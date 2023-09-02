@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>리액트네이티브 너무 무서워요</Text>
+      <Text>리액트네이티브 너무 무서워 힘들어</Text>
       <StatusBar style="auto" />
     </View>
   );
