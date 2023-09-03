@@ -1,27 +1,52 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './Calendar.module.css';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from "date-fns/esm/locale";
+// import { AiFillCalendar } from 'react-icons/ai'  // react-icon 라이브러리 (달력)
+import { BsDash } from 'react-icons/bs';
 
-const Calendar = () => {
-  const [dateRange, setDateRange] = useState([null, null]);
+
+const Calendar = ({ dateRange, setDateRange }) => {
+  // const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
 
+  console.log('startDate:', startDate);
+  console.log('endDate:', endDate);
+  
   return (
-    <DatePicker
-      className={styles.datepicker}  // css 적용을 위함
-      locale={ko}   // 한국어 적용
-      dateFormat='yyyy-MM-dd'   // 날짜 형태
-      
-      selectsRange={true}
-      startDate={startDate}
-      endDate={endDate}
-      onChange={(update) => {
-        setDateRange(update);
-      }}
-      withPortal
-    />
+    <div className={styles.DateBoxContainer}>
+      <div className={styles.DateBox}>
+        <DatePicker
+          className={styles.StyledDatePicker}
+          locale={ko}   // 한국어
+          dateFormat="yyyy.MM.dd"
+          selected={startDate}
+          closeOnScroll={true}
+          onChange={(date) => setDateRange([date, endDate])}
+          selectsStart
+          startDate={startDate}
+          endDate={endDate}
+        />
+        {/* <AiFillCalendar className={styles.CalendarIcon} /> */}
+      </div>
+      <BsDash />
+      <div className={styles.DateBox}>
+        <DatePicker
+          className={styles.StyledDatePicker}
+          locale={ko}
+          dateFormat="yyyy.MM.dd"
+          selected={endDate}
+          closeOnScroll={true}
+          onChange={(date) => setDateRange([startDate, date])}
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
+          minDate={startDate || null}
+        />
+        {/* <AiFillCalendar className={styles.CalendarIcon} /> */}
+      </div>
+    </div>
   );
 }
 
