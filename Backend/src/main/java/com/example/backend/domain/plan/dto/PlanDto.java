@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class PlanDto {
     private int budget_id;
+    private int account_id;
 }
