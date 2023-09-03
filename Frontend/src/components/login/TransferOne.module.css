@@ -4,4 +4,9 @@
 
 .input {
   font-family: 'lineRg';
+  padding-bottom: 1rem;
+}
+
+.submit {
+  margin-top: 1rem;
 }
