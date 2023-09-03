@@ -6,7 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Controller
 public class RedisController {
@@ -18,24 +21,27 @@ public class RedisController {
     @ResponseBody
     public void setValue(String testKey, String testValue) {
 //        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-        redisService.setValues(testKey, testValue, 60);
+        redisService.setValues(60, testKey, testValue);
     }
 
     @RequestMapping(value = "/redis/test/getString")
     @ResponseBody
-    public String getValue(String testKey){
+    public String getValue(String testKey) {
         return redisService.getValues(testKey);
     }
 
     @RequestMapping(value = "/redis/test/setSets")
     @ResponseBody
-    public void setSets(String testKey, String... testValues){
-        redisService.setSets(testKey, testValues);
+    public void setSets(String testKey, String... testValues) {
+        Map<String, String> map = Arrays.stream(testValues)
+                .collect(Collectors.toMap(Function.identity(), Function.identity()));
+
+        redisService.setHash(60, testKey, map);
     }
 
     @RequestMapping(value = "/redis/test/getSets")
     @ResponseBody
-    public Set getSets(String key){
-        return redisService.getSets(key);
+    public Map<Object, Object> getHash(String key) {
+        return redisService.getHash(key);
     }
 }
