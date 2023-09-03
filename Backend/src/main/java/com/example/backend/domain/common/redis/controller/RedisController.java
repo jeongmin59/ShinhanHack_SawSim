@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -42,7 +41,7 @@ public class RedisController {
 
     @RequestMapping(value = "/redis/test/getSets")
     @ResponseBody
-    public Set getSets(String key) {
-        return redisService.getSets(key);
+    public Map<Object, Object> getHash(String key) {
+        return redisService.getHash(key);
     }
 }

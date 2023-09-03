@@ -7,7 +7,6 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -31,7 +30,7 @@ public class RedisService {
         boundHashOperations.expire(timeout, TimeUnit.SECONDS);
     }
 
-    public Set getSets(String key) {
-        return redisTemplate.opsForSet().members(key);
+    public Map<Object, Object> getHash(String key) {
+        return redisTemplate.opsForHash().entries(key);
     }
 }

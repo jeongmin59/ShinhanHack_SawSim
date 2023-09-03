@@ -36,11 +36,11 @@ public class AccountController {
 
     @PostMapping("/auth/verify")
     public BasicResponse<AuthVerifyResponseDto> registerAccount(@RequestBody AuthVerifyRequestDto authVerifyRequestDto) {
-        accountService.verifyAuthNumber(authVerifyRequestDto.getDataBody().getAccountNumber(), authVerifyRequestDto.getDataBody().getAuthNumber());
-        accountService.registerAccount(authVerifyRequestDto.getDataBody().getAccountNumber());
+        String username = accountService.verifyAuthNumber(authVerifyRequestDto.getDataBody().getAccountNumber(), authVerifyRequestDto.getDataBody().getAuthNumber());
+        String userNumber = accountService.registerAccount(username, authVerifyRequestDto.getDataBody().getAccountNumber());
 
         AuthVerifyResponseDto authVerifyResponseDto = AuthVerifyResponseDto.builder()
-                .userNumber("")
+                .userNumber(userNumber)
                 .build();
 
         return BasicResponse.<AuthVerifyResponseDto>builder()
