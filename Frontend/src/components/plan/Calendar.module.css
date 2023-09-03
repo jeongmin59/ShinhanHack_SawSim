@@ -1,4 +1,29 @@
-.datepicker {
+.DateBoxContainer {
   display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+}
+    
+.DateBox {
+  display: flex;
+  align-items: center;
+  margin-right: 2vw;
+}
+    
+.StyledDatePicker {
+  width: 100%;
+  height: auto;
+  border: none;
+  font-weight: 400;
+  font-size: 2vh;
+  line-height: 100%;
+  padding: 2vh;
+  background-color: transparent;
+  color: #707070;
+  text-align: center;
+}
+    
+.CalendarIcon {
+  margin-left: 1vw;
 }
