@@ -13,6 +13,7 @@ const TransferOne = () => {
 
   const [name, setName] = useState(data || "")
   const [account, setAccount] = useState(data || "")
+  const [ranInput, setRanInput] = useState("")
   const [showRandomInput, setShowRandomInput] = useState(false);
 
 
@@ -39,10 +40,13 @@ const TransferOne = () => {
   const onChangeAccount = (event) => {
     setAccount(event.target.value)
   }
+  // 5. 입력된 인증번호 setRanInput
+  const onChangeRanInput = (event) => {
+    setRanInput(event.target.value)
+  }
   
   // 3. 랜덤번호 1원이체 메모에 담아서 1원 송금 (신한 api)
   const sendRandom = async (randomNumber) => {
-    console.log(randomNumber)
     try {
       const requestData = {
         dataHeader: {
@@ -71,7 +75,7 @@ const TransferOne = () => {
           name: name,
           authMemo: randomNumber
       }}
-      const response = await axios.post("/api2/auth/memo", requestData);
+      const response = await axios.post("/api2/v1/auth/memo", requestData);
       console.log(response.data)
     } catch (error) {
       console.error(error);
@@ -92,11 +96,12 @@ const TransferOne = () => {
       };
       const response = await axios.post("/api1/v1/search/name", requestData);
       console.log(response.data)
-      console.log(response.data.dataBody.입금계좌성명);
-      console.log(name)
+      // console.log(response.data.dataBody.입금계좌성명);
+      // console.log(name)
       if (response.data.dataBody.입금계좌성명 === name) {// 예금주가 같다면?
         // 1원 이체 입금통장메모에 랜덤 숫자 4개 넣어서 보냄 (신한 api) = 인증번호 발송
         const randomNumber = Array.from({ length: 4 }, () => Math.floor(Math.random() * 10)).join('');
+        console.log('시연을 위한 랜덤번호 : ', randomNumber)
         sendRandom(randomNumber);
         // 동시에 1원 이체 입금통장메모 저장 api도 보냄 (백 api) - 인증번호 뭔지 백에도 알리기
         sendRandomToBack(randomNumber);
@@ -110,10 +115,35 @@ const TransferOne = () => {
     }
   };
 
+  // 6. 입력번호 1원 이체 인증번호 검증 및 계좌 등록 api로 보내 0 또는 1 띄움 (백 api)
+  // ranInput에 사용자가 입력한 랜덤번호 4자리 들어있음
+  const checkRandom = async () => {
+    try {
+      const requestData = {
+        dataBody: {
+          accountNumber: account,
+          authNumber : ranInput
+        },
+      };
+      const response = await axios.post("/api2/v1/auth/verify", requestData);
+      console.log(response.data)
+      console.log(response.data.dataHeader.successCode);
+      const userNumber = response.data.dataBody.useNumber
+      if (response.data.dataHeader.successCode === 0) {// 인증번호가 맞다면?
+        // 7. 계좌 등록 되고(api 보낼때 같이 됨) userNumber 받음
+        // 8. 다음페이지로 넘기기
+        goToMain(userNumber);
+      } else {
+        window.alert('인증번호가 올바르지 않습니다')
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  // 8. 올바른 계좌번호일 때 실행할 함수
-  const goToMain = () => {
-    navigate('/main', { state: { data: account } });
+  // 8. 모든 검증이 끝나고 실행할 함수
+  const goToMain = (userNumber) => {
+    navigate('/main', { state: { data: userNumber } });
     console.log(account)
   }
 
@@ -121,15 +151,23 @@ const TransferOne = () => {
     <div>
       {showRandomInput ? ( // 인증번호 입력 인풋
         <>
-          <div style={{display: 'flex', justifyContent: 'center'}}>
+          <div style={{marginTop: '3rem', display: 'flex', justifyContent: 'center'}}>
             <ExclamationCircleOutlined />
-            <p style={{marginLeft: '0.2rem', paddingTop:'0.1rem'}}>입금통장 메모의 숫자 4자리를 입력해주세요.</p>
+            <p style={{fontSize:'1.1rem', marginLeft: '0.2rem', paddingTop:'0.1rem'}}>입금통장 메모의 숫자 4자리를 입력해주세요.</p>
           </div>
-          <Space.Compact style={{width: '40%'}}>
+          <Space.Compact style={{width: '45%'}}>
             <Input.Password
+              maxLength='4'
+              onChange={onChangeRanInput}
               style={{fontFamily:"lineRg"}} 
-              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}              
+              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}  
+              onPressEnter={checkRandom}
               size="large" />
+            <Button 
+            style={{backgroundColor:'#0046FF', fontFamily:"lineRg"}} 
+            size="large" 
+            onClick={checkRandom}
+            type="primary"><span style={{paddingTop:'0.15rem'}}>확인</span></Button>    
           </Space.Compact> 
         </>
       ) : ( // 처음 예금주, 계좌번호 입력 인풋
