@@ -1,5 +1,6 @@
 package com.example.backend.domain.plan.controller;
 
+import com.example.backend.domain.plan.dto.BudgetDeleteDto;
 import com.example.backend.domain.plan.dto.BudgetSaveDto;
 import com.example.backend.domain.plan.dto.BudgetUpdateDto;
 import com.example.backend.domain.plan.service.BudgetService;
@@ -22,6 +23,11 @@ public class BudgetController {
     @PutMapping()
     public void budgetUpdate(@RequestBody BudgetUpdateDto budgetUpdateDto){
         budgetService.budgetUpdate(budgetUpdateDto);
+    }
+
+    @DeleteMapping()
+    public void budgetDelete(@RequestBody BudgetDeleteDto budgetDeleteDto){
+        budgetService.budgetDelete(budgetDeleteDto);
     }
 
 }

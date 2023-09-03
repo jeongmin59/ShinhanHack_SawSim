@@ -1,5 +1,6 @@
 package com.example.backend.domain.plan.service;
 
+import com.example.backend.domain.plan.dto.BudgetDeleteDto;
 import com.example.backend.domain.plan.dto.BudgetSaveDto;
 import com.example.backend.domain.plan.dto.BudgetUpdateDto;
 import com.example.backend.domain.plan.entity.Budget;
@@ -18,7 +19,15 @@ public class BudgetService {
     }
 
     public void budgetUpdate(BudgetUpdateDto budgetUpdateDto) {
-        Budget budget = budgetRepository.findByTravel_dateAndCategory(budgetUpdateDto.getTravel_date(), budgetUpdateDto.getCategory());
+        Budget budget = budgetRepository.findByTravel_dateAndCategory(budgetUpdateDto.getTravel_date(), budgetUpdateDto.getCategory()).get();
         budgetRepository.save(budget);
+    }
+
+    public void budgetDelete(BudgetDeleteDto budgetDeleteDto) {
+        budgetRepository.delete(
+                budgetRepository.findByTravel_dateAndCategory(budgetDeleteDto.getTravel_date(),budgetDeleteDto.getCategory()).orElseThrow(
+                        () -> new NullPointerException()
+                )
+        );
     }
 }
