@@ -14,6 +14,12 @@ public class BudgetController {
 
     private final BudgetService budgetService;
 
+    @GetMapping()
+    public void budgetGet(@PathVariable Long plan_id){
+        budgetService.budgetGet(plan_id);
+    }
+
+
     @PostMapping()
     public void budgetSave(@RequestBody BudgetSaveDto budgetSaveDto, @PathVariable Long plan_id){
         budgetSaveDto.setPlan_id(plan_id);

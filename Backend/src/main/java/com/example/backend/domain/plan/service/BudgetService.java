@@ -8,11 +8,17 @@ import com.example.backend.domain.plan.repository.BudgetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BudgetService {
 
     private final BudgetRepository budgetRepository;
+
+    public List<Budget> budgetGet(Long planId) {
+        return budgetRepository.findAllByPlan_id(planId);
+    }
 
     public void budgetSave(BudgetSaveDto budgetSaveDto) {
         budgetRepository.save(budgetSaveDto);
