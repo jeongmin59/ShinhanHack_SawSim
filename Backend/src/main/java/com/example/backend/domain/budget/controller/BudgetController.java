@@ -1,11 +1,13 @@
 package com.example.backend.domain.budget.controller;
 
-import com.example.backend.domain.budget.dto.BudgetDeleteDto;
-import com.example.backend.domain.budget.dto.BudgetSaveDto;
-import com.example.backend.domain.budget.dto.BudgetUpdateDto;
+import com.example.backend.domain.budget.dto.*;
+import com.example.backend.domain.budget.entity.Budget;
 import com.example.backend.domain.budget.service.BudgetService;
+import com.example.backend.domain.common.BasicResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/budget/{plan_id}")
@@ -15,25 +17,58 @@ public class BudgetController {
     private final BudgetService budgetService;
 
     @GetMapping()
-    public void budgetGet(@PathVariable Long plan_id){
-        budgetService.budgetGet(plan_id);
+    public BasicResponse<List<Budget>> budgetGet(@PathVariable Long plan_id){
+        List<Budget> budgets = budgetService.budgetGet(plan_id);
+
+        return BasicResponse.<List<Budget>>builder()
+                .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
+                .dataBody(budgets)
+                .build();
     }
 
 
     @PostMapping()
-    public void budgetSave(@RequestBody BudgetSaveDto budgetSaveDto, @PathVariable Long plan_id){
-        budgetSaveDto.setPlan_id(plan_id);
-        budgetService.budgetSave(budgetSaveDto);
+    public BasicResponse<BudgetSaveResponseDto> budgetSave(@RequestBody BudgetSaveRequestDto budgetSaveRequestDto, @PathVariable Long plan_id){
+
+        BudgetSaveResponseDto budgetSaveResponseDto = BudgetSaveResponseDto.builder()
+                .planId(plan_id)
+                .amount(budgetSaveRequestDto.getDataBody().getAmount())
+                .category(budgetSaveRequestDto.getDataBody().getCategory())
+                .travelDate(budgetSaveRequestDto.getDataBody().getTravelDate())
+                .build();
+
+        int check = budgetService.budgetSave(budgetSaveResponseDto);
+
+        if(check==1){ //중복으로 인한 저장 실패
+            return BasicResponse.<BudgetSaveResponseDto>builder()
+                    .dataHeader(
+                            BasicResponse.DataHeader.builder()
+                                    .successCode("1")
+                                    .build()) // 성공일 때 값이 default
+                    .build();
+        }
+
+        return BasicResponse.<BudgetSaveResponseDto>builder()
+                .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
+                .build();
     }
 
     @PutMapping()
-    public void budgetUpdate(@RequestBody BudgetUpdateDto budgetUpdateDto){
-        budgetService.budgetUpdate(budgetUpdateDto);
+    public BasicResponse<BudgetUpdateResponseDto> budgetUpdate(@RequestBody BudgetUpdateRequestDto budgetUpdateRequestDto){
+        budgetService.budgetUpdate(budgetUpdateRequestDto);
+
+        return BasicResponse.<BudgetUpdateResponseDto>builder()
+                .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
+                .build();
     }
 
     @DeleteMapping()
-    public void budgetDelete(@RequestBody BudgetDeleteDto budgetDeleteDto){
-        budgetService.budgetDelete(budgetDeleteDto);
+    public BasicResponse<BudgetDeleteResponseDto> budgetDelete(@RequestBody BudgetDeleteRequestDto budgetDeleteRequestDto){
+        budgetService.budgetDelete(budgetDeleteRequestDto);
+
+        return BasicResponse.<BudgetDeleteResponseDto>builder()
+                .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
+                .build();
     }
 
 }

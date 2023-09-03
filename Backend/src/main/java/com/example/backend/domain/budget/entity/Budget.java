@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
@@ -16,10 +16,22 @@ public class Budget {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long budget_id;
+    private Long budgetId;
 
-    private Long plan_id;
+    //@Column(name = "plan_id")
+    private Long planId;
+
+    //@Column(name = "category")
     private String category;
+
+   // @Column(name = "amount")
     private Long amount;
-    private LocalDateTime travel_date;
+
+    //@Column(name = "travel_date")
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    private LocalDate travelDate;
+
+    public void setAmount(Long amount){
+        this.amount=amount;
+    }
 }
