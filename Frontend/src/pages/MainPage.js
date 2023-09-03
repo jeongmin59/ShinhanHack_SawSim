@@ -1,15 +1,15 @@
 import React from 'react';
 import styles from "./MainPage.module.css";
 import Header from "../components/common/Header";
-
-
+import BalanceSchedule from "../components/main/BalanceSchedule";
+import Insurance from "../components/main/Insurance";
 
 const MainPage = () => {
   return (
     <div className={styles.div}>
       <Header/>
-      <p className={styles.searchMent}>로그인 시 메인페이지</p>   
-      <p>인증된 계좌번호</p>
+      <BalanceSchedule/>
+      <Insurance/>
     </div>
   );
 };
