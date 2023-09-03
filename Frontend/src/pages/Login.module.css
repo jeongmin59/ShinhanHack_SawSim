@@ -22,3 +22,8 @@
     transform: translatey(-10px);
   }
 }
+
+.soltrip {
+  color: #0046FF;
+  font-weight: bold
+}
