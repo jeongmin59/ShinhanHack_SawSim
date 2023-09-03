@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -17,9 +18,9 @@ public class RedisService {
         return values.get(key);
     }
 
-    public void setValues(String key, String value) {
+    public void setValues(String key, String value, long timeout) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        values.set(key, value);
+        values.set(key, value, timeout, TimeUnit.SECONDS);
     }
 
     public void setSets(String key, String... values) {

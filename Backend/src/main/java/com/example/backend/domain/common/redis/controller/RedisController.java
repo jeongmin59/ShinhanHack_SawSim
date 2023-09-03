@@ -18,7 +18,7 @@ public class RedisController {
     @ResponseBody
     public void setValue(String testKey, String testValue) {
 //        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-        redisService.setValues(testKey, testValue);
+        redisService.setValues(testKey, testValue, 60);
     }
 
     @RequestMapping(value = "/redis/test/getString")
