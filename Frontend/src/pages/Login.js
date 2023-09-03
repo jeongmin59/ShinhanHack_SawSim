@@ -10,7 +10,7 @@ const Login = () => {
       <Header/><br/><br/>
       <img alt="money" src={login} className={styles.money}/>
       <p className={styles.ment1}>1원 이체를 통해 계좌를 인증하고,</p>
-      <p className={styles.ment2}>쏠트립을 이용해보세요!</p>
+      <p className={styles.ment2}><span className={styles.soltrip}>쏠트립</span>을 이용해보세요!</p>
       <TransferOne/>
     </div>
   )
