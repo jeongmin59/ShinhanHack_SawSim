@@ -3,7 +3,7 @@
   /* border: 0.5px solid gray; */
   background-color: white;
   border-radius: 0.5rem;
-  box-shadow: 1px 1px 20px rgb(236, 236, 236), -1px -1px 20px rgb(236, 236, 236);
+  box-shadow: 4px 4px 20px rgb(236, 236, 236), -4px -4px 20px rgb(236, 236, 236);
   width: 90%;
   margin-left: auto;
   margin-right: auto;
@@ -23,26 +23,26 @@
 }
 
 .yejukNAccount {
-  padding-top: 0.6rem;
+  padding-top: 0.5rem;
   margin-left: 0.5rem;
 }
 .yejuk {
   text-align: start;
   margin-top: 0;
   margin-bottom: 0;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 100;
 }
 .account {
   text-align: start;
   margin-top: 0;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   margin-bottom: 0;
   font-family: 'lineRg';
 }
 
 .balance {
-  font-size: 1.9rem;
+  font-size: 2rem;
   text-align: start;
   margin-left: 1.4rem;
   font-weight: 900;
@@ -64,11 +64,7 @@
   margin-top: 0.7rem;
   /* border: 0.5px solid gray; */
   border-radius: 0.5rem;
-  background-blend-mode: multiply;
-  background-color: rgba(255, 255, 255, 1);
-  background-image: url('./trip1.png');
-  background-size: cover;
-  /* box-shadow: 4px 4px 20px rgb(236, 236, 236), -4px -4px 20px rgb(236, 236, 236); */
+  box-shadow: 4px 4px 20px rgb(236, 236, 236), -4px -4px 20px rgb(236, 236, 236);
   width: 90%;
   margin-left: auto;
   margin-right: auto;

@@ -93,11 +93,12 @@ const BalanceSchedule = () => {
         </div>
         <p className={styles.balance}>100,000원</p>
         {/* <p className={styles.balance}>{formatBalance(balance)}원</p> */}
+        <Link to='/budget'>
         <Button 
           size="large" 
           style={{ height: '3rem', backgroundColor:'#0046FF', fontFamily:"preRg", width:'80vw'}}
           className={styles.startTrip}
-          type="primary">여행 시작하기</Button>
+          type="primary">여행 시작하기</Button></Link>
       </div>
       <div className={styles.scheduleNIcon}>
         <p className={styles.scheduleTitle}>{name}님의 여행 일정</p>
@@ -108,17 +109,19 @@ const BalanceSchedule = () => {
       </div>
       <div className={styles.scheduleDiv}>     
         <p className={styles.schedule}>2023.08.25 - 2023.08.27</p>
+        <Link to='/plan'>
         <Button 
           size="medium" 
-          style={{ borderRadius:'1rem', 
-          border:'3px solid', 
-          color: '#0046FF',
-          backgroundColor: '#FFFFFF',
-          borderColor:'#0046FF', 
-          fontWeight: '900', 
-          fontFamily:"preBd"}}
-          className={styles.startTrip}
-          >예산 상세보기</Button>
+          style={{ 
+            border:'1px solid', 
+            color: 'black',
+            backgroundColor: '#FFFFFF',
+            borderColor:'grey', 
+            fontWeight: '900', 
+            fontFamily:"preBd",
+            paddingTop: '0.3rem'}}
+            className={styles.startTrip}
+          >예산 상세보기</Button></Link>
       </div>
     </div>
   );
