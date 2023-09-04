@@ -5,6 +5,7 @@ import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.common.redis.service.RedisService;
 import com.example.backend.domain.payment.Payment;
 import com.example.backend.domain.payment.dto.TransactionHistoryRequestDto;
+import com.example.backend.domain.payment.dto.TransactionHistoryResponseDto;
 import com.example.backend.domain.payment.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,21 @@ public class PaymentService {
         List<Payment> payments = convertTransactionsToPayments(transactionHistory, account);
 
         paymentRepository.saveAll(payments);
+    }
+
+    public List<TransactionHistoryResponseDto> getTransactionHistory(String userNumber) {
+        Account account = getAccount(userNumber);
+
+        List<Payment> payments = paymentRepository.findByAccountId(account.getId());
+        return payments.stream()
+                .map(payment -> TransactionHistoryResponseDto.builder()
+                        .content(payment.getContent())
+                        .amount(payment.getAmount())
+                        .storeName(payment.getStoreName())
+                        .transactionDate(payment.getTransactionDate())
+                        .transactionTime(payment.getTransactionTime())
+                        .paymentType(payment.getPaymentType()).build())
+                .collect(Collectors.toList());
     }
 
     private List<Payment> convertTransactionsToPayments(List<TransactionHistoryRequestDto.Transaction> transactionHistory, Account account) {
