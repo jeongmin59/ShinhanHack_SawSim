@@ -38,7 +38,7 @@ public class AccountService {
 
     @Transactional
     public String registerAccount(String username, String accountNumber) {
-        Account account = new Account(username, accountNumber, UUID.randomUUID().toString());
+        Account account = Account.createAccount(username, accountNumber, UUID.randomUUID().toString());
         Account saveAccount = accountRepository.save(account);
 
         return saveAccount.getUserNumber();

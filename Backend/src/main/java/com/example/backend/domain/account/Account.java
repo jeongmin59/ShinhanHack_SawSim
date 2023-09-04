@@ -24,9 +24,12 @@ public class Account extends BaseEntity {
     private String number;
     private String userNumber;
 
-    public Account(String username, String number, String userNumber) {
-        this.username = username;
-        this.number = number;
-        this.userNumber = userNumber;
+    public static Account createAccount(String username, String number, String userNumber) {
+        Account account = new Account();
+        account.username = username;
+        account.number = number;
+        account.userNumber = userNumber;
+
+        return account;
     }
 }
