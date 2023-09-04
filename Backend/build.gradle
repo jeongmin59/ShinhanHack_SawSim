@@ -32,6 +32,9 @@ dependencies {
 
     // redis 설정
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // springdoc swagger 설정
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
 }
 
 tasks.named('test') {
