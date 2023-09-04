@@ -153,7 +153,7 @@ const TransferOne = () => {
         <>
           <div style={{marginTop: '3rem', display: 'flex', justifyContent: 'center'}}>
             <ExclamationCircleOutlined />
-            <p style={{fontSize:'1.1rem', marginLeft: '0.2rem', paddingTop:'0.1rem'}}>입금통장 메모의 숫자 4자리를 입력해주세요.</p>
+            <p style={{fontSize:'1.1rem', marginLeft: '0.2rem'}}>입금통장 메모의 숫자 4자리를 입력해주세요.</p>
           </div>
           <Space.Compact style={{width: '45%'}}>
             <Input.Password
@@ -164,10 +164,10 @@ const TransferOne = () => {
               onPressEnter={checkRandom}
               size="large" />
             <Button 
-            style={{backgroundColor:'#0046FF', fontFamily:"lineRg"}} 
+            style={{backgroundColor:'#0046FF', fontFamily:"preRg"}} 
             size="large" 
             onClick={checkRandom}
-            type="primary"><span style={{paddingTop:'0.15rem'}}>확인</span></Button>    
+            type="primary">확인</Button>    
           </Space.Compact> 
         </>
       ) : ( // 처음 예금주, 계좌번호 입력 인풋
@@ -177,7 +177,7 @@ const TransferOne = () => {
               addonBefore="예금주"
               value={name}
               onChange={onChangeName}
-              style={{fontFamily:"lineRg"}} 
+              style={{fontFamily:"preRg"}} 
               size="large" 
               className={styles.input} 
               placeholder="예금주를 입력해주세요" 
@@ -189,14 +189,14 @@ const TransferOne = () => {
               onPressEnter={checkName}
               value={account}
               onChange={onChangeAccount}
-              style={{fontFamily:"lineRg"}} 
+              style={{fontFamily:"preRg"}} 
               size="large" 
               className={styles.input} 
               placeholder="계좌번호를 - 없이 입력해주세요" 
               allowClear />
             </Space.Compact>      
           <Button 
-              style={{backgroundColor:'#0046FF', fontFamily:"lineRg", paddingTop:'0.5rem', borderRadius:'1.5rem'}} 
+              style={{height: '3rem', width: '90%', backgroundColor:'#0046FF', fontFamily:"preRg"}} 
               size="large" 
               className={styles.submit} 
               onClick={checkName}
@@ -208,3 +208,9 @@ const TransferOne = () => {
 }
 
 export default TransferOne
+
+// lineRg일때 패딩탑
+// style={{backgroundColor:'#0046FF', fontFamily:"preRg", paddingTop:'0.5rem', borderRadius:'1.5rem'}} 
+
+// 입금통장 메모
+// <p style={{fontSize:'1.1rem', marginLeft: '0.2rem', paddingTop:'0.1rem'}}>입금통장 메모의 숫자 4자리를 입력해주세요.</p>
