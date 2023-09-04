@@ -27,8 +27,7 @@ public class AccountService {
         Map<Object, Object> hash = redisService.getHash(accountNumber);
         String name = (String) hash.get("name");
         String realNumber = (String) hash.get("authMemo");
-        System.out.println("realNumber = " + realNumber);
-        System.out.println("authNumber = " + authNumber);
+
         if (!realNumber.equals(authNumber)) {
             throw new IllegalArgumentException("인증번호가 일치하지 않습니다.");
         }

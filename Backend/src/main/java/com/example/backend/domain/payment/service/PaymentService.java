@@ -4,6 +4,7 @@ import com.example.backend.domain.account.Account;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.common.redis.service.RedisService;
 import com.example.backend.domain.payment.Payment;
+import com.example.backend.domain.payment.dto.LatestDateTimeResponseDto;
 import com.example.backend.domain.payment.dto.TransactionHistoryRequestDto;
 import com.example.backend.domain.payment.dto.TransactionHistoryResponseDto;
 import com.example.backend.domain.payment.repository.PaymentRepository;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -80,5 +83,15 @@ public class PaymentService {
                 "latestTime", transaction.getTransactionTime().format(DateTimeFormatter.ofPattern("HH:mm")));
 
         redisService.setHash(userNumber, map);
+    }
+
+    public LatestDateTimeResponseDto getLatestDateTime(String userNumber) {
+        Map<Object, Object> hash = redisService.getHash(userNumber);
+        String latestDate = (String) hash.get("latestDate");
+        String latestTime = (String) hash.get("latestTime");
+
+        return LatestDateTimeResponseDto.builder()
+                .transactionDate(LocalDate.parse(latestDate))
+                .transactionTime(LocalTime.parse(latestTime)).build();
     }
 }
