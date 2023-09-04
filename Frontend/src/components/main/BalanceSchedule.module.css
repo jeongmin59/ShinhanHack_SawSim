@@ -64,7 +64,8 @@
   margin-top: 0.7rem;
   /* border: 0.5px solid gray; */
   border-radius: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-blend-mode: multiply;
+  background-color: rgba(255, 255, 255, 1);
   background-image: url('./trip1.png');
   background-size: cover;
   box-shadow: 4px 4px 20px rgb(236, 236, 236), -4px -4px 20px rgb(236, 236, 236);
@@ -73,6 +74,18 @@
   margin-right: auto;
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+  position: relative;
+}
+
+.scheduleDiv::before{
+  content: "";
+  opacity: 0.4;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: #ffffff;
 }
 
 .schedule {
@@ -81,6 +94,8 @@
   font-weight: 900;
   margin-top: 0;
   margin-bottom: 0.5rem;
+  /* text-shadow: -1px 0px rgb(255, 255, 255), 0px 1px rgb(255, 255, 255), 1px 0px rgb(255, 255, 255), 0px -1px rgb(255, 255, 255); */
+  position: relative;
 }
 
 .scheduleNIcon {
