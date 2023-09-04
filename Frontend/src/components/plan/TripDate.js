@@ -19,7 +19,7 @@ const TripDate = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <p className={styles.title}>여행 일정</p>
-        <Space direction="horizontal"> {/* direction을 "horizontal"로 변경 */}
+        <Space direction="horizontal">
           <Tooltip title={isCalendarVisible ? '여행 일정 닫기' : '여행 일정 추가하기'}>
             <Button
               shape="circle"
