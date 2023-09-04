@@ -1,11 +1,11 @@
-package com.example.backend.domain.budget.entity;
+package com.example.backend.domain.plan.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
@@ -16,9 +16,9 @@ public class Plan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int budget_id;
+    private Long budget_id;
 
-    private int account_id;
-    private LocalDateTime start_date;
-    private LocalDateTime end_date;
+    private Long account_id;
+    private LocalDate start_date;
+    private LocalDate end_date;
 }
