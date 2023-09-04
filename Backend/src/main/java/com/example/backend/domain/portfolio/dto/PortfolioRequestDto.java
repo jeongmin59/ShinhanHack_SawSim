@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class PortfolioRequestDto {
-    private BudgetSaveRequestDto.DataBody dataBody;
+    private DataBody dataBody;
 
     @Getter
     public static class DataBody {
