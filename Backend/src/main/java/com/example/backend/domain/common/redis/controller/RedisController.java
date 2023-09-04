@@ -1,6 +1,7 @@
 package com.example.backend.domain.common.redis.controller;
 
 import com.example.backend.domain.common.redis.service.RedisService;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Controller
+@Hidden
 public class RedisController {
 
     @Autowired
