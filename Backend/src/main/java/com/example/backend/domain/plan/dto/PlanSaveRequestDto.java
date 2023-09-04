@@ -10,8 +10,8 @@ public class PlanSaveRequestDto {
 
     @Getter
     public static class DataBody {
-        private LocalDate start_date;
-        private LocalDate end_date;
+        private LocalDate startDate;
+        private LocalDate endDate;
     }
 
 }

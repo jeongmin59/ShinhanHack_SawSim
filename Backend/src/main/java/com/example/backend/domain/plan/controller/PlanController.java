@@ -1,12 +1,15 @@
 package com.example.backend.domain.plan.controller;
 
+import com.example.backend.domain.budget.entity.Budget;
+import com.example.backend.domain.common.BasicResponse;
 import com.example.backend.domain.plan.dto.PlanSaveRequestDto;
+import com.example.backend.domain.plan.entity.Plan;
 import com.example.backend.domain.plan.service.PlanService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/plan")
@@ -16,12 +19,30 @@ public class PlanController {
     private final PlanService planService;
 
     @PostMapping()
-    public void planSave(@RequestBody PlanSaveRequestDto planSaveRequestDto){
+    public BasicResponse<Plan> planSave(@RequestBody PlanSaveRequestDto planSaveRequestDto){
         //Header User-Number를 통해서 계좌 ID를 받아옴
         //보류
-        Long account_id = 0L; //임시값
+        Long accountId = 0L; //임시값
 
-        planService.planSave(planSaveRequestDto,account_id);
+        planService.planSave(planSaveRequestDto,accountId);
 
+        return BasicResponse.<Plan>builder()
+                .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
+                .build();
     }
+
+    @GetMapping()
+    public BasicResponse<List<Plan>> planList(){
+        //Header User-Number를 통해서 계좌 ID를 받아옴
+        //보류
+        Long accountId = 0L; //임시값
+
+        List<Plan> planList = planService.planList(accountId);
+        
+        return BasicResponse.<List<Plan>>builder()
+                .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
+                .dataBody(planList)
+                .build();
+    }
+
 }

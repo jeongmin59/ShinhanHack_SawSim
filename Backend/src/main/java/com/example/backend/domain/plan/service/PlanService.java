@@ -6,6 +6,9 @@ import com.example.backend.domain.plan.repository.PlanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class PlanService {
@@ -16,11 +19,21 @@ public class PlanService {
         Plan plan = new Plan(
                 null,
                 accountId,
-                planSaveRequestDto.getDataBody().getStart_date(),
-                planSaveRequestDto.getDataBody().getEnd_date()
+                planSaveRequestDto.getDataBody().getStartDate(),
+                planSaveRequestDto.getDataBody().getEndDate()
         );
 
         planRepository.save(plan);
 
+    }
+
+    public List<Plan> planList(Long accountId) {
+        Optional<List<Plan>> planList = planRepository.findAllByAccountId(accountId);
+
+        if(planList.isEmpty()){
+            return null;
+        }
+
+        return planList.get();
     }
 }
