@@ -30,6 +30,11 @@ public class RedisService {
         boundHashOperations.expire(timeout, TimeUnit.SECONDS);
     }
 
+    public void setHash(String key, Map<String, String> map) {
+        BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
+        boundHashOperations.putAll(map);
+    }
+
     public Map<Object, Object> getHash(String key) {
         return redisTemplate.opsForHash().entries(key);
     }
