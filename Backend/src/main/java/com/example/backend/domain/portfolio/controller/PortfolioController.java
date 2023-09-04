@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/portfolio")
+@RequestMapping("/portfolio/{plan_id}")
 @RequiredArgsConstructor
 public class PortfolioController {
 
