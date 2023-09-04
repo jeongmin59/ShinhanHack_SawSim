@@ -6,7 +6,7 @@ import { ko } from "date-fns/esm/locale";
 import { BsDash } from 'react-icons/bs';
 import DailyBudget from './DailyBudget';
 
-const Calendar = () => {
+const CalendarComponent = () => {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
@@ -73,4 +73,4 @@ const Calendar = () => {
   )
 }
 
-export default Calendar;
+export default CalendarComponent;
