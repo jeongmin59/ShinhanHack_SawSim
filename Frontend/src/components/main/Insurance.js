@@ -12,10 +12,12 @@ const Insurance = () => {
         <p className={styles.insurance}>신한 여행자 보험</p>
       </div>  
       <div className={styles.insuranceDiv}>     
-        <p className={styles.insurance}>삼성화재 다이렉트 보험</p>
+        <p className={styles.insurance}>삼성화재</p>
+        <p className={styles.insurance}>다이렉트</p>
+        <p className={styles.insurance}>보험</p>
       </div>  
       <div className={styles.insuranceDiv}>     
-        <p className={styles.insurance}>신한 여행자 보험</p>
+        <p className={styles.insurance}>트래블로버</p>
       </div>  
     </div>
     <div className={styles.insurances}>
@@ -23,10 +25,12 @@ const Insurance = () => {
         <p className={styles.insurance}>신한 여행자 보험</p>
       </div>  
       <div className={styles.insuranceDiv}>     
-        <p className={styles.insurance}>삼성화재 다이렉트 보험</p>
+        <p className={styles.insurance}>삼성화재</p>
+        <p className={styles.insurance}>다이렉트</p>
+        <p className={styles.insurance}>보험</p>
       </div>  
       <div className={styles.insuranceDiv}>     
-        <p className={styles.insurance}>신한 여행자 보험</p>
+        <p className={styles.insurance}>트래블로버</p>
       </div>  
     </div>
   </div>

@@ -144,7 +144,7 @@ const TransferOne = () => {
   // 8. 모든 검증이 끝나고 실행할 함수
   const goToMain = (userNumber) => {
     navigate('/main', { state: { data: userNumber } });
-    console.log(account)
+    console.log(userNumber)
   }
 
   return (
