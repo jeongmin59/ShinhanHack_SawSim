@@ -16,7 +16,7 @@ public class Plan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long budgetId;
+    private Long planId;
 
     private Long accountId;
     private LocalDate startDate;
