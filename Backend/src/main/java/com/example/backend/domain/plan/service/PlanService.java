@@ -1,6 +1,6 @@
 package com.example.backend.domain.plan.service;
 
-import com.example.backend.domain.plan.dto.PlanDetailResponse;
+import com.example.backend.domain.plan.dto.PlanDetailResponseDto;
 import com.example.backend.domain.plan.dto.PlanSaveRequestDto;
 import com.example.backend.domain.plan.entity.Plan;
 import com.example.backend.domain.plan.repository.PlanRepository;
@@ -32,28 +32,22 @@ public class PlanService {
     public List<Plan> planList(Long accountId) {
         return planRepository.findAllByAccountId(accountId)
                 .orElse(Collections.emptyList());
-
-//        Optional<List<Plan>> planList = planRepository.findAllByAccountId(accountId);
-//        if(planList.isEmpty()){
-//            return null;
-//        }
-//        return planList.get();
     }
 
-    public PlanDetailResponse planDetail(Long planId) {
+    public PlanDetailResponseDto planDetail(Long planId) {
         Optional<Plan> plan = planRepository.findById(planId);
 
         if(plan.isEmpty()){
             return null;
         }
 
-        PlanDetailResponse planDetailResponse = PlanDetailResponse.builder()
+        PlanDetailResponseDto planDetailResponseDto = PlanDetailResponseDto.builder()
                 .accountId(plan.get().getAccountId())
                 .startDate(plan.get().getStartDate())
                 .endDate(plan.get().getEndDate())
                 .build();
 
-        return planDetailResponse;
+        return planDetailResponseDto;
 
     }
 }

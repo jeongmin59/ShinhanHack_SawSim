@@ -1,13 +1,17 @@
 package com.example.backend.domain.plan.controller;
 
+import com.example.backend.domain.account.Account;
+import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.common.BasicResponse;
-import com.example.backend.domain.plan.dto.PlanDetailResponse;
+import com.example.backend.domain.plan.dto.PlanDetailResponseDto;
+import com.example.backend.domain.plan.dto.PlanListResponseDto;
 import com.example.backend.domain.plan.dto.PlanSaveRequestDto;
 import com.example.backend.domain.plan.entity.Plan;
 import com.example.backend.domain.plan.service.PlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,12 +20,15 @@ import java.util.List;
 public class PlanController {
 
     private final PlanService planService;
+    private final AccountRepository accountRepository;
 
     @PostMapping()
-    public BasicResponse<Plan> planSave(@RequestBody PlanSaveRequestDto planSaveRequestDto){
+    public BasicResponse<Plan> planSave(@RequestBody PlanSaveRequestDto planSaveRequestDto,@RequestHeader("User-Number") String userNumber){
         //Header User-Number를 통해서 계좌 ID를 받아옴
-        //보류
-        Long accountId = 0L; //임시값
+        Account account = accountRepository.findAccountByUserNumber(userNumber)
+                .orElseThrow(() -> new IllegalArgumentException("올바른 유저가 아닙니다."));
+
+        Long accountId = account.getId();
 
         planService.planSave(planSaveRequestDto,accountId);
 
@@ -31,26 +38,38 @@ public class PlanController {
     }
 
     @GetMapping()
-    public BasicResponse<List<Plan>> planList(){
+    public BasicResponse<List<PlanListResponseDto>> planList(@RequestHeader("User-Number") String userNumber){
         //Header User-Number를 통해서 계좌 ID를 받아옴
-        //보류
-        Long accountId = 0L; //임시값
+        Account account = accountRepository.findAccountByUserNumber(userNumber)
+                .orElseThrow(() -> new IllegalArgumentException("올바른 유저가 아닙니다."));
+
+        Long accountId = account.getId();
 
         List<Plan> planList = planService.planList(accountId);
 
-        return BasicResponse.<List<Plan>>builder()
+        List<PlanListResponseDto> planListResponseDtos = new ArrayList<>();
+        for (Plan plan : planList) {
+            PlanListResponseDto planListResponseDto = PlanListResponseDto.builder()
+                    .planId(plan.getPlanId())
+                    .startDate(plan.getStartDate())
+                    .endDate(plan.getEndDate())
+                    .build();
+            planListResponseDtos.add(planListResponseDto);
+        }
+
+        return BasicResponse.<List<PlanListResponseDto>>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
-                .dataBody(planList)
+                .dataBody(planListResponseDtos)
                 .build();
     }
 
     @GetMapping("/{plan_id}")
-    public BasicResponse<PlanDetailResponse> planDetail(@PathVariable Long plan_id){
-        PlanDetailResponse planDetailResponse = planService.planDetail(plan_id);
+    public BasicResponse<PlanDetailResponseDto> planDetail(@PathVariable Long plan_id){
+        PlanDetailResponseDto planDetailResponseDto = planService.planDetail(plan_id);
 
-        return BasicResponse.<PlanDetailResponse>builder()
+        return BasicResponse.<PlanDetailResponseDto>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
-                .dataBody(planDetailResponse)
+                .dataBody(planDetailResponseDto)
                 .build();
     }
 }
