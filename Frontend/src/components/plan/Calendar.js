@@ -51,14 +51,15 @@ const CalendarModal = () => {
       setOpen(false);
       setConfirmLoading(false);
     }, 500);
-    window.location.reload();
+
+    // window.location.reload();
   };
 
   const handleCancel = () => {
     console.log('취소');
     setOpen(false);
   };
-  // console.log(date)
+  console.log(date)
 
   return (
     <div>
