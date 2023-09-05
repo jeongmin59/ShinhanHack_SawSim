@@ -7,6 +7,7 @@ import MainPage from './pages/MainPage'
 import Budget from './pages/Budget'
 import Cash from './pages/Cash'
 import TransactionDetail from './pages/TransactionDetail'
+import PlanBudget from './pages/PlanBudget'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route exact path='/budget' element={<Budget/>}/>
         <Route exact path='/cash' element={<Cash/>}/>
         <Route exact path='/transaction' element={<TransactionDetail/>}/>
+        <Route exact path='/planbudget' element={<PlanBudget/>}/>
       </Routes>
     </div>
   );

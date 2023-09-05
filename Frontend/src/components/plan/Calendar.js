@@ -51,8 +51,7 @@ const CalendarModal = () => {
       setOpen(false);
       setConfirmLoading(false);
     }, 500);
-
-    // window.location.reload();
+    window.location.reload();
   };
 
   const handleCancel = () => {
@@ -63,7 +62,10 @@ const CalendarModal = () => {
 
   return (
     <div>
-      <Button type="primary" onClick={showModal}>
+      <Button 
+        type="primary" 
+        onClick={showModal}
+        style={{ backgroundColor:'#0046FF', fontFamily:"preRg" }}>
         일정 선택
       </Button>
       <Modal
@@ -72,7 +74,8 @@ const CalendarModal = () => {
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
-        style={{ top: 20 }}
+        style={{ fontFamily:"preRg" }}
+        maskStyle={{ fontFamily:"preRg" }}
       >
       <h3 className='text-center'>일정을 선택해주세요.</h3>
       <div className='calendar-container'>
