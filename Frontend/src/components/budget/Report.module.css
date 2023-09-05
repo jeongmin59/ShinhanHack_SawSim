@@ -8,17 +8,16 @@
   font-weight: 900;
 }
 
-.calendarDiv {
+/* .calendarDiv {
   margin-top: 0.7rem;
-  /* border: 0.5px solid gray; */
   border-radius: 0.5rem;
-  box-shadow: 4px 4px 20px rgb(236, 236, 236), -4px -4px 20px rgb(236, 236, 236);
+  box-shadow: 1px 1px 10px rgb(236, 236, 236), -1px -1px 10px rgb(236, 236, 236);
   width: 90%;
   margin-left: auto;
   margin-right: auto;
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
-}
+} */
 
 .schedule {
   /* width: 70%; */
