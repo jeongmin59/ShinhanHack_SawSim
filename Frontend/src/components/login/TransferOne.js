@@ -101,7 +101,7 @@ const TransferOne = () => {
       if (response.data.dataBody.입금계좌성명 === name) {// 예금주가 같다면?
         // 1원 이체 입금통장메모에 랜덤 숫자 4개 넣어서 보냄 (신한 api) = 인증번호 발송
         const randomNumber = Array.from({ length: 4 }, () => Math.floor(Math.random() * 10)).join('');
-        console.log('시연을 위한 랜덤번호 : ', randomNumber)
+        console.log('랜덤번호 : ', randomNumber)
         sendRandom(randomNumber);
         // 동시에 1원 이체 입금통장메모 저장 api도 보냄 (백 api) - 인증번호 뭔지 백에도 알리기
         sendRandomToBack(randomNumber);

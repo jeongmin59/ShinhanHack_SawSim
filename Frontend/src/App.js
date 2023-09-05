@@ -5,6 +5,8 @@ import Plan from './pages/Plan'
 import Login from './pages/Login'
 import MainPage from './pages/MainPage'
 import Budget from './pages/Budget'
+import Cash from './pages/Cash'
+import TransactionDetail from './pages/TransactionDetail'
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Route exact path='/main' element={<MainPage/>}/>
         <Route exact path='/plan' element={<Plan/>}/>
         <Route exact path='/budget' element={<Budget/>}/>
+        <Route exact path='/cash' element={<Cash/>}/>
+        <Route exact path='/transaction' element={<TransactionDetail/>}/>
       </Routes>
     </div>
   );

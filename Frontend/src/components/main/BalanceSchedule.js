@@ -91,9 +91,13 @@ const BalanceSchedule = () => {
             {/* <p className={styles.account}>{formatAccountNumber(account)}</p> */}
           </div>
         </div>
-        <p className={styles.balance}>100,000원</p>
-        {/* <p className={styles.balance}>{formatBalance(balance)}원</p> */}
-        <Link to='/budget'>
+        <p className={styles.balance}>{formatBalance(balance)}원</p>
+        <Link to={{
+          pathname: '/budget',
+          state: {
+            userNumber: data,
+          }, 
+        }}>
         <Button 
           size="large" 
           style={{ height: '3rem', backgroundColor:'#0046FF', fontFamily:"preRg", width:'80vw'}}
