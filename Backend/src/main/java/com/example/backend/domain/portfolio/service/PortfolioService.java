@@ -54,6 +54,7 @@ public class PortfolioService {
 
             //신한 API에서 해당 거래 내역 일차별 총합
             int expenditure_cost = 0; // 지출
+            portfolioRequestDto.getUserNumber()
 
             //logic
 
