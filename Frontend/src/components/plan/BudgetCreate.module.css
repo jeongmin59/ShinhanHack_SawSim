@@ -1,0 +1,23 @@
+.dateItem {
+    margin-top: 2rem;
+    /* border: 0.5px solid gray; */
+    border-radius: 0.5rem;
+    box-shadow: 4px 4px 20px rgb(236, 236, 236), -4px -4px 20px rgb(236, 236, 236);
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+.category {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.amount {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
