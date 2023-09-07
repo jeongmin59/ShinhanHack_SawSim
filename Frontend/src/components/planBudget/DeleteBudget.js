@@ -14,7 +14,7 @@ const DeleteBuget = () => {
           "amount" : "9000"
         },
         };
-      const response = await axios.delete('/budget/{plain_id}', requestData);
+      const response = await axios.delete('/budget/{plan_id}', requestData);
       console.log('성공:', response);
     } catch (error) {
       console.error('에러:', error);

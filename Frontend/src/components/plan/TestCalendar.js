@@ -6,7 +6,7 @@ import { ko } from 'date-fns/locale';
 import axios from 'axios';
 import './Calendar.css';
 
-const CalendarModal = ({ onDateSelected }) => {
+const TestCalendar = () => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
@@ -24,39 +24,27 @@ const CalendarModal = ({ onDateSelected }) => {
 
   const handleOk = async () => {
     setConfirmLoading(true);
-
-    const formattedStartDate = startDate.toISOString().split('T')[0];
-    let formattedEndDate = null;
-
-    if (endDate !== null) {
-      formattedEndDate = endDate.toISOString().split('T')[0];
-    } else {
-      formattedEndDate = formattedStartDate;
-    }
-
-    console.log('변환된 Start Date:', formattedStartDate);
-    console.log('변환된 End Date:', formattedEndDate);
-
+  
     try {
-      const requestData = {
-        dataBody: { 
-          "startDate" : formattedStartDate,
-          "endDate" : formattedEndDate
+      // POST 요청 데이터를 불러와서 사용합니다.
+      const requestData = require('public/data/addTravelPlan_request.json');
+  
+      const response = await axios.post('/plan', requestData, {
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': '233hWS3k',
         },
-      };
-
-      const response = await axios.post('/plan', requestData);
+      });
+  
       console.log('성공:', response.data);
-
-      // 백엔드에서 받은 날짜를 상위 컴포넌트로 전달
-      onDateSelected({ startDate: formattedStartDate, endDate: formattedEndDate });
     } catch (error) {
-      console.error('그냥 에러:', error);
+      console.error('에러:', error);
     } finally {
       setConfirmLoading(false);
       setOpen(false);
     }
   };
+  
 
   const handleCancel = () => {
     console.log('취소');
@@ -94,4 +82,4 @@ const CalendarModal = ({ onDateSelected }) => {
   );
 };
 
-export default CalendarModal;
+export default TestCalendar;
