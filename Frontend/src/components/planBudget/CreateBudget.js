@@ -28,7 +28,7 @@ const CreateBudget = () => {
           "amount" : "30000"
         },
       };
-    const response = await axios.post("/budget/{plain_id}", requestData);
+    const response = await axios.post("/budget/{plan_id}", requestData);
     console.log(response.data)
       if (response.ok) {
         console.log('성공');
