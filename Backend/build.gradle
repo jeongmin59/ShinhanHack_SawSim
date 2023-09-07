@@ -35,6 +35,12 @@ dependencies {
 
     // springdoc swagger 설정
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+
+    // mysql
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    //webflux
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 }
 
 tasks.named('test') {
