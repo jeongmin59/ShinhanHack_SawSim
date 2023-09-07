@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css'
+import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
-import "./Calendar.css"
+import axios from 'axios';
+import './Calendar.css';
 
 const CalendarModal = () => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  // const [modalText, setModalText] = useState('Content of the modal');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
 
@@ -22,13 +22,37 @@ const CalendarModal = () => {
     setOpen(true);
   };
 
-  const handleOk = () => {
-    // setModalText('The modal will be closed after two seconds');
+  const handleOk = async () => {
     setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
+
+    const formattedStartDate = startDate.toISOString().split('T')[0];
+    let formattedEndDate = null;
+
+    if (endDate !== null) {
+      formattedEndDate = endDate.toISOString().split('T')[0];
+    } else {
+      formattedEndDate = formattedStartDate;
+    }
+
+    console.log('변환된 Start Date:', formattedStartDate);
+    console.log('변환된 End Date:', formattedEndDate);
+
+    try {
+      const requestData = {
+        dataBody: { 
+          "startDate" : formattedStartDate,
+          "endDate" : formattedEndDate
+        },
+      };
+
+      const response = await axios.post('/plan', requestData);
+      console.log('성공:', response.data);
+    } catch (error) {
+      console.error('그냥 에러:', error);
+    } finally {
       setConfirmLoading(false);
-    }, 500);
+      setOpen(false);
+    }
   };
 
   const handleCancel = () => {
@@ -36,8 +60,8 @@ const CalendarModal = () => {
     setOpen(false);
   };
 
-  console.log('startDate:', startDate)
-  console.log('endDate:', endDate)
+  console.log('startDate:', startDate);
+  console.log('endDate:', endDate);
 
   return (
     <div>
@@ -52,7 +76,6 @@ const CalendarModal = () => {
         onCancel={handleCancel}
         width={290}
       >
-        {/* <p>{modalText}</p> */}
         <DatePicker
           selected={startDate}
           onChange={onChange}

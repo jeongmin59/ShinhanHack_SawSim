@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Select, InputNumber, Button } from 'antd';
-import styles from './BudgetCreate.module.css';
+import { Select, InputNumber, Button, Space } from 'antd';
+import axios from "axios";
+import styles from './CreateBudget.module.css';
+import DeleteBuget from './DeleteBudget';
 
 const { Option } = Select;
 
-const BudgetCreate = () => {
+const CreateBudget = () => {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
 
@@ -16,21 +18,21 @@ const BudgetCreate = () => {
     setAmount(value);
   };
 
+  // 백엔드랑 연결후에 수정하기!!!
   const handleSubmit = async () => {
     try {
-      const response = await fetch('/addBudget', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const requestData = {
+        dataBody: { 
+          "travelDate":"2023-08-25", // 날짜 변경 요망
+          "category" : "교통비",
+          "amount" : "30000"
         },
-        body: JSON.stringify({ category, amount }),
-      });
-
+      };
+    const response = await axios.post("/budget/{plain_id}", requestData);
+    console.log(response.data)
       if (response.ok) {
-        // 성공적으로 예산을 추가한 경우 처리
         console.log('성공');
       } else {
-        // 예산 추가 중 오류 발생한 경우 처리
         console.error('추가 중 오류');
       }
     } catch (error) {
@@ -57,26 +59,28 @@ const BudgetCreate = () => {
         </label>
         <br />
         <br />
-        <label className={styles.amount}>
+          <label className={styles.amount}>
           <p>예산:</p>
-          <InputNumber
+          <Space.Compact>
+          <InputNumber addonAfter="₩"
             min={1}
             value={amount}
             onChange={handleAmountChange}
-            style={{ width: '50%' }}
-            formatter={(value) => `₩ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            style={{ width: '80%' }} 
+            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             parser={(value) => value.replace(/\₩\s?|(,*)/g, '')}
-
           />
+          </Space.Compact>
         </label>
         <br />
         <br />
         <Button type="primary" onClick={handleSubmit}>
           예산 추가하기
         </Button>
+        <DeleteBuget />
       </form>
     </div>
   );
 };
 
-export default BudgetCreate;
+export default CreateBudget;
