@@ -8,6 +8,7 @@ import Budget from './pages/Budget'
 import Cash from './pages/Cash'
 import TransactionDetail from './pages/TransactionDetail'
 import PlanBudget from './pages/PlanBudget'
+import Dutch from './pages/Dutch'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route exact path='/cash' element={<Cash/>}/>
         <Route exact path='/transaction' element={<TransactionDetail/>}/>
         <Route exact path='/planbudget' element={<PlanBudget/>}/>
+        <Route exact path='/dutch' element={<Dutch/>}/>
       </Routes>
     </div>
   );

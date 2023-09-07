@@ -1,0 +1,22 @@
+.ant-float-btn-default .ant-float-btn-body .ant-float-btn-content .ant-float-btn-description {
+  font-size: 20px;
+  color: #0046FF;
+
+}
+
+.ant-table-cell {
+  font-size: 16px;
+  font-family: 'preRg';
+}
+
+/* 테이블 제목, 본문 모두 */
+:where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-thead>tr>th, :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-tbody>tr>th, :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-tbody>tr>td, :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper tfoot>tr>th, :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper tfoot>tr>td {
+  padding: 0.2rem;
+  align-items: center;
+  text-align: center;
+}
+
+/* 테이블 제목 */
+:where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-thead >tr>th, :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-thead >tr>td {
+  font-size: 18px;
+}
