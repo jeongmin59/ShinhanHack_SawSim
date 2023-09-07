@@ -221,7 +221,7 @@ public class PortfolioService {
     }
 
     // userNumber로 계좌내역조회 받아오는 메서드
-    private ShinhanTransactionRequestDto transactionHistoryInquiry(String userNumber) {
+    public ShinhanTransactionRequestDto transactionHistoryInquiry(String userNumber) {
         Account account = accountRepository.findAccountByUserNumber(userNumber)
                 .orElseThrow(() -> new IllegalArgumentException("올바른 유저가 아닙니다."));
 
