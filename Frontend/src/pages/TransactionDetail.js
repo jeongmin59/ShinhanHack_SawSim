@@ -58,10 +58,8 @@ const TransactionDetail = () => {
       <Header />
       <p className={styles.transactionTitle}>거래 상세내역</p>
       <div className={styles.transDiv}>
-        <p className={styles.nMent1}>
-          여행메이트와의 정산이 필요한 내역을 체크하고,
-        </p>
-        <p className={styles.nMent}>정산하기 버튼을 눌러 공유해보세요</p>
+        <p className={styles.nMent1}>여행메이트와의 정산이 필요한 내역을 체크하고,</p>
+        <p className={styles.nMent}>정산 내역보기 버튼을 눌러 공유해보세요</p>
       </div>
 
       {selectedRowKeys.length > 0 && (
