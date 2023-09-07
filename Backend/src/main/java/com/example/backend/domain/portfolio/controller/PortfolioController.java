@@ -19,7 +19,6 @@ public class PortfolioController {
     public BasicResponse<PortfolioResponseDto> portfolioBudgetGet(@RequestHeader("User-Number") String userNumber,@PathVariable Long plan_id){
         PortfolioResponseDto portfolioResponseDto = portfolioService.portfolioBudgetGet(userNumber, plan_id);
 
-
         return BasicResponse.<PortfolioResponseDto>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
                 .dataBody(portfolioResponseDto)

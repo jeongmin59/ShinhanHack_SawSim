@@ -8,14 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Transaction {
+public class TransactionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
@@ -23,8 +23,8 @@ public class Transaction {
     private LocalDate date;
     private String store;
     private Long cost;
-    private Long latitude;
-    private Long longitude;
-    private Time time;
+    private Double latitude;
+    private Double longitude;
+    private LocalTime time;
 
 }

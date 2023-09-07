@@ -14,8 +14,9 @@ public class PortfolioResponseDto {
     @Getter
     @Builder(toBuilder = true)
     public static class DataBody {
-        private String totalBudget;
-        private String amount;
+
+        private Long totalBudget;
+        private Long amount;
         private List<LocalDate> budgetOvers;
 
         @Getter

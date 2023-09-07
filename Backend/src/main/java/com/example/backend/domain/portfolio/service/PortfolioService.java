@@ -7,8 +7,12 @@ import com.example.backend.domain.budget.repository.BudgetRepository;
 import com.example.backend.domain.plan.entity.Plan;
 import com.example.backend.domain.plan.repository.PlanRepository;
 import com.example.backend.domain.portfolio.dto.*;
+import com.example.backend.domain.portfolio.entity.BudgetOver;
 import com.example.backend.domain.portfolio.entity.Portfolio;
+import com.example.backend.domain.portfolio.entity.TransactionHistory;
+import com.example.backend.domain.portfolio.repository.BudgetOverRepository;
 import com.example.backend.domain.portfolio.repository.PortfolioRepository;
+import com.example.backend.domain.portfolio.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,8 +21,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +36,8 @@ public class PortfolioService {
     private final PlanRepository planRepository;
     private final AccountRepository accountRepository;
     private final PortfolioRepository portfolioRepository;
+    private final BudgetOverRepository budgetOverRepository;
+    private final TransactionRepository transactionRepository;
 
 
     public PortfolioResponseDto portfolioBudgetGet(String userNumber ,Long plan_id) {
@@ -53,8 +60,8 @@ public class PortfolioService {
         }
 
         //날짜 차이 계산
-        Period period = Period.between(plan.get().getStartDate(),plan.get().getEndDate());
-        int day = period.getDays();
+        long day = ChronoUnit.DAYS.between(plan.get().getStartDate(),plan.get().getEndDate());
+
 
         int budget_total=0; // 예산 총합
         int expenditure_total=0; // 지출 총합
@@ -93,6 +100,13 @@ public class PortfolioService {
             // 금액 초과 일자 구하기
             if((budget_cost-expenditure_cost)<0){
                 budgetOver.add(plan.get().getStartDate().plusDays(i));
+                BudgetOver budget = new BudgetOver(
+                        null,
+                        plan.get().getStartDate().plusDays(i),
+                        (long)(budget_cost-expenditure_cost)
+                );
+
+                budgetOverRepository.save(budget);
             }
 
             // total 더하기
@@ -100,7 +114,7 @@ public class PortfolioService {
             expenditure_total+=expenditure_cost;
         }
 
-        long totalBudget = new Double((double)expenditure_total/ (double)budget_total * 100.0).longValue();
+        long totalBudget = (long) ((double) expenditure_total / budget_total);
         long consumptionAmount = budget_total-expenditure_total;
         // 여행 포트폴리오 저장
         Portfolio portfolio = new Portfolio(
@@ -113,9 +127,11 @@ public class PortfolioService {
         portfolioRepository.save(portfolio);
 
         PortfolioResponseDto portfolioResponseDto = PortfolioResponseDto.builder()
-                .dataBody(PortfolioResponseDto.DataBody.builder().totalBudget(String.valueOf(totalBudget)).build())
-                .dataBody(PortfolioResponseDto.DataBody.builder().amount(String.valueOf(consumptionAmount)).build())
-                .dataBody(PortfolioResponseDto.DataBody.builder().budgetOvers(budgetOver).build())
+                .dataBody(PortfolioResponseDto.DataBody.builder()
+                        .totalBudget(totalBudget)
+                        .amount(consumptionAmount)
+                        .budgetOvers(budgetOver)
+                        .build())
                 .build();
 
         return portfolioResponseDto;
@@ -151,7 +167,8 @@ public class PortfolioService {
 
             // 여행 날짜에 포함되는 거래 내역이고
             // 출금 금액이 있으면 저장
-            if ((plan.get().getStartDate().compareTo(date))>=0 && (plan.get().getEndDate().compareTo(date))<=0
+
+            if ((plan.get().getStartDate().compareTo(date))<=0 && (plan.get().getEndDate().compareTo(date))>=0
                     && Integer.parseInt(transactionHistory.getWithdrawalAmount())>0 ){
 
                 //4. 위도 경도 받아오는 api 사용
@@ -173,6 +190,20 @@ public class PortfolioService {
                             .build();
 
                     travelInfoList.add(travelInfo);
+
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmmss");
+                    LocalTime parsedTime = LocalTime.parse(transactionHistory.getTransactionTime(), formatter);
+
+                    TransactionHistory transaction = new TransactionHistory(
+                            null,
+                            date,
+                            transactionHistory.getDetail(),
+                            Long.parseLong(transactionHistory.getWithdrawalAmount()),
+                            Double.parseDouble(latitude),
+                            Double.parseDouble(longitude),
+                            parsedTime
+                    );
+                    transactionRepository.save(transaction);
                 }
             }
         }

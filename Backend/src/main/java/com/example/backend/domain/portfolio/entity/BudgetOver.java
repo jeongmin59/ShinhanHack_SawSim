@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
@@ -18,5 +19,6 @@ public class BudgetOver {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long overId;
 
+    private LocalDate date;
     private Long budgetOver;
 }
