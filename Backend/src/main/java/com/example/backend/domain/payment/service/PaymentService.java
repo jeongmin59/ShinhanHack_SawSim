@@ -94,7 +94,7 @@ public class PaymentService {
         String latestTime = (String) hash.get("latestTime");
 
         return LatestDateTimeResponseDto.builder()
-                .transactionDate(LocalDate.parse(latestDate))
-                .transactionTime(LocalTime.parse(latestTime)).build();
+                .transactionDate(LocalDate.parse(latestDate, DateTimeFormatter .ofPattern("yyyyMMdd")))
+                .transactionTime(LocalTime.parse(latestTime, DateTimeFormatter .ofPattern("HHmmss"))).build();
     }
 }

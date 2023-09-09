@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/budget/{plan_id}")
+@RequestMapping("/budget/{planId}")
 @RequiredArgsConstructor
 public class BudgetController {
 
     private final BudgetService budgetService;
 
     @GetMapping()
-    public BasicResponse<List<Budget>> budgetGet(@PathVariable Long plan_id){
-        List<Budget> budgets = budgetService.budgetGet(plan_id);
+    public BasicResponse<List<Budget>> budgetGet(@PathVariable Long planId){
+        List<Budget> budgets = budgetService.budgetGet(planId);
 
         return BasicResponse.<List<Budget>>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
@@ -28,10 +28,10 @@ public class BudgetController {
 
 
     @PostMapping()
-    public BasicResponse<BudgetSaveResponseDto> budgetSave(@RequestBody BudgetSaveRequestDto budgetSaveRequestDto, @PathVariable Long plan_id){
+    public BasicResponse<BudgetSaveResponseDto> budgetSave(@RequestBody BudgetSaveRequestDto budgetSaveRequestDto, @PathVariable Long planId){
 
         BudgetSaveResponseDto budgetSaveResponseDto = BudgetSaveResponseDto.builder()
-                .planId(plan_id)
+                .planId(planId)
                 .amount(budgetSaveRequestDto.getDataBody().getAmount())
                 .category(budgetSaveRequestDto.getDataBody().getCategory())
                 .travelDate(budgetSaveRequestDto.getDataBody().getTravelDate())

@@ -1,28 +1,34 @@
 package com.example.backend.domain.plan.service;
 
+import com.example.backend.domain.account.Account;
+import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.plan.dto.PlanDetailResponseDto;
 import com.example.backend.domain.plan.dto.PlanSaveRequestDto;
 import com.example.backend.domain.plan.entity.Plan;
 import com.example.backend.domain.plan.repository.PlanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PlanService {
 
     private final PlanRepository planRepository;
+    private final AccountRepository accountRepository;
 
     public void planSave(PlanSaveRequestDto planSaveRequestDto, Long accountId) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new IllegalArgumentException("올바른 유저가 아닙니다."));
+
         Plan plan = new Plan(
                 null,
-                accountId,
                 planSaveRequestDto.getDataBody().getStartDate(),
-                planSaveRequestDto.getDataBody().getEndDate()
+                planSaveRequestDto.getDataBody().getEndDate(),
+                account
         );
 
         planRepository.save(plan);
@@ -35,19 +41,14 @@ public class PlanService {
     }
 
     public PlanDetailResponseDto planDetail(Long planId) {
-        Optional<Plan> plan = planRepository.findById(planId);
+        Plan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new NotFoundException("생성되지 않은 여행계획입니다."));
 
-        if(plan.isEmpty()){
-            return null;
-        }
-
-        PlanDetailResponseDto planDetailResponseDto = PlanDetailResponseDto.builder()
-                .accountId(plan.get().getAccountId())
-                .startDate(plan.get().getStartDate())
-                .endDate(plan.get().getEndDate())
+        return PlanDetailResponseDto.builder()
+                .accountId(plan.getAccount().getId())
+                .startDate(plan.getStartDate())
+                .endDate(plan.getEndDate())
                 .build();
-
-        return planDetailResponseDto;
 
     }
 }

@@ -79,10 +79,8 @@ public class BudgetScheduler {
             }
             paymentRepository.saveAll(payments);
 
-            // "todayBudget_" + plan.getAccount().getNumber() key 로 redis 확인
             long todayBudget = Long.parseLong(redisService.getValues(plan.getAccount().getNumber()));
-            // 오늘 사용한 실사용내역 합 구하기
-            List<Payment> paymentList = paymentRepository.findByAccountAndDate(plan.getAccount(), today);
+            List<Payment> paymentList = paymentRepository.findByAccountAndTransactionDate(plan.getAccount(), today);
 
             long totalAmount = paymentList.stream()
                     .mapToLong(Payment::getAmount)
@@ -91,7 +89,7 @@ public class BudgetScheduler {
             String userNumber = plan.getAccount().getUserNumber();
             String username = plan.getAccount().getUsername();
             if (todayBudget <= totalAmount) {
-                SOLPushNotificationResponse solPushNotificationResponse = callPushNotificationApi(userNumber, username);
+                callPushNotificationApi(userNumber, username); // TODO: 수행결과 "N" 이면 예외처리해주기(지금은 무조건 성공 나옴)
             }
         }
     }

@@ -11,5 +11,5 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     List<Payment> findByAccountId(Long accountId);
 
-    List<Payment> findByAccountAndDate(Account account, LocalDate today);
+    List<Payment> findByAccountAndTransactionDate(Account account, LocalDate today);
 }
