@@ -9,7 +9,15 @@
 
 .react-datepicker__day--selected, .react-datepicker__day--in-selecting-range, .react-datepicker__day--in-range, .react-datepicker__month-text--selected, .react-datepicker__month-text--in-selecting-range, .react-datepicker__month-text--in-range, .react-datepicker__quarter-text--selected, .react-datepicker__quarter-text--in-selecting-range, .react-datepicker__quarter-text--in-range, .react-datepicker__year-text--selected, .react-datepicker__year-text--in-selecting-range, .react-datepicker__year-text--in-range {
   border-radius: 0.3rem;
-  background-color: #0046FF;
+  background-color: #316FDF;
   color: #fff;
 }
 
+.ant-btn {
+  background-color: #316FDF;
+  margin-top: 2rem;
+}
+
+.ant-btn-default {
+  background-color: #ffffff;
+}

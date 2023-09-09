@@ -68,7 +68,14 @@ const CalendarModal = ({ onDateSelected }) => {
 
   return (
     <div>
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary"
+      onClick={showModal}
+      style={{height: '2.5rem', 
+        width: '30%', 
+        backgroundColor:'#316FDF', 
+        fontFamily:"preRg"}} 
+      size="large"
+      >
         일정 선택
       </Button>
       <Modal
@@ -78,6 +85,21 @@ const CalendarModal = ({ onDateSelected }) => {
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
         width={290}
+        style={{height: '2.5rem', width: '30%', backgroundColor:'#316FDF', fontFamily:"preRg"}} 
+        size="large"
+        okText="확인"
+        cancelText="취소" 
+        okButtonProps={{
+          style: {
+            backgroundColor: '#316FDF', 
+            fontFamily:"preRg"
+          },
+        }}
+        cancelButtonProps={{
+          style: {
+            fontFamily:"preRg"
+          },
+        }}
       >
         <DatePicker
           selected={startDate}
