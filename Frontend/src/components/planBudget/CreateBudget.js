@@ -42,26 +42,28 @@ const CreateBudget = () => {
 
   return (
     <div>
-      <h3>예산 추가하기</h3>
+      <h2>예산 추가하기</h2>
       <form className={styles.dateItem}>
         <label className={styles.category}>
-          <p>카테고리:</p>
+          <p className={styles.categoryTitle}>카테고리</p>
           <Select
             placeholder="선택"
             optionFilterProp="children"
             onChange={handleCategoryChange}
             style={{ width: '30%' }}
           >
-            <Option value="food">식비</Option>
-            <Option value="transportation ">교통비</Option>
-            <Option value="shopping">쇼핑</Option>
+            <Option value="food">음식점</Option>
+            <Option value="transportation ">교통,수송</Option>
+            <Option value="accommodation">여행</Option>
+            <Option value="healthcare">의료, 건강</Option>
+            <Option value="etc">기타</Option>
           </Select>
         </label>
         <br />
         <br />
           <label className={styles.amount}>
-          <p>예산:</p>
-          <Space.Compact>
+          <p className={styles.amountTitle}>예산</p>
+          <Space.Compact className={styles.amountInput}>
           <InputNumber addonAfter="₩"
             min={1}
             value={amount}
