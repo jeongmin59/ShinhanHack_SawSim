@@ -10,8 +10,8 @@ import java.time.LocalTime;
 @Getter
 @Builder(toBuilder = true)
 public class LatestDateTimeResponseDto {
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyyMMdd")
     private LocalDate transactionDate;
-    @DateTimeFormat(pattern = "HH:mm")
+    @DateTimeFormat(pattern = "HHmmss")
     private LocalTime transactionTime;
 }

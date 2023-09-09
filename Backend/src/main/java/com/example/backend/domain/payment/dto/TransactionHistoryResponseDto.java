@@ -14,9 +14,9 @@ public class TransactionHistoryResponseDto {
     private String content;
     private Long amount;
     private String storeName;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyyMMdd")
     private LocalDate transactionDate;
-    @DateTimeFormat(pattern = "HH:mm")
+    @DateTimeFormat(pattern = "HHmmss")
     private LocalTime transactionTime;
     private PaymentType paymentType;
 }
