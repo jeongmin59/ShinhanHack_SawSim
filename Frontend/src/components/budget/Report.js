@@ -4,6 +4,7 @@ import styles from "./Report.module.css";
 import axios from "axios";
 import { Button, Tooltip } from 'antd';
 
+
 const Report = () => {
   const data = useLocation().state?.userNumber;
   const [day, setDay] = useState("")
@@ -82,8 +83,10 @@ const Report = () => {
     <div className={styles.calendarDiv}>
       {/* <p className={styles.ment}>여행 3일차</p>
       <p className={styles.ment}>오늘 예산의 75%인 12,000원을 사용하셨네요!</p> */}
-      <Link to="/cash"><Button style={{fontFamily:"preRg", marginRight:'1rem'}} type="primary">현금 기록하기</Button></Link>
-      <Link to="/transaction"><Button style={{fontFamily:"preRg"}} type="primary">상세보기</Button></Link>
+      <Link to="/cash">
+        <Button style={{color:'white', fontFamily:"preRg", backgroundColor:'#316FDF', marginRight:'1rem'}}>현금 기록하기</Button>
+      </Link>
+      <Link to="/transaction"><Button style={{color:'white', fontFamily:"preRg", backgroundColor:'#316FDF'}}>상세보기</Button></Link>
     </div>
   </div>
   );

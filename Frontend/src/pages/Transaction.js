@@ -23,25 +23,25 @@ const columns = [
     title: '일시',
     dataIndex: '일시',
     width: '20%',
-    // render: (text) => <a className={styles.time}>{text}</a>,
-    render: (text) => (
-      <Link to='/transaction/detail' className={styles.time}><div dangerouslySetInnerHTML={{ __html: text.replace(' ', '<br/>') }} /></Link>
-    ),
+    render: (text) => <p style={{fontFamily:'preLt', margin:0}}>{text}</p>,
+    // render: (text) => (
+    //   <Link to='/transaction/detail' className={styles.time}><div dangerouslySetInnerHTML={{ __html: text.replace(' ', '<br/>') }} /></Link>
+    // ),
   },
   {
     title: '상세내역',
     dataIndex: '상세내역',
     width: '36%',
-    render: (text) => (
-      <Link to='/transaction/detail' className={styles.time}>{text}</Link>
-    ),    
+    // render: (text) => (
+    //   <Link to='/transaction/detail' className={styles.time}>{text}</Link>
+    // ),    
   },
   {
     title: '금액',
     dataIndex: '금액',
-    render: (text) => (
-      <Link to='/transaction/detail' className={styles.time}>{text}</Link>
-    ),  
+    // render: (text) => (
+    //   <Link to='/transaction/detail' className={styles.time}>{text}</Link>
+    // ),  
     // width: '30%',
   },
   {
@@ -119,6 +119,7 @@ const Transaction = () => {
   const navigate = useNavigate();
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     setSelectedRowKeys(selectedRowKeys);
@@ -140,7 +141,7 @@ const Transaction = () => {
       <Header />
       <div className={styles.titles}>
         <Link className={styles.backLink} to='/budget'><p className={styles.toBack}>&lt;</p>
-        <p className={styles.transactionTitle}>거래 상세내역</p></Link> 
+        <p className={styles.transactionTitle}>거래 내역</p></Link> 
       </div>
       <div className={styles.transDiv}>
         <p className={styles.nMent1}>여행메이트와의 정산이 필요한 내역을 체크하고,</p>
@@ -162,7 +163,7 @@ const Transaction = () => {
         />
       )}
 
-      <div className={styles.detailDiv}>
+      <div style={{ marginTop: '0.1rem' }}>
         <Table
           style={{backgroundColor:'#F4F5FA', background:'#F4F5FA'}}
           rowSelection={{
@@ -176,6 +177,12 @@ const Transaction = () => {
           pagination={false}
           hideSelectAll={true}
           onClick={check}
+          onRow={(record) => ({
+            onClick: () => {
+              setSelectedTransaction(record);
+              navigate('/transaction/detail', { state: { selectedRow: record } });
+            },
+          })}
         />
       </div>
     </div>
