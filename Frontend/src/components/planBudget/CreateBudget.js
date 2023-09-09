@@ -3,6 +3,7 @@ import { Select, InputNumber, Button, Space } from 'antd';
 import axios from "axios";
 import styles from './CreateBudget.module.css';
 import DeleteBuget from './DeleteBudget';
+import './Create.css'
 
 const { Option } = Select;
 
@@ -48,9 +49,9 @@ const CreateBudget = () => {
           <p className={styles.categoryTitle}>카테고리</p>
           <Select
             placeholder="선택"
-            optionFilterProp="children"
+            // optionFilterProp="children"
             onChange={handleCategoryChange}
-            style={{ width: '30%' }}
+            style={{ width: '30%', fontFamily:"preRg"}}
           >
             <Option value="food">음식점</Option>
             <Option value="transportation ">교통,수송</Option>
@@ -76,10 +77,18 @@ const CreateBudget = () => {
         </label>
         <br />
         <br />
-        <Button type="primary" onClick={handleSubmit}>
-          예산 추가하기
-        </Button>
-        <DeleteBuget />
+        <div className={styles.btnContainer}>
+
+          <Button type="primary" 
+            onClick={handleSubmit}
+            style={{height: '2.5rem', width: '35%', 
+            marginRight: '1rem',
+            backgroundColor:'#316FDF', fontFamily:"preRg"}} 
+            size="large">
+            예산 추가하기
+          </Button>
+          <DeleteBuget />
+        </div>
       </form>
     </div>
   );

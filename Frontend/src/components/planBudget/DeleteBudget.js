@@ -22,9 +22,13 @@ const DeleteBuget = () => {
   };
 
   return (
-    <div>
-      <Button onClick={handleDelete}>삭제</Button>
-    </div>
+    <p>
+      <Button 
+        onClick={handleDelete}
+        style={{height: '2.5rem', width: '100%', fontFamily:"preRg"}} 
+        size="large"
+      >삭제</Button>
+    </p>
   );
 }
 
