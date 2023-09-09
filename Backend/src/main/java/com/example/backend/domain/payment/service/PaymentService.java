@@ -15,8 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +36,12 @@ public class PaymentService {
 
         List<TransactionHistoryRequestDto.Transaction> transactionHistory = transactionHistoryRequestDto.getDataBody().getTransactionHistory();
 
+        Optional<TransactionHistoryRequestDto.Transaction> latestTransaction = transactionHistory.stream()
+                .max(Comparator.comparing(TransactionHistoryRequestDto.Transaction::getTransactionDate)
+                        .thenComparing(TransactionHistoryRequestDto.Transaction::getTransactionTime));
+
         // 확인된 가장 최신 결제 시간 redis 저장
-        if (!transactionHistory.isEmpty()) {
-            updateLatestDateTimeInRedis(userNumber, transactionHistory.get(0));
-        }
+        latestTransaction.ifPresent(transaction -> updateLatestDateTimeInRedis(userNumber, transaction));
 
         List<Payment> payments = convertTransactionsToPayments(transactionHistory, account);
 
@@ -79,9 +83,8 @@ public class PaymentService {
 
     private void updateLatestDateTimeInRedis(String userNumber, TransactionHistoryRequestDto.Transaction transaction) {
         Map<String, String> map = Map.of(
-                "latestDate", transaction.getTransactionDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                "latestTime", transaction.getTransactionTime().format(DateTimeFormatter.ofPattern("HH:mm")));
-
+                "latestDate", transaction.getTransactionDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")),
+                "latestTime", transaction.getTransactionTime().format(DateTimeFormatter.ofPattern("HHmmss")));
         redisService.setHash(userNumber, map);
     }
 
@@ -91,7 +94,7 @@ public class PaymentService {
         String latestTime = (String) hash.get("latestTime");
 
         return LatestDateTimeResponseDto.builder()
-                .transactionDate(LocalDate.parse(latestDate))
-                .transactionTime(LocalTime.parse(latestTime)).build();
+                .transactionDate(LocalDate.parse(latestDate, DateTimeFormatter .ofPattern("yyyyMMdd")))
+                .transactionTime(LocalTime.parse(latestTime, DateTimeFormatter .ofPattern("HHmmss"))).build();
     }
 }
