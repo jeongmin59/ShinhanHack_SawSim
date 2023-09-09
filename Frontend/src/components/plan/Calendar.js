@@ -73,6 +73,7 @@ const CalendarModal = ({ onDateSelected }) => {
       style={{height: '2.5rem', 
         width: '30%', 
         backgroundColor:'#316FDF', 
+        marginTop: '3rem',
         fontFamily:"preRg"}} 
       size="large"
       >
@@ -85,7 +86,8 @@ const CalendarModal = ({ onDateSelected }) => {
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
         width={290}
-        style={{height: '2.5rem', width: '30%', backgroundColor:'#316FDF', fontFamily:"preRg"}} 
+        style={{height: '2.5rem', width: '30%', 
+        backgroundColor:'#316FDF', fontFamily:"preRg"}} 
         size="large"
         okText="확인"
         cancelText="취소" 
