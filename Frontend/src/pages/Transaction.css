@@ -1,15 +1,17 @@
+/* 거래내역 페이지 '정산하기' 플로팅 */
 .ant-float-btn-default .ant-float-btn-body .ant-float-btn-content .ant-float-btn-description {
   font-size: 1.2rem;
   color: #316FDF;
 }
 
+/* 거래내역&정산하기 페이지 테이블 본문 */
 .ant-table-cell {
   font-size: 0.9rem;
   font-family: 'preRg';
   background-color: #F4F5FA;
 }
 
-/* 테이블 제목, 본문 모두 */
+/* 거래내역&정산하기 페이지 테이블 제목, 본문 모두 */
 :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-thead>tr>th, :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-tbody>tr>th, :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-tbody>tr>td, :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper tfoot>tr>th, :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper tfoot>tr>td {
   padding: 0.2rem;
   align-items: center;
@@ -17,20 +19,39 @@
   border-bottom: 1px solid rgb(212, 212, 212);
 }
 
-/* 테이블 제목 */
+/* 거래내역&정산하기 페이지 테이블 제목 */
 :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-thead >tr>th, :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-thead >tr>td {
   font-size: 1rem;
   /* background-color: #F4F5FA; */
   border-bottom: 1px solid rgb(75, 75, 75);
 }
 
-
-/* 로그인화면 addon (예금주, 계좌번호) */
+/* 로그인화면 input 앞에 addon (예금주, 계좌번호) */
 .ant-input-group-addon {
   font-family: 'preRg';
 }
 
-/* 로그인화면 input 텍스트 */
+/* 로그인화면 input 텍스트 폰트 */
 .ant-input-affix-wrapper .ant-input-affix-wrapper-lg .css-dev-only-do-not-override-nnuwmp {
+  font-family: 'preRg';
+}
+
+/* 예산 카테고리 선택 */
+.ant-select {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.ant-input-number-group-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.ant-select-dropdown {
+  font-family: 'preRg';
+}
+.ant-select-selection-item {
   font-family: 'preRg';
 }
