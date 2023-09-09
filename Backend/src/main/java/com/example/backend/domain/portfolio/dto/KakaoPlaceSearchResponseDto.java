@@ -22,6 +22,7 @@ public class KakaoPlaceSearchResponseDto {
         private String address_name;
         private String x; // longitude
         private String y; // latitude
+        private String category_name;
 
         // Getter and Setter methods
     }
