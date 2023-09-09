@@ -1,6 +1,7 @@
 package com.example.backend.domain.portfolio.service;
 
 import com.example.backend.domain.account.Account;
+import com.example.backend.domain.account.exception.UserNotFountException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.budget.entity.Budget;
 import com.example.backend.domain.budget.repository.BudgetRepository;
@@ -223,7 +224,7 @@ public class PortfolioService {
     // userNumber로 계좌내역조회 받아오는 메서드
     public ShinhanTransactionRequestDto transactionHistoryInquiry(String userNumber) {
         Account account = accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(() -> new IllegalArgumentException("올바른 유저가 아닙니다."));
+                .orElseThrow(UserNotFountException::new);
 
         ShinhanTransactionResponseDto shinhanTransactionResponseDto = ShinhanTransactionResponseDto.builder()
                 .dataHeader(ShinhanTransactionResponseDto.DataHeader.builder().apikey("2023_Shinhan_SSAFY_Hackathon").build())

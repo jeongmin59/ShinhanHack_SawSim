@@ -1,6 +1,7 @@
 package com.example.backend.domain.account.service;
 
 import com.example.backend.domain.account.Account;
+import com.example.backend.domain.account.exception.CertificationCodeNotMatchedException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.common.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class AccountService {
         String realNumber = (String) hash.get("authMemo");
 
         if (!realNumber.equals(authNumber)) {
-            throw new IllegalArgumentException("인증번호가 일치하지 않습니다.");
+            throw new CertificationCodeNotMatchedException();
         }
 
         return name;
