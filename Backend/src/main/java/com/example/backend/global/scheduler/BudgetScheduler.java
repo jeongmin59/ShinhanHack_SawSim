@@ -9,6 +9,7 @@ import com.example.backend.domain.payment.repository.PaymentRepository;
 import com.example.backend.domain.plan.entity.Plan;
 import com.example.backend.domain.plan.repository.PlanRepository;
 import com.example.backend.global.scheduler.dto.AccountHistoryResponse;
+import com.example.backend.global.scheduler.dto.SOLPushNotificationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -77,6 +78,21 @@ public class BudgetScheduler {
                         plan.getAccount()));
             }
             paymentRepository.saveAll(payments);
+
+            // "todayBudget_" + plan.getAccount().getNumber() key 로 redis 확인
+            long todayBudget = Long.parseLong(redisService.getValues(plan.getAccount().getNumber()));
+            // 오늘 사용한 실사용내역 합 구하기
+            List<Payment> paymentList = paymentRepository.findByAccountAndDate(plan.getAccount(), today);
+
+            long totalAmount = paymentList.stream()
+                    .mapToLong(Payment::getAmount)
+                    .sum();
+
+            String userNumber = plan.getAccount().getUserNumber();
+            String username = plan.getAccount().getUsername();
+            if (todayBudget <= totalAmount) {
+                SOLPushNotificationResponse solPushNotificationResponse = callPushNotificationApi(userNumber, username);
+            }
         }
     }
 
@@ -104,6 +120,34 @@ public class BudgetScheduler {
 
         ResponseEntity<AccountHistoryResponse> response =
                 restTemplate.postForEntity(url, entity, AccountHistoryResponse.class);
+
+        return response.getBody();
+    }
+
+    private SOLPushNotificationResponse callPushNotificationApi(String userNumber, String username) {
+        Map<String, String> dataHeader = new HashMap<>();
+        dataHeader.put("apikey", "2023_Shinhan_SSAFY_Hackathon");
+
+        Map<String, String> dataBody = new HashMap<>();
+        dataBody.put("제휴고객번호", userNumber);
+        dataBody.put("발송메시지", username);
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("dataHeader", dataHeader);
+        requestBody.put("dataBody", dataBody);
+
+        String url = "https://shbhack.shinhan.com/v1/notice/sol-push";
+
+        // RestTemplate 사용
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        ResponseEntity<SOLPushNotificationResponse> response =
+                restTemplate.postForEntity(url, entity, SOLPushNotificationResponse.class);
 
         return response.getBody();
     }
