@@ -23,9 +23,6 @@ const DeleteBuget = () => {
 
   return (
     <div>
-      <div>
-        하이
-      </div>
       <Button onClick={handleDelete}>삭제</Button>
     </div>
   );

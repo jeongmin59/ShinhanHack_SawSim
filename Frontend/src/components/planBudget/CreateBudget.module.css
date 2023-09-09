@@ -8,6 +8,7 @@
     margin-right: auto;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
+    
   }
 
 .category {
@@ -21,3 +22,21 @@
     flex-direction: row;
     justify-content: center;
 }
+
+.categoryTitle {
+    margin-right: 1rem; 
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+  
+.amountTitle {
+    margin-right: 1rem;
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+  
+  
+.amountInput {
+    margin-left: 1rem; 
+  }
+  
