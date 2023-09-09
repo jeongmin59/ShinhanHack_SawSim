@@ -6,6 +6,8 @@ import { Button, Table } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
+// import './Transaction.css';
+
 
 const columns = [
   {
