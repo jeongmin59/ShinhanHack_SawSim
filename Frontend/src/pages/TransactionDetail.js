@@ -93,8 +93,8 @@ const TransactionDetail = () => {
     <div>
       <Header />
       <div className={styles.titles}>
-        <Link className={styles.backLink} to='/budget'><p className={styles.toBack}>&lt;</p><p className={styles.transactionTitle}>거래 상세내역</p></Link>
-        
+        <Link className={styles.backLink} to='/budget'><p className={styles.toBack}>&lt;</p>
+        <p className={styles.transactionTitle}>거래 상세내역</p></Link> 
       </div>
       <div className={styles.transDiv}>
         <p className={styles.nMent1}>여행메이트와의 정산이 필요한 내역을 체크하고,</p>
