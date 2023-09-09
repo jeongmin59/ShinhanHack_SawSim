@@ -100,7 +100,7 @@ const BalanceSchedule = () => {
         }}>
         <Button 
           size="large" 
-          style={{ marginTop:0, height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
+          style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
           className={styles.startTrip}
           type="primary">여행 시작하기</Button></Link>
       </div>
