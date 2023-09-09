@@ -7,14 +7,11 @@ import { DownloadOutlined } from '@ant-design/icons';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
 
-const { Kakao} = window;
-
-
 const columns = [
   {
     title: '일시',
     dataIndex: '일시',
-    width: '43%',
+    width: '37%',
   },
   {
     title: '상세내역',
@@ -23,40 +20,24 @@ const columns = [
   {
     title: '금액',
     dataIndex: '금액',
-    // width: '25%',/
+    width: '27%',
   },
 ];
 
 const Dutch = () => {
   const location = useLocation();
   const selectedRows = location.state && location.state.selectedRows;
-  const resultUrl = window.location.href;
   const data = selectedRows;
 
   const cardRef = useRef();
   const onDownloadBtn = () => {
     const card = cardRef.current;
     domtoimage.toBlob(card).then(blob => {
-      saveAs(blob, 'card.png');
+      saveAs(blob, '정산내역.png');
     });
   }
 
-
-  const share = () => {
-    Kakao.Share.sendDefault({
-      objectType: 'text',
-      text: 'data',
-      link: {
-            webUrl: resultUrl,
-            mobileWebUrl: resultUrl,
-          },
-        })
-    }
-    
   useEffect(() => {
-    Kakao.cleanup();
-    Kakao.init('dcb221d398f716119c61870ef4204001')
-    console.log(Kakao.isInitialized())
   }, []);
 
 
@@ -74,7 +55,7 @@ const Dutch = () => {
             ref={cardRef}
             columns={columns}
             dataSource={data}
-            scroll={{ y: '63vh' }}
+            // scroll={{ y: '63vh' }}
             pagination={false}
             hideSelectAll={true}
           />
