@@ -1,7 +1,6 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 module.exports = function (app) {
-  // 프록시1 설정
   app.use(
     "/api1",
     createProxyMiddleware({
@@ -10,6 +9,16 @@ module.exports = function (app) {
       pathRewrite: {
         "^/api1": "",
       },
-    })
+    }),
+  );
+  app.use(
+    "/api2",
+    createProxyMiddleware({
+      target: "http://34.64.216.247:8080",
+      changeOrigin: true,
+      pathRewrite: {
+        "^/api2": "",
+      },
+    }),
   );
 };

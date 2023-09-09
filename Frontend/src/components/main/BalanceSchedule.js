@@ -38,12 +38,7 @@ const BalanceSchedule = () => {
   // 9. data에 저장된 userName 이용해 계좌 조회 > accountNumber 나옴
   const checkAccount = async () => {
     try {
-      const requestData = {
-        dataHeader: {
-          "User-Number": data,
-        },
-      };
-      const response = await axios.get("/api2/v1/auth/accounts", requestData);
+      const response = await axios.get("/api2/auth/accounts", { headers: { "User-Number": data } });
       console.log(response.data)
       console.log(response.data.dataBody.accountNumber)
       setAccount(response.data.dataBody.accountNumber)
@@ -77,8 +72,11 @@ const BalanceSchedule = () => {
 
   useEffect(() => {
     checkAccount();
-    checkBalance();
-  });
+    // checkBalance();
+    if (account) {
+      checkBalance();
+    }
+ }, [account]); // account 상태 업데이트 될때마다 재실행
 
   return (
     <div className={styles.div}>

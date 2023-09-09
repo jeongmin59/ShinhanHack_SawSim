@@ -75,7 +75,7 @@ const TransferOne = () => {
           name: name,
           authMemo: randomNumber
       }}
-      const response = await axios.post("/api2/v1/auth/memo", requestData);
+      const response = await axios.post("/api2/auth/memo", requestData);
       console.log(response.data)
     } catch (error) {
       console.error(error);
@@ -125,11 +125,12 @@ const TransferOne = () => {
           authNumber : ranInput
         },
       };
-      const response = await axios.post("/api2/v1/auth/verify", requestData);
-      console.log(response.data)
-      console.log(response.data.dataHeader.successCode);
-      const userNumber = response.data.dataBody.useNumber
-      if (response.data.dataHeader.successCode === 0) {// 인증번호가 맞다면?
+      const response = await axios.post("/api2/auth/verify", requestData);
+      console.log('여길봐라',response.data)
+      console.log('이놈아',response.data.dataHeader.successCode);
+      const userNumber = response.data.dataBody.userNumber
+      console.log('유져네임이다',userNumber);
+      if (response.data.dataHeader.successCode === '0') {// 인증번호가 맞다면?
         // 7. 계좌 등록 되고(api 보낼때 같이 됨) userNumber 받음
         // 8. 다음페이지로 넘기기
         goToMain(userNumber);
