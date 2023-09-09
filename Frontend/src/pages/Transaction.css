@@ -1,7 +1,6 @@
 .ant-float-btn-default .ant-float-btn-body .ant-float-btn-content .ant-float-btn-description {
   font-size: 20px;
-  color: #0046FF;
-
+  color: #316FDF;
 }
 
 .ant-table-cell {
@@ -19,4 +18,14 @@
 /* 테이블 제목 */
 :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-thead >tr>th, :where(.css-dev-only-do-not-override-nnuwmp).ant-table-wrapper .ant-table-thead >tr>td {
   font-size: 18px;
+}
+
+/* 로그인화면 addon (예금주, 계좌번호) */
+.ant-input-group-addon {
+  font-family: 'preRg';
+}
+
+/* 로그인화면 input 텍스트 */
+.ant-input-affix-wrapper .ant-input-affix-wrapper-lg .css-dev-only-do-not-override-nnuwmp {
+  font-family: 'preRg';
 }

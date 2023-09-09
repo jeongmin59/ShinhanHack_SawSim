@@ -152,8 +152,7 @@ const TransferOne = () => {
       {showRandomInput ? ( // 인증번호 입력 인풋
         <>
           <div style={{marginTop: '3rem', display: 'flex', justifyContent: 'center'}}>
-            <ExclamationCircleOutlined />
-            <p style={{fontSize:'1.1rem', marginLeft: '0.2rem'}}>입금통장 메모의 숫자 4자리를 입력해주세요.</p>
+            <p style={{fontSize:'1.1rem'}}>입금통장 메모의 숫자 4자리를 입력해주세요.</p>
           </div>
           <Space.Compact style={{width: '45%'}}>
             <Input.Password
@@ -164,7 +163,7 @@ const TransferOne = () => {
               onPressEnter={checkRandom}
               size="large" />
             <Button 
-            style={{backgroundColor:'#0046FF', fontFamily:"preRg"}} 
+            style={{backgroundColor:'#316FDF', fontFamily:"preRg"}} 
             size="large" 
             onClick={checkRandom}
             type="primary">확인</Button>    
@@ -196,7 +195,7 @@ const TransferOne = () => {
               allowClear />
             </Space.Compact>      
           <Button 
-              style={{height: '3rem', width: '90%', backgroundColor:'#0046FF', fontFamily:"preRg"}} 
+              style={{height: '3rem', width: '90%', backgroundColor:'#316FDF', fontFamily:"preRg"}} 
               size="large" 
               className={styles.submit} 
               onClick={checkName}

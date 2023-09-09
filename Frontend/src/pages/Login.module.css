@@ -1,6 +1,6 @@
 .ment1 {
   margin-bottom: 0.5rem;
-  margin-top: 2.5rem;
+  margin-top: 1rem;
   font-size: 1.1rem;
 }
 
@@ -10,8 +10,9 @@
 }
 
 .money {
-  width: 15rem;
-  animation: up-down 0.8s linear 0s infinite alternate; margin-top: 0;
+  width: 13rem;
+  animation: up-down 0.8s linear 0s infinite alternate;
+  margin-top: 0;
 }
 
 @keyframes up-down{
@@ -24,6 +25,7 @@
 }
 
 .soltrip {
-  color: #0046FF;
+  color: #316FDF;
   font-weight: bold
 }
+

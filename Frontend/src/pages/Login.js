@@ -6,7 +6,7 @@ import login from "./login.png";
 
 const Login = () => {
   return (
-    <div>
+    <div className={styles.container}>
       <Header/><br/><br/>
       <img alt="money" src={login} className={styles.money}/>
       <p className={styles.ment1}>1원 이체를 통해 계좌를 인증하고,</p>

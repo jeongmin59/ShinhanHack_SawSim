@@ -35,6 +35,42 @@ const data = [
     상세내역: '스타벅스',
     금액: '8200',
   },
+  {
+    key: '3',
+    일시: '08/24 11:00:12',
+    상세내역: '김밥천국',
+    금액: '11000',
+  },
+  {
+    key: '4',
+    일시: '08/24 11:00:12',
+    상세내역: '스타벅스',
+    금액: '8200',
+  },
+  {
+    key: '5',
+    일시: '08/24 11:00:12',
+    상세내역: '김밥천국',
+    금액: '11000',
+  },
+  {
+    key: '6',
+    일시: '08/24 11:00:12',
+    상세내역: '스타벅스스타벅스스타벅스',
+    금액: '8200',
+  },
+  {
+    key: '7',
+    일시: '08/24 11:00:12',
+    상세내역: '김밥천국',
+    금액: '11000',
+  },
+  {
+    key: '8',
+    일시: '08/24 11:00:12',
+    상세내역: '스타벅스',
+    금액: '8200',
+  },
 ];
 
 const TransactionDetail = () => {
@@ -56,7 +92,10 @@ const TransactionDetail = () => {
   return (
     <div>
       <Header />
-      <p className={styles.transactionTitle}>거래 상세내역</p>
+      <div className={styles.titles}>
+        <Link className={styles.backLink} to='/budget'><p className={styles.toBack}>&lt;</p><p className={styles.transactionTitle}>거래 상세내역</p></Link>
+        
+      </div>
       <div className={styles.transDiv}>
         <p className={styles.nMent1}>여행메이트와의 정산이 필요한 내역을 체크하고,</p>
         <p className={styles.nMent}>정산 내역보기 버튼을 눌러 공유해보세요</p>
@@ -67,10 +106,10 @@ const TransactionDetail = () => {
           description="정산하기"
           shape="square"
           style={{
-            border: '1px solid blue',
+            border: '1px solid #316FDF',
             fontFamily: 'preBd',
             width: '8rem',
-            height: '3rem',
+            height: '2.8rem',
             right: '35vw',
           }}
           onClick={toDutch}
@@ -79,6 +118,7 @@ const TransactionDetail = () => {
 
       <div className={styles.detailDiv}>
         <Table
+          style={{backgroundColor:'#F4F5FA', background:'#F4F5FA'}}
           rowSelection={{
             hideSelectAll: true,
             onChange: onSelectChange,

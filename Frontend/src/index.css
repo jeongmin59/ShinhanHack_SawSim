@@ -5,7 +5,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #FEFEFE;
+  /* 이게 원래 색*/
+  /* background-color: #FEFEFE; */
+  /* 이게 쏠 메인화면 색*/
+  background-color: #F4F4FA;
+
   font-family: 'preRg';
   image-rendering:-webkit-optimize-contrast;
 
