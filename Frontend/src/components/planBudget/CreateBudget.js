@@ -24,7 +24,7 @@ const CreateBudget = () => {
     // 예산 목록 호출
     async function fetchBudgets() {
       try {
-        const response = await axios.get("/budget/{plan_id}"); // 예산 목록을 가져오는 API 엔드포인트
+        const response = await axios.get("/plan"); // 예산 목록을 가져오는 API 엔드포인트
         const budgets = response.data; // 가져온 예산 목록 데이터
   
         // 예산 목록에 예산이 있는지 확인
@@ -80,7 +80,7 @@ const CreateBudget = () => {
 
   return (
     <div>
-      <h2>{isEditMode ? '예산 수정하기' : '예산 추가하기'}</h2>
+      {/* <h2>{isEditMode ? '예산 수정하기' : '예산 추가하기'}</h2> */}
       <form className={styles.dateItem}>
         <label className={styles.category}>
           <p className={styles.categoryTitle}>카테고리</p>
