@@ -2,6 +2,7 @@ package com.example.backend.domain.account.controller;
 
 import com.example.backend.domain.account.Account;
 import com.example.backend.domain.account.dto.*;
+import com.example.backend.domain.account.exception.UserNotFountException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.account.service.AccountService;
 import com.example.backend.domain.common.BasicResponse;
@@ -54,7 +55,7 @@ public class AccountController {
     @GetMapping("/auth/accounts")
     public BasicResponse<AccountResponseDto> getAccount(@RequestHeader("User-Number") String userNumber) {
         Account account = accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(() -> new IllegalArgumentException("올바른 유저가 아닙니다."));
+                .orElseThrow(UserNotFountException::new);
 
         AccountResponseDto accountResponseDto = AccountResponseDto.builder()
                 .accountNumber(account.getNumber())

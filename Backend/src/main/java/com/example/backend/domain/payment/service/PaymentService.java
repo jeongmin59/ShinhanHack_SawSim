@@ -1,6 +1,7 @@
 package com.example.backend.domain.payment.service;
 
 import com.example.backend.domain.account.Account;
+import com.example.backend.domain.account.exception.UserNotFountException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.common.redis.service.RedisService;
 import com.example.backend.domain.payment.Payment;
@@ -78,7 +79,7 @@ public class PaymentService {
 
     private Account getAccount(String userNumber) {
         return accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(() -> new IllegalArgumentException("올바른 유저가 아닙니다."));
+                .orElseThrow(UserNotFountException::new);
     }
 
     private void updateLatestDateTimeInRedis(String userNumber, TransactionHistoryRequestDto.Transaction transaction) {
