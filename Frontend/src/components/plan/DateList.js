@@ -6,11 +6,33 @@ import axios from 'axios';
 
 const DateList = () => {
   const [dates, setdates] = useState([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(null);
+
 
   const getdates = async () => {
+    const formattedStartDate = startDate.toISOString().split('T')[0];
+    let formattedEndDate = null;
+
+    if (endDate !== null) {
+      formattedEndDate = endDate.toISOString().split('T')[0];
+    } else {
+      formattedEndDate = formattedStartDate;
+    }
+
+    console.log('변환된 Start Date:', formattedStartDate);
+    console.log('변환된 End Date:', formattedEndDate);
+
     try {
-      const response = await axios.get("/plan");
-      // console.log(response.data)
+      const requestData = {
+        dataBody: { 
+          "startDate" : formattedStartDate,
+          "endDate" : formattedEndDate
+        },
+      };
+
+      const response = await axios.get("/plan", requestData);
+      console.log(response.data)
       // console.log(response.data.data.resultCount)
       // console.log(response.data.data.results);
       if (response.data && response.data.data.results && response.data.data.results.length > 0) {
