@@ -15,14 +15,8 @@ public class PortfolioResponseDto {
     @Builder(toBuilder = true)
     public static class DataBody {
 
-        private Long totalBudget;
-        private Long amount;
-        private List<LocalDate> budgetOvers;
-
-        @Getter
-        @Builder(toBuilder = true)
-        public static class budgetOver {
-            private LocalDate date;
-        }
+        private Long totalBudget; // 여행 총 예산
+        private Long amount; // 예산 -  사용 금액
+        private List<LocalDate> budgetOvers; // 예산을 초과한 날
     }
 }

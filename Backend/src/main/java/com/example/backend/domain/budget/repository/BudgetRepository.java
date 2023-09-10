@@ -16,6 +16,5 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
     // 여행 포트폴리오 예산 조회할 때 사용
     List<Budget> findAllByTravelDate(LocalDate travelDate);
 
-
     List<Budget> findAllByPlanAndTravelDate(Plan plan, LocalDate travelDate);
 }

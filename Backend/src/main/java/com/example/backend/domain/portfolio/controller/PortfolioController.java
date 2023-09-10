@@ -9,15 +9,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/portfolio/{plan_id}")
+@RequestMapping("/portfolio/{planId}")
 @RequiredArgsConstructor
 public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
     @GetMapping("/budget")
-    public BasicResponse<PortfolioResponseDto> portfolioBudgetGet(@RequestHeader("User-Number") String userNumber,@PathVariable Long plan_id){
-        PortfolioResponseDto portfolioResponseDto = portfolioService.portfolioBudgetGet(userNumber, plan_id);
+    public BasicResponse<PortfolioResponseDto> portfolioBudgetGet(@RequestHeader("User-Number") String userNumber,@PathVariable Long planId){
+        PortfolioResponseDto portfolioResponseDto = portfolioService.portfolioBudgetGet(userNumber, planId);
 
         return BasicResponse.<PortfolioResponseDto>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
@@ -26,8 +26,8 @@ public class PortfolioController {
     }
 
     @GetMapping("/map")
-    public BasicResponse<PortfolioMapResponseDto> portfolioMapGet(@RequestHeader("User-Number") String userNumber, @PathVariable Long plan_id){
-        PortfolioMapResponseDto portfolioMapResponseDto = portfolioService.portfolioMapGet(userNumber, plan_id);
+    public BasicResponse<PortfolioMapResponseDto> portfolioMapGet(@RequestHeader("User-Number") String userNumber, @PathVariable Long planId){
+        PortfolioMapResponseDto portfolioMapResponseDto = portfolioService.portfolioMapGet(userNumber, planId);
 
         return BasicResponse.<PortfolioMapResponseDto>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
