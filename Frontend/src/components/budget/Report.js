@@ -6,7 +6,8 @@ import { Button, Tooltip } from 'antd';
 
 
 const Report = () => {
-  const data = useLocation().state?.userNumber;
+  // const data = useLocation().state?.userNumber;
+  const data = localStorage.getItem('userNumber');
   const [day, setDay] = useState("")
   const [totalBudget, setTotalBudget] = useState("")
   const [amount, setAmount] = useState("")
@@ -35,7 +36,7 @@ const Report = () => {
           "date" : getFormattedDate(),
         }
       };
-      const response = await axios.get("/api2/v1//transactions/analyze", requestData);
+      const response = await axios.get("/api2/transactions/analyze", requestData);
       console.log(response.data)
       console.log(response.data.dataBody.day) // 여행 몇일차
       setDay()

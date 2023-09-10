@@ -11,7 +11,7 @@ import Transaction from './pages/Transaction'
 import TransactionDetail from './pages/TransactionDetail'
 import PlanBudget from './pages/PlanBudget'
 import Dutch from './pages/Dutch'
-import Popular from './pages/Popular'
+import PopularPage from './pages/PopularPage'
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
         <Route exact path='/transaction/detail' element={<TransactionDetail/>}/>
         <Route exact path='/planbudget' element={<PlanBudget/>}/>
         <Route exact path='/dutch' element={<Dutch/>}/>
-        <Route exact path='/popular' element={<Popular/>}/>
+        <Route exact path='/popular' element={<PopularPage/>}/>
       </Routes>
     </div>
   );

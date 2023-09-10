@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from "./Popular.module.css";
+import styles from "./PopularPage.module.css";
 import Header from "../components/common/Header";
-import PopularSpots from "../components/main/PopularSpots";
+import PopularSpots from "../components/popular/PopularSpots";
 
-const CashCreate = () => {
+const PopularPage = () => {
   return (
     <div>
       <Header/>
@@ -13,4 +13,4 @@ const CashCreate = () => {
   )
 }
 
-export default CashCreate
+export default PopularPage

@@ -60,7 +60,6 @@ const TransferOne = () => {
       };
       const response = await axios.post("/api1/v1/auth/1transfer", requestData);
       console.log(response.data)
-      
     } catch (error) {
       console.error(error);
     }
@@ -133,6 +132,7 @@ const TransferOne = () => {
       if (response.data.dataHeader.successCode === '0') {// 인증번호가 맞다면?
         // 7. 계좌 등록 되고(api 보낼때 같이 됨) userNumber 받음
         // 8. 다음페이지로 넘기기
+        localStorage.setItem('userNumber', userNumber);
         goToMain(userNumber);
       } else {
         window.alert('인증번호가 올바르지 않습니다')
@@ -144,7 +144,7 @@ const TransferOne = () => {
 
   // 8. 모든 검증이 끝나고 실행할 함수
   const goToMain = (userNumber) => {
-    navigate('/main', { state: { data: userNumber } });
+    navigate('/main');
     console.log(userNumber)
   }
 
