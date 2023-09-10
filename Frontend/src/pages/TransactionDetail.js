@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import styles from "./TransactionDetail.module.css";
 import Header from "../components/common/Header";
 import { Button, Modal, Input } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined, ConsoleSqlOutlined } from '@ant-design/icons';
 import pencil from "../assets/pencil2.png";
 
 
@@ -11,17 +11,22 @@ const TransactionDetail = () => {
   const location = useLocation();
   const selectedRow = location.state.selectedRow;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [memo, setMemo] = useState('');
 
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
     setIsModalOpen(false);
+    // 여기에 put axios 요청 보내는 함수 넣기
   };
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
+  const handleMemoChange =(e) =>{
+    setMemo(e.target.value)
+  }
+  
   return (
     <div>
       <Header/>
@@ -53,7 +58,7 @@ const TransactionDetail = () => {
           maskStyle={{opacity:'0.2'}}
           width={400}
           >
-        <Input showCount maxLength={15} style={{marginBottom: '0.8rem', fontSize: '1.1rem', fontFamily:'preRg', borderRadius:0, borderBottom:'2px solid #316FDF'}} placeholder="최대 15자 입력" bordered={false} />
+        <Input onChange={handleMemoChange} showCount maxLength={15} style={{marginBottom: '0.8rem', fontSize: '1.1rem', fontFamily:'preRg', borderRadius:0, borderBottom:'2px solid #316FDF'}} placeholder="최대 15자 입력" bordered={false} />
       </Modal>
 
       <div className={styles.container}>
