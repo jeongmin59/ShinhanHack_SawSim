@@ -31,6 +31,10 @@
   font-family: 'preRg';
 }
 
+.ant-input-number-group-addon {
+  font-family: 'preRg';
+}
+
 /* 로그인화면 input 텍스트 폰트 */
 .ant-input-affix-wrapper .ant-input-affix-wrapper-lg .css-dev-only-do-not-override-nnuwmp {
   font-family: 'preRg';
@@ -55,3 +59,8 @@
 .ant-select-selection-item {
   font-family: 'preRg';
 }
+
+.ant-input-show-count-suffix {
+  font-family: 'preRg';
+  font-size:0.8rem
+} 

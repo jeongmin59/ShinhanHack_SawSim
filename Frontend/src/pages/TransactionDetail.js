@@ -53,7 +53,7 @@ const TransactionDetail = () => {
           maskStyle={{opacity:'0.2'}}
           width={400}
           >
-        <Input style={{marginBottom: '0.8rem', fontSize: '1.1rem', fontFamily:'preRg', borderRadius:0, borderBottom:'2px solid #316FDF'}} placeholder="최대 15자 입력" bordered={false} />
+        <Input showCount maxLength={15} style={{marginBottom: '0.8rem', fontSize: '1.1rem', fontFamily:'preRg', borderRadius:0, borderBottom:'2px solid #316FDF'}} placeholder="최대 15자 입력" bordered={false} />
       </Modal>
 
       <div className={styles.container}>
