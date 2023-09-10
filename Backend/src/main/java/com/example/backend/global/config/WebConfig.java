@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")
+                .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS")
                 .allowedHeaders("User-Content", "Content-Type")
                 .exposedHeaders("Content-Type") // 서버가 클라이언트로 보내고, 브라우저가 접근 가능하게 할 response 헤더를 설정

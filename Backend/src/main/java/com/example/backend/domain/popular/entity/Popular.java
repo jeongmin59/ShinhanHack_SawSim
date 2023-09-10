@@ -16,8 +16,7 @@ public class Popular {
     private Integer popularId;
 
     private String store;
-    @Lob
-    private byte[] img;
+    private String img;
     private String category;
 
 
