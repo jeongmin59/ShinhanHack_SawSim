@@ -7,12 +7,12 @@ import '../../pages/Transaction.css'
 
 function DateList() {
   const [lastPlan, setLastPlan] = useState(null);
+  const data = localStorage.getItem('userNumber');
 
   const getDates = async () => {
     try {
-      const headers = { "User-Number": "44b78142-4320-4115-88f1-86bb562fbc0c" }
-
-      const response = await axios.get("/api2/plan", { headers: headers });
+      const response = await axios.get("/api2/plan", 
+        { headers: { "User-Number" : data } });
       const dataBody = response.data.dataBody;
 
       if (dataBody.length > 0) {

@@ -1,15 +1,25 @@
 import React from 'react';
-import Header from '../components/common/Header'
-import styles from "./PlanBudget.module.css";
-import BudgetList from '../components/planBudget/BudgetList';
+import { Link } from 'react-router-dom'
+import Header from "../components/common/Header";
+// import DateListDetail from "../components/planBudget/DateListDetail"
+import BudgetList from "../components/planBudget/BudgetList"
+import { Button } from 'antd';
+// import styles from "./HistoryDetail.module.css";
 
-const PlanBudget = () => {
+const Planbudget = () => {
+  const reloadPage = () => {
+    window.location.reload();
+  }
+
   return (
-    <div className={styles.container}>
-      <Header />
-      <BudgetList />
+    <div>
+     <div>
+      <Header/>
+      <Button onClick={reloadPage}><Link to="/plan">뒤로가기</Link></Button>
+      <BudgetList/>
+      </div>
     </div>
   );
-}
+};
 
-export default PlanBudget;
+export default Planbudget;

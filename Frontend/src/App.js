@@ -26,6 +26,7 @@ function App() {
         <Route exact path='/transaction' element={<Transaction/>}/>
         <Route exact path='/transaction/detail' element={<TransactionDetail/>}/>
         <Route exact path='/planbudget' element={<PlanBudget/>}/>
+        <Route exact path='/planbudget/:plan_id' element={<PlanBudget/>}/>
         <Route exact path='/dutch' element={<Dutch/>}/>
         <Route exact path='/popular' element={<PopularPage/>}/>
       </Routes>
