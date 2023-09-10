@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from "./CreateInPerson.module.css";
 import { EditOutlined, FormOutlined, ScanOutlined } from '@ant-design/icons';
-import { Input, InputNumber, message, Row, Col, Button } from 'antd';
+import { Input, InputNumber, message, Row, Col, Button, } from 'antd';
 import axios from "axios";
 
 
 const CreateInPerson = () => {
   const data = localStorage.getItem('userNumber');
+  const navigate = useNavigate()
+  const [messageApi, contextHolder] = message.useMessage();
 
   const [date, setDate] = useState(null);
   const [hour, setHour] = useState(0);
@@ -77,36 +79,49 @@ const formatTime = (hour, minute) => {
 };
 
 const handleSubmit= () => {
-    const transactionDate = formatDate(date);
-    const transactionTime = formatTime(hour, minute);
+  const transactionDate = formatDate(date);
+  const transactionTime = formatTime(hour, minute);
   console.log('Amount:', amount);
   console.log('Memo:', memo);
   console.log('store:', store);
   console.log('거래일시:', transactionDate, transactionTime);
 
+
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: '등록이 완료되었습니다',
+    });
+  };
+
   const registerCash = async () => {
     try {
       const requestData = {
         dataBody: { 
-          transactionHistory: {
+          transactionHistory: [{
             transactionDate: transactionDate,
             transactionTime: transactionTime,
             amount: amount,
             content: memo,
             storeName: store,
             paymentType: "CASH"
-          }
-      }}
-      const headers = {
-        "User-Number": data
-      }
-      const response = await axios.post("/api2/transactions", requestData, {headers:headers});
+          }]
+        }
+      };
+      
+      const response = await axios.post("/api2/transactions", requestData, { headers: { "User-Number": data } });
       console.log(response.data)
+      if (response.data.dataHeader.successCode === '0') {
+        window.alert('등록이 완료되었습니다')
+        navigate('/cash');
+      }
     } catch (error) {
       console.error(error);
     }
   }
+  
   registerCash();
+  
 };
 
   return (
@@ -135,7 +150,7 @@ const handleSubmit= () => {
     <InputNumber
     
       min={0}
-      max={24}
+      max={23}
       value={hour}
       onChange={handleHourChange}
       formatter={(value) => `${value}`.padStart(2, '0')}
