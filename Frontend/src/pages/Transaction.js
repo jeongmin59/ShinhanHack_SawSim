@@ -4,6 +4,8 @@ import styles from './Transaction.module.css';
 import Header from '../components/common/Header';
 import { FloatButton, Button, Collapse, Divider, Radio, Table, Tag } from 'antd';
 import './Transaction.css';
+import axios from "axios";
+
 
 // 페이지 접속 시 거래내역조회(신한 api) + 거래내역 확인시간 조회(백 api)
 // 거래내역조회(신한)의 거래일자시간과 최신 거래내역 확인시간(백) 비교
@@ -24,25 +26,15 @@ const columns = [
     dataIndex: '일시',
     width: '20%',
     render: (text) => <p style={{fontFamily:'preLt', margin:0}}>{text}</p>,
-    // render: (text) => (
-    //   <Link to='/transaction/detail' className={styles.time}><div dangerouslySetInnerHTML={{ __html: text.replace(' ', '<br/>') }} /></Link>
-    // ),
   },
   {
     title: '상세내역',
     dataIndex: '상세내역',
-    width: '36%',
-    // render: (text) => (
-    //   <Link to='/transaction/detail' className={styles.time}>{text}</Link>
-    // ),    
+    width: '36%',   
   },
   {
     title: '금액',
     dataIndex: '금액',
-    // render: (text) => (
-    //   <Link to='/transaction/detail' className={styles.time}>{text}</Link>
-    // ),  
-    // width: '30%',
   },
   {
     title: '구분',
@@ -55,6 +47,8 @@ const columns = [
     width: '15%',
   },
 ];
+
+
 
 const data = [
   {
@@ -116,10 +110,32 @@ const data = [
 ];
 
 const Transaction = () => {
+  const userNumber = localStorage.getItem('userNumber');
   const navigate = useNavigate();
+  const [allTransactions, setAllTransactions] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
+
+// 1. axios get 요청을 보냄 + setAllTransactions
+// 2. map으로 돌면서 데이터 배열을 완성한다
+// 3. 그걸 그대로 테이블의 data로 넣는다
+const getTransactions = async () => {
+  try {
+    const response = await axios.get("/api2/transactions", { headers: { "User-Number": userNumber } });
+    console.log(response.data)      
+    setAllTransactions(response.data.dataBody)
+    console.log(allTransactions)
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// const data = [
+
+// ]
+
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     setSelectedRowKeys(selectedRowKeys);
@@ -131,10 +147,6 @@ const Transaction = () => {
   const toDutch = () => {
     navigate('/dutch', { state: { selectedRows } });
   };
-
-  const check = () => {
-    console.log('눌림')
-  }
 
   return (
     <div>
@@ -176,7 +188,7 @@ const Transaction = () => {
           scroll={{ y: '65vh' }}
           pagination={false}
           hideSelectAll={true}
-          onClick={check}
+          // onClick={check}
           onRow={(record) => ({
             onClick: () => {
               setSelectedTransaction(record);
