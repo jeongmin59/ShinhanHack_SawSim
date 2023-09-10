@@ -12,6 +12,7 @@ import TransactionDetail from './pages/TransactionDetail'
 import PlanBudget from './pages/PlanBudget'
 import Dutch from './pages/Dutch'
 import PopularPage from './pages/PopularPage'
+import PortfolioPage from './pages/PortfolioPage'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route exact path='/planbudget/:plan_id' element={<PlanBudget/>}/>
         <Route exact path='/dutch' element={<Dutch/>}/>
         <Route exact path='/popular' element={<PopularPage/>}/>
+        <Route exact path='/portfolio' element={<PortfolioPage/>}/>
       </Routes>
     </div>
   );
