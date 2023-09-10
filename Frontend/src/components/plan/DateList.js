@@ -1,71 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import styles from './DateList.module.css';
 import { Button } from 'antd';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
+import '../../pages/Transaction.css'
 
-const DateList = () => {
-  const [dates, setdates] = useState([]);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(null);
+function DateList() {
+  const [lastPlan, setLastPlan] = useState(null);
 
-
-  const getdates = async () => {
-    const formattedStartDate = startDate.toISOString().split('T')[0];
-    let formattedEndDate = null;
-
-    if (endDate !== null) {
-      formattedEndDate = endDate.toISOString().split('T')[0];
-    } else {
-      formattedEndDate = formattedStartDate;
-    }
-
-    console.log('변환된 Start Date:', formattedStartDate);
-    console.log('변환된 End Date:', formattedEndDate);
-
+  const getDates = async () => {
     try {
-      const requestData = {
-        dataBody: { 
-          "startDate" : formattedStartDate,
-          "endDate" : formattedEndDate
-        },
-      };
+      const headers = { "User-Number": "4d03f54d-9b32-4d88-8705-23f6409f4502" }
 
-      const response = await axios.get("/plan", requestData);
-      console.log(response.data)
-      // console.log(response.data.data.resultCount)
-      // console.log(response.data.data.results);
-      if (response.data && response.data.data.results && response.data.data.results.length > 0) {
-        setdates(response.data.data.results);
+      const response = await axios.get("/api2/plan", { headers: headers });
+      const dataBody = response.data.dataBody;
+
+      if (dataBody.length > 0) {
+        const lastPlan = dataBody[dataBody.length - 1];
+        setLastPlan(lastPlan);
       }
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
   useEffect(() => {
-    getdates();
+    getDates();
   }, []);
 
+  const renderDateRange = (startDate, endDate) => {
+    const dateArray = [];
+    const currentDate = new Date(startDate);
 
+    while (currentDate <= new Date(endDate)) {
+      dateArray.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dateArray.map((date, index) => (
+      <div key={index}>
+        <p className={styles.dateText}>
+          {index + 1}일차 [{date.getFullYear()}.
+          {date.getMonth() + 1 < 10 ? '0' : ''}{date.getMonth() + 1}.
+          {date.getDate() < 10 ? '0' : ''}{date.getDate()}]
+        </p>
+        <div className={styles.dateItem}>
+          
+        <Link to={{
+          pathname: '/planbudget',
+        }}>
+          <Button
+            size="small"
+            style={{ height: '2rem', backgroundColor: '#316FDF', fontFamily: "preRg" }}
+            type="primary">예산 추가하기</Button>
+        </Link>
+        </div>
+      </div>
+    ));
+  }
 
   return (
     <div>
-      <p className={styles.ListDiv}>선택된 날짜 목록</p>
-      <div>
-        {dates.map((date, index) => (
-          <div key={index} className={styles.dateItem}>{date}
-          <Link to={{
-            pathname: '/planbudget',
-          }}>
-          <Button 
-            size="small" 
-            style={{ height: '2rem', backgroundColor:'#0046FF', fontFamily:"preRg"}}
-            // className={styles.startTrip}
-            type="primary">예산 추가하기</Button></Link>
-          </div>
-        ))}
-      </div>
+      {lastPlan ? (
+        <div>
+          {renderDateRange(lastPlan.startDate, lastPlan.endDate)}
+        </div>
+      ) : (
+        <p>선택된 일정이 없습니다.</p>
+      )}
     </div>
   );
 }

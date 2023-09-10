@@ -1,85 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import styles from './SelectedDate.module.css';
-import DateList from './DateList';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import styles from './SelectedDate.module.css'
 
-const SelectedDate = () => {
-  // 로컬 스토리지에서 일정 데이터 가져오기
-  // const getSavedSchedule = () => {
-  //   const savedSchedule = localStorage.getItem('selectedDate');
-  //   return savedSchedule ? JSON.parse(savedSchedule) : [];
-  // };
+function SelectedDate() {
+  const [lastPlan, setLastPlan] = useState(null);
 
-  // ISO 8601 형식의 날짜를 원하는 형식으로 포맷팅하는 함수
-//   const formatDate = (dateString) => {
-//     const date = new Date(dateString);
-//     const formattedDate = date.toLocaleDateString('en-US', {
-//       year: 'numeric',
-//       month: '2-digit',
-//       day: '2-digit',
-//     });
-//     return formattedDate;
-//   };
-
-const [selectedDates, setSelectedDates] = useState({ startDate: null, endDate: null });
-
-  // 선택한 날짜 범위를 백엔드에서 가져오는 함수
-  const fetchSelectedDatesFromBackend = async () => {
+  const getDate = async () => {
     try {
-      // 백엔드 API 호출
-      const response = await axios.get('/plan'); // API 엔드포인트를 실제 엔드포인트로 변경
+      const headers = {"User-Number": "4d03f54d-9b32-4d88-8705-23f6409f4502"}
 
-      // API 응답에서 선택한 날짜 데이터 추출
-      const { startDate, endDate } = response.data;
+      const response = await axios.get("/api2/plan", { headers: headers });
+      const dataBody = response.data.dataBody;
 
-      // 상태 업데이트
-      setSelectedDates({ startDate, endDate });
+      if (dataBody.length > 0) {
+        const lastPlan = dataBody[dataBody.length - 1];
+        setLastPlan(lastPlan);
+      }
     } catch (error) {
-      console.error('백엔드 API 호출 에러:', error);
+      console.error(error);
     }
-  };
-
-  // 컴포넌트가 처음 마운트될 때 백엔드에서 날짜 데이터를 가져옴
+  }
+  
   useEffect(() => {
-    fetchSelectedDatesFromBackend();
+    getDate();
   }, []);
-
-  // 컴포넌트가 처음 마운트될 때 일정 데이터를 불러옴
-  // useEffect(() => {
-  //   const savedSchedule = getSavedSchedule();
-  //   setSelectedDates(savedSchedule);
-  // }, []);
-
-  // 선택한 날짜 범위를 연속된 날짜로 변환하는 함수
-  const generateDateRange = (startDate, endDate) => {
-    const dateRange = [];
-    const currentDate = new Date(startDate);
-    const lastDate = new Date(endDate);
-
-    while (currentDate <= lastDate) {
-      dateRange.push(currentDate.toISOString());
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    return dateRange;
-  };
-
-  // 선택한 날짜 범위를 연속된 날짜 배열로 변환
-  const selectedDateRange = generateDateRange(selectedDates[0], selectedDates[selectedDates.length - 1]);
 
   return (
     <div>
-    <p>선택된 날짜</p>
-    {selectedDates.startDate && selectedDates.endDate ? (
-      <div className={styles.calendarDiv}>
-        <div>시작 날짜: {selectedDates.startDate}</div>
-        <div>종료 날짜: {selectedDates.endDate}</div>
-      </div>
-    ) : (
-      <div>날짜를 선택하지 않았습니다.</div>
-    )}
-    <DateList dates={selectedDateRange} />
-  </div>
+      <h3>선택된 일정</h3>
+      {lastPlan ? (
+        <div className={styles.dateItem}>
+          <p>여행 시작 일자: {lastPlan.startDate}</p>
+          <p>여행 종료 일자: {lastPlan.endDate}</p>
+        </div>
+      ) : (
+        <p>선택된 일정이 없습니다.</p>
+      )}
+    </div>
   );
 }
 
