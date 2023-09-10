@@ -2,6 +2,7 @@ package com.example.backend.domain.payment.controller;
 
 import com.example.backend.domain.common.BasicResponse;
 import com.example.backend.domain.payment.dto.LatestDateTimeResponseDto;
+import com.example.backend.domain.payment.dto.TransactionContentRequestDto;
 import com.example.backend.domain.payment.dto.TransactionHistoryRequestDto;
 import com.example.backend.domain.payment.dto.TransactionHistoryResponseDto;
 import com.example.backend.domain.payment.service.PaymentService;
@@ -36,6 +37,18 @@ public class PaymentController {
         return BasicResponse.<List<TransactionHistoryResponseDto>>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
                 .dataBody(transactionHistory)
+                .build();
+    }
+
+    @Operation(summary = "여행비 사용 내역 메모 수정", description = "실제 여행을 하며 사용한 내역의 개인 메모를 수정하는 API")
+    @PutMapping("/transactions/{transactionId}")
+    public BasicResponse<Void> updateTransactionContent(@RequestHeader("User-Number") String userNumber,
+                                                        @PathVariable(name = "transactionId") Long transactionId,
+                                                        @RequestBody TransactionContentRequestDto transactionContentRequestDto) {
+        paymentService.updateTransactionContent(userNumber, transactionId, transactionContentRequestDto.getDataBody().getContent());
+
+        return BasicResponse.<Void>builder()
+                .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
                 .build();
     }
 

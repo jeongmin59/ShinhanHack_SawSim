@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @Getter
 @Builder(toBuilder = true)
 public class TransactionHistoryResponseDto {
+    private Long id;
     private String content;
     private Long amount;
     private String storeName;

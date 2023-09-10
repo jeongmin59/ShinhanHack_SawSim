@@ -46,4 +46,8 @@ public class Payment extends BaseEntity {
 
         return payment;
     }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
