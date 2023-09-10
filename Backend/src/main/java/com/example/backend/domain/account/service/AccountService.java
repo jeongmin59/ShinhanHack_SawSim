@@ -2,6 +2,7 @@ package com.example.backend.domain.account.service;
 
 import com.example.backend.domain.account.Account;
 import com.example.backend.domain.account.exception.CertificationCodeNotMatchedException;
+import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.common.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,11 @@ public class AccountService {
 
     public String verifyAuthNumber(String accountNumber, String authNumber) {
         Map<Object, Object> hash = redisService.getHash(accountNumber);
+
+        if (hash == null || hash.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+
         String name = (String) hash.get("name");
         String realNumber = (String) hash.get("authMemo");
 

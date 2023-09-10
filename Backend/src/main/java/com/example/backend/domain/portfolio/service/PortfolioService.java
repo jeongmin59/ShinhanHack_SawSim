@@ -1,7 +1,7 @@
 package com.example.backend.domain.portfolio.service;
 
 import com.example.backend.domain.account.Account;
-import com.example.backend.domain.account.exception.UserNotFountException;
+import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.budget.entity.Budget;
 import com.example.backend.domain.budget.repository.BudgetRepository;
@@ -41,31 +41,31 @@ public class PortfolioService {
     private final TransactionRepository transactionRepository;
 
 
-    public PortfolioResponseDto portfolioBudgetGet(String userNumber ,Long plan_id) {
+    public PortfolioResponseDto portfolioBudgetGet(String userNumber, Long plan_id) {
         // 여행 예산 조회
         // 1. 전체 예산 사용 퍼센트
         // 2. 사용 금액
         // 3. 예산 초과 날짜
 
         // 내 여행 예산 값과 실제 신한 API 거래 내역을 비교
-            // 내 여행 예산 일차 별로 총합 구하기
-            // 신한 API에서 해당 거래 내역 일차별로 총합 구하기
-                // 3. 예산 초과 날짜 구하고 저장
-                // 일차별 총합을 모두 더 하고 저장 2. 사용 금액 구함
-                // 총합 값에 비교하여 비율을 구하면 1. 전체 예산 사용 퍼센트 구함
+        // 내 여행 예산 일차 별로 총합 구하기
+        // 신한 API에서 해당 거래 내역 일차별로 총합 구하기
+        // 3. 예산 초과 날짜 구하고 저장
+        // 일차별 총합을 모두 더 하고 저장 2. 사용 금액 구함
+        // 총합 값에 비교하여 비율을 구하면 1. 전체 예산 사용 퍼센트 구함
 
         Optional<Plan> plan = planRepository.findById(plan_id);
 
-        if(plan.isEmpty()){
+        if (plan.isEmpty()) {
             return null;
         }
 
         //날짜 차이 계산
-        long day = ChronoUnit.DAYS.between(plan.get().getStartDate(),plan.get().getEndDate());
+        long day = ChronoUnit.DAYS.between(plan.get().getStartDate(), plan.get().getEndDate());
 
 
-        int budget_total=0; // 예산 총합
-        int expenditure_total=0; // 지출 총합
+        int budget_total = 0; // 예산 총합
+        int expenditure_total = 0; // 지출 총합
 
         List<LocalDate> budgetOver = new ArrayList<>(); //금액 초과
 
@@ -73,7 +73,7 @@ public class PortfolioService {
         ShinhanTransactionRequestDto shinhanTransactionRequestDto = transactionHistoryInquiry(userNumber);
 
         //날짜 반복
-        for(int i=0;i<day;i++){
+        for (int i = 0; i < day; i++) {
             //해당 일차 예산 총합 구하기
             List<Budget> budgets = budgetRepository.findAllByTravelDate(plan.get().getStartDate().plusDays(i));
             int budget_cost = 0; // 예산
@@ -87,36 +87,36 @@ public class PortfolioService {
 
 
             //logic
-            for(ShinhanTransactionRequestDto.DataBody.TransactionHistory transactionHistory : shinhanTransactionRequestDto.getDataBody().getTransactions()){
+            for (ShinhanTransactionRequestDto.DataBody.TransactionHistory transactionHistory : shinhanTransactionRequestDto.getDataBody().getTransactions()) {
                 // 날짜 비교를 위한 LocalDate 타입 변경
                 LocalDate date = LocalDate.parse(transactionHistory.getTransactionDate(), DateTimeFormatter.BASIC_ISO_DATE);
 
                 // 날짜가 같으면 해당 날짜에 지출이 있다는 것
-                if(date.equals(plan.get().getStartDate().plusDays(i))){
-                    expenditure_cost+= Integer.parseInt(transactionHistory.getWithdrawalAmount());
+                if (date.equals(plan.get().getStartDate().plusDays(i))) {
+                    expenditure_cost += Integer.parseInt(transactionHistory.getWithdrawalAmount());
                 }
             }
 
 
             // 금액 초과 일자 구하기
-            if((budget_cost-expenditure_cost)<0){
+            if ((budget_cost - expenditure_cost) < 0) {
                 budgetOver.add(plan.get().getStartDate().plusDays(i));
                 BudgetOver budget = new BudgetOver(
                         null,
                         plan.get().getStartDate().plusDays(i),
-                        (long)(budget_cost-expenditure_cost)
+                        (long) (budget_cost - expenditure_cost)
                 );
 
                 budgetOverRepository.save(budget);
             }
 
             // total 더하기
-            budget_total+=budget_cost;
-            expenditure_total+=expenditure_cost;
+            budget_total += budget_cost;
+            expenditure_total += expenditure_cost;
         }
 
         long totalBudget = (long) ((double) expenditure_total / budget_total);
-        long consumptionAmount = budget_total-expenditure_total;
+        long consumptionAmount = budget_total - expenditure_total;
         // 여행 포트폴리오 저장
         Portfolio portfolio = new Portfolio(
                 null,
@@ -152,7 +152,7 @@ public class PortfolioService {
         //2
         Optional<Plan> plan = planRepository.findById(planId);
 
-        if(plan.isEmpty()){
+        if (plan.isEmpty()) {
             return null;
         }
 
@@ -162,21 +162,21 @@ public class PortfolioService {
         List<PortfolioMapResponseDto.DataBody.travelInfo> travelInfoList = new ArrayList<>();
 
         // 내역 조회 반복
-        for(ShinhanTransactionRequestDto.DataBody.TransactionHistory transactionHistory : shinhanTransactionRequestDto.getDataBody().getTransactions()){
+        for (ShinhanTransactionRequestDto.DataBody.TransactionHistory transactionHistory : shinhanTransactionRequestDto.getDataBody().getTransactions()) {
             // 날짜 비교를 위한 LocalDate 타입 변경
             LocalDate date = LocalDate.parse(transactionHistory.getTransactionDate(), DateTimeFormatter.BASIC_ISO_DATE);
 
             // 여행 날짜에 포함되는 거래 내역이고
             // 출금 금액이 있으면 저장
 
-            if ((plan.get().getStartDate().compareTo(date))<=0 && (plan.get().getEndDate().compareTo(date))>=0
-                    && Integer.parseInt(transactionHistory.getWithdrawalAmount())>0 ){
+            if ((plan.get().getStartDate().compareTo(date)) <= 0 && (plan.get().getEndDate().compareTo(date)) >= 0
+                    && Integer.parseInt(transactionHistory.getWithdrawalAmount()) > 0) {
 
                 //4. 위도 경도 받아오는 api 사용
                 Mono<KakaoPlaceSearchResponseDto> location = findLocation(transactionHistory.getDetail());
                 KakaoPlaceSearchResponseDto responseDto = location.block(); // Mono의 결과를 동기적으로 가져옴
 
-                if (responseDto != null && !responseDto.getDocuments().isEmpty()){
+                if (responseDto != null && !responseDto.getDocuments().isEmpty()) {
                     String latitude = responseDto.getDocuments().get(0).getY(); // 첫 번째 결과의 위도 정보 가져오기
                     String longitude = responseDto.getDocuments().get(0).getX(); // 첫 번째 결과의 경도 정보 가져오기
 
@@ -224,7 +224,7 @@ public class PortfolioService {
     // userNumber로 계좌내역조회 받아오는 메서드
     public ShinhanTransactionRequestDto transactionHistoryInquiry(String userNumber) {
         Account account = accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         ShinhanTransactionResponseDto shinhanTransactionResponseDto = ShinhanTransactionResponseDto.builder()
                 .dataHeader(ShinhanTransactionResponseDto.DataHeader.builder().apikey("2023_Shinhan_SSAFY_Hackathon").build())
@@ -256,7 +256,7 @@ public class PortfolioService {
     /**
      * 0번째 인덱스를 출력하게 함 따로 조건 설정이 필요
      */
-    public Mono<KakaoPlaceSearchResponseDto> findLocation(String detail){
+    public Mono<KakaoPlaceSearchResponseDto> findLocation(String detail) {
         String kakaoApiKey = "db1d7f023e9f1fbe3ba4df2e0c1228f6";
 
         WebClient webClient = WebClient.builder()

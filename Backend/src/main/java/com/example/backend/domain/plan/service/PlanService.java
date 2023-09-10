@@ -1,7 +1,7 @@
 package com.example.backend.domain.plan.service;
 
 import com.example.backend.domain.account.Account;
-import com.example.backend.domain.account.exception.UserNotFountException;
+import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.plan.dto.PlanDetailResponseDto;
 import com.example.backend.domain.plan.dto.PlanSaveRequestDto;
@@ -23,7 +23,7 @@ public class PlanService {
 
     public void planSave(PlanSaveRequestDto planSaveRequestDto, Long accountId) {
         Account account = accountRepository.findById(accountId)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         Plan plan = new Plan(
                 null,
