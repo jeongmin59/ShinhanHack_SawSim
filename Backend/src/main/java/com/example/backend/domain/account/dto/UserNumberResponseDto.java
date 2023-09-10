@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(toBuilder = true)
-public class AccountResponseDto {
-    private String accountNumber;
+public class UserNumberResponseDto {
+    private String userNumber;
     private String name;
 }

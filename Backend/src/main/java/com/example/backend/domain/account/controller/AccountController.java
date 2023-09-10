@@ -67,4 +67,21 @@ public class AccountController {
                 .dataBody(accountResponseDto)
                 .build();
     }
+
+    @Operation(summary = "회원 번호 조회", description = "등록했던 여행 계좌로 회원 번호 조회")
+    @GetMapping("/user-number")
+    public BasicResponse<UserNumberResponseDto> getAccount(@RequestBody UserNumberRequestDto userNumberRequestDto) {
+        Account account = accountRepository.findAccountByNumber(userNumberRequestDto.getDataBody().getAccountNumber())
+                .orElseThrow(UserNotFountException::new);
+
+        UserNumberResponseDto userNumberResponseDto = UserNumberResponseDto.builder()
+                .userNumber(account.getUserNumber())
+                .name(account.getUsername())
+                .build();
+
+        return BasicResponse.<UserNumberResponseDto>builder()
+                .dataHeader(BasicResponse.DataHeader.builder().build())
+                .dataBody(userNumberResponseDto)
+                .build();
+    }
 }
