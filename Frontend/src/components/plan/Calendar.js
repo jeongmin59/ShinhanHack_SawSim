@@ -11,6 +11,8 @@ const CalendarModal = ({ onDateSelected }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
+  // localStorage.setItem('userNumber', userNumber);
+  // const data = localStorage.getItem('userNumber');
 
   const onChange = (dates) => {
     const [start, end] = dates;
@@ -47,7 +49,7 @@ const CalendarModal = ({ onDateSelected }) => {
         },
       };
 
-      const headers = {"User-Number": "4d03f54d-9b32-4d88-8705-23f6409f4502"}
+      const headers = {"User-Number": "44b78142-4320-4115-88f1-86bb562fbc0c"}
       const response = await axios.post('/api2/plan', requestData, { headers: headers });
       console.log('성공:', response.data);
       console.log('제발', response.data.dataheader.sucessCode);
@@ -76,12 +78,12 @@ const CalendarModal = ({ onDateSelected }) => {
     <div>
       <Button type="primary"
       onClick={showModal}
-      style={{height: '2.5rem', 
-        width: '30%', 
+      style={{height: '2rem', 
+        width: '25%', 
         backgroundColor:'#316FDF', 
         marginTop: '3rem',
         fontFamily:"preRg"}} 
-      size="large"
+      size="middle"
       >
         일정 선택
       </Button>

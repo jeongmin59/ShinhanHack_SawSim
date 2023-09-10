@@ -7,7 +7,7 @@ function SelectedDate() {
 
   const getDate = async () => {
     try {
-      const headers = {"User-Number": "4d03f54d-9b32-4d88-8705-23f6409f4502"}
+      const headers = {"User-Number": "44b78142-4320-4115-88f1-86bb562fbc0c"}
 
       const response = await axios.get("/api2/plan", { headers: headers });
       const dataBody = response.data.dataBody;
@@ -27,14 +27,14 @@ function SelectedDate() {
 
   return (
     <div>
-      <h3>선택된 일정</h3>
+      <h3>여행 일정</h3>
       {lastPlan ? (
         <div className={styles.dateItem}>
           <p>여행 시작 일자: {lastPlan.startDate}</p>
           <p>여행 종료 일자: {lastPlan.endDate}</p>
         </div>
       ) : (
-        <p>선택된 일정이 없습니다.</p>
+        <p>일정을 선택해주세요.</p>
       )}
     </div>
   );
