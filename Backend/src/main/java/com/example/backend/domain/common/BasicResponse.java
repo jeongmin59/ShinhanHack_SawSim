@@ -2,6 +2,7 @@ package com.example.backend.domain.common;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @Builder
@@ -16,7 +17,7 @@ public class BasicResponse<T> {
         @Builder.Default
         private String successCode = "0";
         @Builder.Default
-        private String resultCode = "";
+        private HttpStatus resultCode = HttpStatus.OK;
         @Builder.Default
         private String resultMessage = "";
     }

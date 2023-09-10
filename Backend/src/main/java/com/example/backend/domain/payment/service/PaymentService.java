@@ -1,7 +1,7 @@
 package com.example.backend.domain.payment.service;
 
 import com.example.backend.domain.account.Account;
-import com.example.backend.domain.account.exception.UserNotFountException;
+import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.common.redis.service.RedisService;
 import com.example.backend.domain.payment.Payment;
@@ -79,7 +79,7 @@ public class PaymentService {
 
     private Account getAccount(String userNumber) {
         return accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
     }
 
     private void updateLatestDateTimeInRedis(String userNumber, TransactionHistoryRequestDto.Transaction transaction) {

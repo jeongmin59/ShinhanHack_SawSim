@@ -1,12 +1,13 @@
 package com.example.backend.domain.account.service;
 
 import com.example.backend.domain.account.exception.CertificationCodeNotMatchedException;
+import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.common.redis.service.RedisService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Map;
 
@@ -14,8 +15,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@TestPropertySource("classpath:test-application.properties")
+//@SpringBootTest
+//@TestPropertySource("classpath:test-application.properties")
+@ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
 
     @InjectMocks
@@ -65,6 +67,6 @@ class AccountServiceTest {
 
         // then
         assertThatThrownBy(() -> accountService.verifyAuthNumber(accountNumber, ""))
-                .isInstanceOf(NullPointerException.class);
+                .isInstanceOf(UserNotFoundException.class);
     }
 }

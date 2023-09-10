@@ -2,7 +2,7 @@ package com.example.backend.domain.account.controller;
 
 import com.example.backend.domain.account.Account;
 import com.example.backend.domain.account.dto.*;
-import com.example.backend.domain.account.exception.UserNotFountException;
+import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.account.service.AccountService;
 import com.example.backend.domain.common.BasicResponse;
@@ -55,7 +55,7 @@ public class AccountController {
     @GetMapping("/auth/accounts")
     public BasicResponse<AccountResponseDto> getAccount(@RequestHeader("User-Number") String userNumber) {
         Account account = accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         AccountResponseDto accountResponseDto = AccountResponseDto.builder()
                 .accountNumber(account.getNumber())
@@ -72,7 +72,7 @@ public class AccountController {
     @GetMapping("/user-number")
     public BasicResponse<UserNumberResponseDto> getAccount(@RequestBody UserNumberRequestDto userNumberRequestDto) {
         Account account = accountRepository.findAccountByNumber(userNumberRequestDto.getDataBody().getAccountNumber())
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         UserNumberResponseDto userNumberResponseDto = UserNumberResponseDto.builder()
                 .userNumber(account.getUserNumber())

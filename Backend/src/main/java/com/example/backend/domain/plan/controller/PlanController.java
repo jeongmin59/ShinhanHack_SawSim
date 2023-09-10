@@ -1,7 +1,7 @@
 package com.example.backend.domain.plan.controller;
 
 import com.example.backend.domain.account.Account;
-import com.example.backend.domain.account.exception.UserNotFountException;
+import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.common.BasicResponse;
 import com.example.backend.domain.plan.dto.PlanDetailResponseDto;
@@ -27,7 +27,7 @@ public class PlanController {
     public BasicResponse<Plan> planSave(@RequestBody PlanSaveRequestDto planSaveRequestDto,@RequestHeader("User-Number") String userNumber){
         //Header User-Number를 통해서 계좌 ID를 받아옴
         Account account = accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         Long accountId = account.getId();
 
@@ -42,7 +42,7 @@ public class PlanController {
     public BasicResponse<List<PlanListResponseDto>> planList(@RequestHeader("User-Number") String userNumber){
         //Header User-Number를 통해서 계좌 ID를 받아옴
         Account account = accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(UserNotFountException::new);
+                .orElseThrow(UserNotFoundException::new);
 
         Long accountId = account.getId();
 
