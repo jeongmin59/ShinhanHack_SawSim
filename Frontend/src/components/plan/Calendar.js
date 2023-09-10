@@ -82,7 +82,7 @@ const CalendarModal = ({ onDateSelected }) => {
       style={{height: '2rem', 
         width: '25%', 
         backgroundColor:'#316FDF', 
-        marginTop: '3rem',
+        // marginTop: '3rem',
         fontFamily:"preRg"}} 
       size="middle"
       >

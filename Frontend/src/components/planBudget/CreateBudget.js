@@ -107,7 +107,7 @@ const CreateBudget = () => {
               onChange={handleAmountChange}
               style={{ width: '80%' }}
               formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              parser={(value) => value.replace(/\₩\s?|(,*)/g, '')}
+              parser={(value) => value.replace(/\\s?|(,*)/g, '')}
             />
           </Space.Compact>
         </label>
@@ -118,7 +118,7 @@ const CreateBudget = () => {
             onClick={handleAddOrUpdateBudget}
             style={{
               height: '2.5rem',
-              width: '35%',
+              width: '40%',
               marginRight: '1rem',
               backgroundColor: '#316FDF',
               fontFamily: "preRg"
