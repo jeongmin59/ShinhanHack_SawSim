@@ -2,7 +2,7 @@ import {React, useState, useEffect} from 'react';
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import styles from "./BalanceSchedule.module.css";
 import axios from "axios";
-import { Button, Tooltip } from 'antd';
+import { Button, Tooltip, Skeleton } from 'antd';
 import shinhan from './shinhan.png'
 import { CalendarOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
@@ -12,17 +12,17 @@ import { CalendarOutlined, QuestionCircleOutlined } from '@ant-design/icons';
   // 9. 메인페이지에서 userNumber 이용해 계좌 조회
   // 10. 계좌번호로 잔액 조회 (신한 api)
   // -----------------------------------------할 것
-  // 11. 여행 일정 api 조회 (규렬), 일정 있으면 예산 상세보기 및 시작하기 화면
-  // 12. 일정 없다면? 여행 시작하기 버튼 없애고 여행 일정 칸에
+  // 11. 여행 일정 api 조회 (규렬), 일정 있으면 예산 상세보기 및 시작하기 화면 ()
+  // 12. 일정 없다면? 여행 시작하기 버튼 없애고 여행 일정 칸에 
   // '아직 일정이 없습니다. 일정을 등록하고 여행을 시작해보세요!' + 바로가기 버튼(toPlan)
 
 const BalanceSchedule = () => {
-  const location = useLocation()
-  const data = location.state?.data // userNumber
-  // const [userNum, setUserNum] = useState(data || "") 이미 data에 저장돼서 굳이..?
+  // const location = useLocation()
+  // const data = location.state?.data // userNumber
+  const data = localStorage.getItem('userNumber');
   const [account, setAccount] = useState('')
   const [name, setName] = useState('')
-  const [balance, setBalance] = useState(0)
+  const [balance, setBalance] = useState('')
 
   // 잔액 콤마 표시
   function formatBalance(balance) {
@@ -31,9 +31,9 @@ const BalanceSchedule = () => {
 
   // 계좌번호 형태으로 변환
   function formatAccountNumber(accountNumber) {
-    const formattedNumber = accountNumber.replace(/(\d{3})(\d{3})(\d{6})/, '$1-$2-$3');
-    return formattedNumber;
-  }
+    const str = String(accountNumber);
+    return str.substring(0, 3) + '-' + str.substring(3, 6) + '-' + str.substring(6, 12);
+}
 
   // 9. data에 저장된 userName 이용해 계좌 조회 > accountNumber 나옴
   const checkAccount = async () => {
@@ -69,10 +69,11 @@ const BalanceSchedule = () => {
       console.error(error);
     }
   }
-
+ 
   useEffect(() => {
     checkAccount();
-    // checkBalance();
+    console.log(localStorage.getItem('userNumber'))
+    console.log('로컬', data)
     if (account) {
       checkBalance();
     }
@@ -85,11 +86,14 @@ const BalanceSchedule = () => {
           <img src={shinhan} alt='shinhan' className={styles.logo}/>
           <div className={styles.yejukNAccount}>
             <p className={styles.yejuk}>예적금</p>
-            <p className={styles.account}>1111-1111-111</p>
-            {/* <p className={styles.account}>{formatAccountNumber(account)}</p> */}
+            {/* <p className={styles.account}>{formatAccountNumber(String(account))}</p> */}
+            <p className={styles.account}>{account ? formatAccountNumber(account) : 
+            <Skeleton.Input style={{borderRadius:'2rem', width: 150 }} active size="small" />}</p>
           </div>
         </div>
-        <p className={styles.balance}>{formatBalance(balance)}원</p>
+        <p className={styles.balance}>
+          {balance ? `${formatBalance(balance)}원` :
+          <Skeleton.Input style={{marginTop: '-1rem', borderRadius:'2rem', width: 80 }} active size="large" />}</p>
         <Link to={{
           pathname: '/budget',
           state: {

@@ -24,3 +24,24 @@
   font-weight: 900;
   color: black
 }
+
+.popularMent {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.7rem;
+}
+
+.img {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 0.4rem
+}
+
+.store {
+  margin-top: 0.5rem;
+}
+
+.popularDiv {
+  margin-top: 1rem;
+}

@@ -9,10 +9,10 @@ const Report = () => {
     // 인기장소 조회
     const getPopular = async () => {
       try {
-        const response = await axios.get("/api2/v1/popular_places");
+        const response = await axios.get("/api2/popular");
         console.log(response)
-        console.log(response.data.dataBody.popular_places)
-        setPopular(response.data.dataBody.popular_places)
+        console.log(response.data.dataBody.popularPlaces)
+        setPopular(response.data.dataBody.popularPlaces.slice(0, 3))
       } catch (error) {
         console.error(error);
       }
@@ -24,15 +24,20 @@ const Report = () => {
 
   return (
   <div>
-    <p className={styles.popularTitle}>지금 내 근처 인기있는 장소는?</p>
-    <div className={styles.popularDiv}>
-      {/* <p className={styles.schedule}>스타벅스</p> */}
+    <div className={styles.popularTitles}>
+      <p className={styles.popularTitle}>지금 인기있는 장소는?</p>
+      <Link to='/popular'><button className={styles.more}>더보기</button></Link>
     </div>
+
+    <div style={{ padding:'0 0.5rem',marginTop: '1rem', display: 'flex', flexWrap: 'wrap' }}>
     {popular.map((item, index) => (
-    <div className={styles.popularDiv}>
-      <p className={styles.popular}>{item.store}</p>
+    <div style={{ width: '33%'}}>
+      <a href={`https://www.google.com/search?q=${item.store}&oq=${item.store}&aqs=edge..69i57.1023j0j4&sourceid=chrome&ie=UTF-8`} target="_blank" rel="noopener noreferrer">
+      <img loading="lazy" className={styles.img} src={item.img} alt="img"/></a>
+      <p className={styles.store}>{item.store}</p>
     </div>
     ))}
+    </div>
   </div>
   );
 };

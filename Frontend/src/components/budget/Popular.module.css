@@ -22,3 +22,31 @@
   display: flex;
   justify-content: start;
 }
+
+.popularTitles {
+  display: flex;
+  justify-content: space-between;
+}
+
+.more {
+  margin-top: 3.3rem;
+  margin-right: 1.3rem;
+  font-family: 'preRg';
+  font-size: 0.8rem;
+  border: 1px solid grey;
+  border-radius: 2rem;
+  background-color: transparent;
+  color: grey;
+  padding-top: 0.15rem;
+}
+
+.img {
+  width: 30vw;
+  height: 13vh;
+  object-fit: cover;
+  border-radius: 0.4rem
+}
+
+.store {
+  margin-top: 0.5rem;
+}
