@@ -1,10 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 import Header from "../components/common/Header";
-// import DateListDetail from "../components/planBudget/DateListDetail"
 import BudgetList from "../components/planBudget/BudgetList"
 import { Button } from 'antd';
-// import styles from "./HistoryDetail.module.css";
 
 const Planbudget = () => {
   const reloadPage = () => {
