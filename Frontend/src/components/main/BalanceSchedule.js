@@ -2,7 +2,7 @@ import {React, useState, useEffect} from 'react';
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import styles from "./BalanceSchedule.module.css";
 import axios from "axios";
-import { Button, Tooltip, Skeleton } from 'antd';
+import { Button, Skeleton } from 'antd';
 import shinhan from './shinhan.png'
 import { CalendarOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
@@ -23,6 +23,7 @@ const BalanceSchedule = () => {
   const [account, setAccount] = useState('')
   const [name, setName] = useState('')
   const [balance, setBalance] = useState('')
+  const [plan, setPlan] = useState('')
 
   // 잔액 콤마 표시
   function formatBalance(balance) {
@@ -70,6 +71,18 @@ const BalanceSchedule = () => {
     }
   }
  
+  // 11. 등록된 여행 일정 조회 (백 api)
+  const checkPlan = async () => {
+    try {
+      const response = await axios.get("/api2/plan", { headers: { "User-Number": data } });
+      console.log(response.data)
+      setPlan(response.data.dataBody)
+      console.log('플랜',plan)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     checkAccount();
     console.log(localStorage.getItem('userNumber'))
@@ -77,6 +90,7 @@ const BalanceSchedule = () => {
     if (account) {
       checkBalance();
     }
+    checkPlan()
  }, [account]); // account 상태 업데이트 될때마다 재실행
 
   return (
@@ -94,41 +108,63 @@ const BalanceSchedule = () => {
         <p className={styles.balance}>
           {balance ? `${formatBalance(balance)}원` :
           <Skeleton.Input style={{marginTop: '-1rem', borderRadius:'2rem', width: 80 }} active size="large" />}</p>
-        <Link to={{
-          pathname: '/budget',
-          state: {
-            userNumber: data,
-          }, 
-        }}>
-        <Button 
-          size="large" 
-          style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
-          className={styles.startTrip}
-          type="primary">여행 시작하기</Button></Link>
+        
+        {plan.length === 0 ? (
+          <>
+            <Link to='/plan'>
+            <Button 
+              size="large" 
+              style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
+              className={styles.startTrip}
+              type="primary">여행 등록하러 GO</Button></Link>
+          </>
+        ) : (
+          <>
+            <Link to='/budget'>
+            <Button 
+              size="large" 
+              style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
+              className={styles.startTrip}
+              type="primary">여행 시작하기</Button></Link>
+          </>
+        )}
+
       </div>
       <div className={styles.scheduleNIcon}>
         <p className={styles.scheduleTitle}>{name}님의 여행 일정</p>
         <CalendarOutlined style={{ fontSize:'1.5rem', marginLeft: '0.5rem', paddingTop:'2.9rem'}} />
-        {/* <Tooltip style={{marginTop:'2.5rem'}} placement="right" title='일별 예산을 입력해보세요'>
-          <QuestionCircleOutlined style={{ fontSize:'1.5rem', marginLeft: '0.3rem', paddingTop:'2.6rem'}} />
-        </Tooltip> */}
       </div>
-      <div className={styles.scheduleDiv}>     
-        <p className={styles.schedule}>2023.08.25 - 2023.08.27</p>
-        <Link to='/plan'>
-        <Button 
-          size="medium" 
-          style={{ 
-            border:'1px solid', 
-            color: 'black',
-            backgroundColor: '#FFFFFF',
-            borderColor:'grey', 
-            fontWeight: '900', 
-            fontFamily:"preBd",
-            paddingTop: '0.3rem'}}
-            className={styles.startTrip}
-          >예산 상세보기</Button></Link>
+      
+
+      <div className={styles.scheduleDiv}>
+        {plan.length === 0 ? (
+          <>
+          <p className={styles.noSchedule1}>등록된 여행 일정이 없습니다</p>
+          <p className={styles.noSchedule2}>등록하기를 눌러 일정을 등록해주세요</p>
+          </>
+        ) : (
+          <>
+          <p className={styles.schedule}>{plan.startDate}-{plan.endDate}</p>
+          <Link to='/plan'>
+          <Button 
+            size="medium" 
+            style={{ 
+              border:'1px solid', 
+              color: 'black',
+              backgroundColor: '#FFFFFF',
+              borderColor:'grey', 
+              fontWeight: '900', 
+              fontFamily:"preBd",
+              paddingTop: '0.3rem'}}
+              className={styles.startTrip}
+            >예산 상세보기</Button></Link>
+          </>
+        )}     
+        
       </div>
+
+
+
     </div>
   );
 };
