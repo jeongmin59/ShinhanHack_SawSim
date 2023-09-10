@@ -9,28 +9,20 @@
 .icons {
   display: flex;
   justify-content: space-between;
-  height: 4vh;
   width: 33vw;
   margin-right: 0.5rem;
 }
 
 .comment {
-  width: 30px;
-  height: 30px;
-  image-rendering:-webkit-optimize-contrast;
+  font-size: 1.6rem;
 }
 
 .microphone {
-  width: 30px;
-  height: 30px;
-  image-rendering:-webkit-optimize-contrast;
+  font-size: 1.6rem;
 }
 
 .user {
-  width: 28px;
-  height: 26px;
-  image-rendering:-webkit-optimize-contrast;
-  margin-top: 0.1rem;
+  font-size: 1.6rem;
 }
 
 .title {
@@ -38,6 +30,6 @@
   margin-left: 0.5rem;
   margin-bottom: 0;
   margin-top: 0;
-  font-weight: 300;
+  font-weight: 400;
   font-family: 'medium';
 }
