@@ -51,7 +51,7 @@ public class PlanController {
         List<PlanListResponseDto> planListResponseDtos = new ArrayList<>();
         for (Plan plan : planList) {
             PlanListResponseDto planListResponseDto = PlanListResponseDto.builder()
-                    .planId(plan.getPlanId())
+                    .planId(plan.getId())
                     .startDate(plan.getStartDate())
                     .endDate(plan.getEndDate())
                     .build();

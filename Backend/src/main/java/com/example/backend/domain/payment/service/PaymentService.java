@@ -3,6 +3,7 @@ package com.example.backend.domain.payment.service;
 import com.example.backend.domain.account.Account;
 import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
+import com.example.backend.domain.common.exception.ResourceNotFoundException;
 import com.example.backend.domain.common.redis.service.RedisService;
 import com.example.backend.domain.payment.Payment;
 import com.example.backend.domain.payment.dto.LatestDateTimeResponseDto;
@@ -55,6 +56,7 @@ public class PaymentService {
         List<Payment> payments = paymentRepository.findByAccountId(account.getId());
         return payments.stream()
                 .map(payment -> TransactionHistoryResponseDto.builder()
+                        .id(payment.getId())
                         .content(payment.getContent())
                         .amount(payment.getAmount())
                         .storeName(payment.getStoreName())
@@ -97,5 +99,15 @@ public class PaymentService {
         return LatestDateTimeResponseDto.builder()
                 .transactionDate(LocalDate.parse(latestDate, DateTimeFormatter .ofPattern("yyyyMMdd")))
                 .transactionTime(LocalTime.parse(latestTime, DateTimeFormatter .ofPattern("HHmmss"))).build();
+    }
+
+    @Transactional
+    public void updateTransactionContent(String userNumber, Long transactionId, String content) {
+        Account account = getAccount(userNumber);
+
+        Payment payment = paymentRepository.findByAccountAndId(account, transactionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment", transactionId));
+
+        payment.updateContent(content);
     }
 }

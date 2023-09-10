@@ -20,7 +20,7 @@ public class Plan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PLAN_ID")
-    private Long planId;
+    private Long id;
 
     private LocalDate startDate;
     private LocalDate endDate;
