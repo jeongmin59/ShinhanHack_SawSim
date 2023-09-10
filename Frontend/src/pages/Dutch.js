@@ -44,7 +44,6 @@ const Dutch = () => {
   return (
     <div>
       <Header/>
-      {/* <pre>{JSON.stringify(selectedRows, null, 2)}</pre> */}
       <div className={styles.dutchTitleNIcon}>
         <p className={styles.dutchTitle}>정산 내역보기</p>
         <DownloadOutlined onClick={onDownloadBtn} style={{fontSize: '1.4rem', paddingTop: '0.4rem', paddingRight: '1.5rem'}}/>
