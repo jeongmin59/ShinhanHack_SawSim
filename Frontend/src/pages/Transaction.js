@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Transaction.module.css';
 import Header from '../components/common/Header';
-import { FloatButton, Button, Collapse, Divider, Radio, Table, Tag } from 'antd';
+import {  Alert, Space, FloatButton, Button, Collapse, Divider, Radio, Table, Tag } from 'antd';
 import './Transaction.css';
 import axios from "axios";
 
@@ -159,6 +159,8 @@ const getTransactions = async () => {
         <p className={styles.nMent1}>여행메이트와의 정산이 필요한 내역을 체크하고,</p>
         <p className={styles.nMent}>정산 내역보기 버튼을 눌러 공유해보세요</p>
       </div>
+      <Alert closable message="Informational Notes" type="info" showIcon message="정산이 필요한 내역을 체크하고, 
+      정산 내역보기 버튼을 눌러 공유해보세요" />
 
       {selectedRowKeys.length > 0 && (
         <FloatButton

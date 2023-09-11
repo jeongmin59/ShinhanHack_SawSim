@@ -90,12 +90,16 @@
 
 .schedule {
   /* width: 70%; */
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 900;
   margin-top: 0;
   margin-bottom: 0.5rem;
   /* text-shadow: -1px 0px rgb(255, 255, 255), 0px 1px rgb(255, 255, 255), 1px 0px rgb(255, 255, 255), 0px -1px rgb(255, 255, 255); */
   position: relative;
+  background: linear-gradient(to top, #ffffff 50%, transparent 50%);
+  width: 70vw;
+  margin: 0 auto 0.5rem auto;
+
 }
 
 .scheduleNIcon {

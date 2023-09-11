@@ -38,10 +38,10 @@ const PopularSpots = () => {
     <div>
       <div className={styles.titles}>
         <Link className={styles.backLink} to='/budget'><p className={styles.toBack}>&lt;</p>
-        <p className={styles.popularTitle}>뒤로가기</p></Link> 
+        <p className={styles.popularTitle}></p></Link> 
       </div>
 
-      <p className={styles.popularMent}>지금 내 근처 <span style={{fontFamily:'preBd',color:'#316FDF'}}>인기있는</span> 장소는?</p>
+      <p className={styles.popularMent}>지금 이 순간 <span style={{fontFamily:'preBd',color:'#316FDF'}}>인기 있는</span> 장소는?</p>
 
        <Space size={[0, 8]} wrap>
         {tagsData.map((tag) => (
