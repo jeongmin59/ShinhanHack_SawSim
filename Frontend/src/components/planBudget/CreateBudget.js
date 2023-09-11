@@ -3,7 +3,7 @@ import { Select, InputNumber, Button, Space } from 'antd';
 import axios from "axios";
 import styles from './CreateBudget.module.css';
 import DeleteBudget from './DeleteBudget';
-import { useParams, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
   
 const { Option } = Select;
   
@@ -11,10 +11,13 @@ const CreateBudget = () => {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
   const [isEditMode, setIsEditMode] = useState(false); // 추가 및 수정 모드
-  const location = useLocation();
-  const { formattedDate } = location.state || {};
-  const { latestPlanId } = location.state || {};
-  // const { planId } = useParams(); // useParams를 사용하여 planId를 가져옵니다.
+  // const location = useLocation();
+  // console.log("location.state:", location.state);
+  // const { formattedDate } = location.state || {};
+  // const { latestPlanId } = location.state || {};
+  const { state } = useLocation();
+  const formattedDate = state?.formattedDate;
+  const lastPlanId = state?.lastPlanId;
 
   const handleCategoryChange = (value) => {
     setCategory(value);
@@ -29,33 +32,37 @@ const CreateBudget = () => {
       const requestData = {
         dataBody: {
           travelDate: formattedDate,
-          category: category,
-          amount: amount,
+          category: setCategory,
+          amount: setAmount,
         },
       };
 
       if (isEditMode) {
-        const response = await axios.put(`/budget/${latestPlanId}`, requestData);
+        const response = await axios.put(`/budget/${lastPlanId}`, requestData);
         if (response.data.dataHeader.successCode === "0") {
           console.log('예산 수정 성공');
         } else {
           console.error('예산 수정 중 오류');
+          console.log('예산 수정 성공');
         }
       } else {
-        const response = await axios.post(`/budget/${latestPlanId}`, requestData);
+        const response = await axios.post(`/budget/${lastPlanId}`, requestData);
         if (response.data.dataHeader.successCode === "0") {
           console.log('예산 추가 성공');
         } else {
           console.error('예산 추가 중 오류');
+          console.log(response.data.dataHeader);
         }
       }
     } catch (error) {
       console.error('에러', error);
+      // console.log(response.data);
     }
   };
 
-  console.log(formattedDate)
-  console.log(latestPlanId)
+  console.log("formattedDate:", formattedDate);
+  console.log("lastPlanId:", lastPlanId);
+
 
 
 return (

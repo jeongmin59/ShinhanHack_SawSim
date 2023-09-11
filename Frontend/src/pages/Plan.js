@@ -4,7 +4,7 @@ import styles from './Plan.module.css'
 import Header from '../components/common/Header'
 import CalendarModal from '../components/plan/Calendar';
 import SelectedDate from '../components/plan/SelectedDate';
-import DateList from '../components/plan/DateList';
+// import DateList from '../components/plan/DateList';
 
 const Plan = () => {
   return (
@@ -16,7 +16,7 @@ const Plan = () => {
       </div>
       <CalendarModal />
       <SelectedDate />
-      <DateList />
+      {/* <DateList /> */}
     </div>
   );
 }
