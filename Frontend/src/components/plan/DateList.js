@@ -3,51 +3,51 @@ import axios from 'axios';
 import styles from './DateList.module.css';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
-import '../../pages/Transaction.css'
+import '../../pages/Transaction.css';
+// import { useLocation } from 'react-router-dom';
 
 function DateList() {
   const [lastPlan, setLastPlan] = useState(null);
   const [latestPlanId, setLatestPlanId] = useState(null); // 최신 planId 상태 추가
   const data = localStorage.getItem('userNumber');
 
-  const getDates = async () => {
-    try {
-      const response = await axios.get("/api2/plan", 
-        { headers: { "User-Number" : data } });
-      const dataBody = response.data.dataBody;
-
-      if (dataBody.length > 0) {
-        const lastPlan = dataBody[dataBody.length - 1];
-        setLastPlan(lastPlan);
-
-        // 가장 최신의 planId를 가져와 상태에 설정
-        setLatestPlanId(lastPlan.planId);
-
-        console.log(dataBody);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   useEffect(() => {
-    getDates();
-  }, []);
+    const getDates = async () => {
+      try {
+        const response = await axios.get("/api2/plan", 
+          { headers: { "User-Number" : data } });
+        const dataBody = response.data.dataBody;
 
-  console.log(latestPlanId)
+        if (dataBody.length > 0) {
+          const lastPlan = dataBody[dataBody.length - 1];
+          setLastPlan(lastPlan);
+
+          // 가장 최신의 planId를 가져와 상태에 설정
+          setLatestPlanId(lastPlan.planId);
+          
+          console.log("latestPlanId:", lastPlan.planId);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    getDates();
+  }, [data]);
 
   const renderDateRange = (startDate, endDate) => {
     const dateArray = [];
     const currentDate = new Date(startDate);
-  
+
     while (currentDate <= new Date(endDate)) {
       dateArray.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
     }
-  
+
     return dateArray.map((date, index) => {
       const formattedDate = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
-  
+      console.log("formattedDate:", formattedDate);
+
       return (
         <div key={index}>
           <p className={styles.dateText}>
@@ -56,13 +56,15 @@ function DateList() {
             {date.getDate() < 10 ? '0' : ''}{date.getDate()}]
           </p>
           <div className={styles.dateItem}>
-            <Link to={{
-              pathname: `${lastPlan.planId}`,
-              state: {
-                formattedDate: formattedDate,
-                latestPlanId: lastPlan.planId, // 최신 planId를 넘겨줍니다.
-              }
-            }}>
+            <Link
+              to={{
+                pathname: `/budget/${latestPlanId}`,
+                state: {
+                  formattedDate: formattedDate,
+                  latestPlanId: lastPlan.planId,
+                }
+              }}
+            >
               <Button
                 size="small"
                 style={{ height: '2rem', backgroundColor: '#316FDF', fontFamily: "preRg" }}

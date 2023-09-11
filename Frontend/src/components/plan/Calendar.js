@@ -51,13 +51,11 @@ const CalendarModal = ({ onDateSelected }) => {
       // const headers = {"User-Number": "44b78142-4320-4115-88f1-86bb562fbc0c"}
       const response = await axios.post('/api2/plan', requestData, { headers: { "User-Number" : data } });
       console.log('성공', response.data);
-      console.log('제발', response.data.dataheader.resultcode);
+      // console.log('제발', response.data.dataheader.successCode);
 
       localStorage.setItem('startDate', formattedStartDate);
       localStorage.setItem('endDate', formattedEndDate);
 
-      // 백엔드에서 받은 날짜를 상위 컴포넌트로 전달
-      // onDateSelected({ startDate: formattedStartDate, endDate: formattedEndDate });
     } catch (error) {
       console.error('그냥 에러:', error);
     } finally {
