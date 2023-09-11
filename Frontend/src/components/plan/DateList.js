@@ -8,7 +8,7 @@ import '../../pages/Transaction.css';
 
 function DateList() {
   const [lastPlan, setLastPlan] = useState(null);
-  const [latestPlanId, setLatestPlanId] = useState(null); // 최신 planId 상태 추가
+  const [lastPlanId, setLastPlanId] = useState(null); // 최신 planId 상태 추가
   const data = localStorage.getItem('userNumber');
 
   useEffect(() => {
@@ -17,15 +17,16 @@ function DateList() {
         const response = await axios.get("/api2/plan", 
           { headers: { "User-Number" : data } });
         const dataBody = response.data.dataBody;
+        console.log(dataBody)
 
         if (dataBody.length > 0) {
           const lastPlan = dataBody[dataBody.length - 1];
           setLastPlan(lastPlan);
 
           // 가장 최신의 planId를 가져와 상태에 설정
-          setLatestPlanId(lastPlan.planId);
+          setLastPlanId(lastPlan.planId);
           
-          console.log("latestPlanId:", lastPlan.planId);
+          // console.log("lastPlanId 변경", lastPlan.planId);
         }
       } catch (error) {
         console.error(error);
@@ -33,7 +34,8 @@ function DateList() {
     }
 
     getDates();
-  }, [data]);
+    console.log("lastPlanId 변경", lastPlanId);
+  }, [lastPlanId]);
 
   const renderDateRange = (startDate, endDate) => {
     const dateArray = [];
@@ -57,13 +59,11 @@ function DateList() {
           </p>
           <div className={styles.dateItem}>
             <Link
-              to={{
-                pathname: `/budget/${latestPlanId}`,
-                state: {
+              to={`/budget/${lastPlanId}`}
+                state = {{
                   formattedDate: formattedDate,
-                  latestPlanId: lastPlan.planId,
-                }
-              }}
+                  lastPlanId: lastPlan.planId, 
+                }}
             >
               <Button
                 size="small"
@@ -93,3 +93,4 @@ function DateList() {
 }
 
 export default DateList;
+
