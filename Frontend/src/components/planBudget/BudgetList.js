@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CreateBudget from './CreateBudget';
-// import styles from '../pages/Plan.module.css'
+import axios from 'axios';
 
 const BudgetList = () => {
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [budgetResults, setbudgetResults] = useState([]);
+  const data = localStorage.getItem('userNumber');
+
+  const getBudgetList = async () => {
+    try {
+      const response = await axios.get("/api2/plan", 
+        { headers: { "User-Number" : data } });
+      // const dataBody = response.data.dataBody;
+        console.log(response.data.data.results);
+      if (response.data.data && response.data.data.results.length > 0) {
+        setbudgetResults(response.data.data.results);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getBudgetList();
+  }, []);
 
   return (
     <div>
-      <h2>{isEditMode ? '예산 수정하기' : '예산 추가하기'}</h2>
+      <h3>예산 추가</h3>
+        <div></div>
       
 
 
