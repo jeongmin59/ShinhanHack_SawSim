@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../pages/Plan.module.css'
+import styles from './Plan.module.css'
 import Header from '../components/common/Header'
 import CalendarModal from '../components/plan/Calendar';
 import SelectedDate from '../components/plan/SelectedDate';
