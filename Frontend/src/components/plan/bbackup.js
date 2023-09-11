@@ -1,201 +1,75 @@
-import React, { useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import { Button, Modal } from 'antd';
-import "./Calendar.css"
-import dayjs from 'dayjs'; // dd일 이 아니라 d로 표시하게 함
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import styles from './DateList.module.css';
+import { Button } from 'antd';
+import { Link } from 'react-router-dom';
+import '../../pages/Transaction.css'
 
-const CalendarModal = () => {
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  // const [modalText, setModalText] = useState('Content of the modal');
-  const [date, setDate] = useState(new Date());
+function DateList() {
+  const [lastPlan, setLastPlan] = useState(null);
+  const data = localStorage.getItem('userNumber');
 
-  const saveDateToLocalStorage = (selectedDate) => {
+  const getDates = async () => {
     try {
-      // date를 문자열로 변환하여 로컬 스토리지에 저장
-      localStorage.setItem('selectedDate', JSON.stringify(selectedDate));
+      const response = await axios.get("/api2/plan", 
+        { headers: { "User-Number" : data } });
+      const dataBody = response.data.dataBody;
+
+      if (dataBody.length > 0) {
+        const lastPlan = dataBody[dataBody.length - 1];
+        setLastPlan(lastPlan);
+      }
     } catch (error) {
-      console.error('로컬 스토리지 저장 안 됨', error);
+      console.error(error);
     }
-  };
-  
-  const showModal = () => {
-    setOpen(true);
-  };
+  }
 
-  const handleOk = async () => {
-    // setModalText('2초후 닫힘');
-    setConfirmLoading(true);
+  useEffect(() => {
+    getDates();
+  }, []);
 
-    try {
-      // 서버에 보낼 데이터
-      const requestData = {
-        dataBody: {
-          startDate: date[0], // 시작 날짜
-          endDate: date[1],   // 종료 날짜
-        },
-      };
-      // POST 요청
-      const response = await axios.post('/plan', requestData);
-      console.log('요청 성공:', response.data);
-      saveDateToLocalStorage(date)
+  const renderDateRange = (startDate, endDate) => {
+    const dateArray = [];
+    const currentDate = new Date(startDate);
 
-    } catch (error) {
-      console.error('요청 실패:', error);
-      saveDateToLocalStorage(date)
+    while (currentDate <= new Date(endDate)) {
+      dateArray.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 500);
-    window.location.reload();
-  };
-
-  const handleCancel = () => {
-    console.log('취소');
-    setOpen(false);
-  };
-  console.log(date)
+    return dateArray.map((date, index) => (
+      <div key={index}>
+        <p className={styles.dateText}>
+          {index + 1}일차 [{date.getFullYear()}.
+          {date.getMonth() + 1 < 10 ? '0' : ''}{date.getMonth() + 1}.
+          {date.getDate() < 10 ? '0' : ''}{date.getDate()}]
+        </p>
+        <div className={styles.dateItem}>
+          
+        <Link to={{
+          pathname: '/planbudget',
+        }}>
+          <Button
+            size="small"
+            style={{ height: '2rem', backgroundColor: '#316FDF', fontFamily: "preRg" }}
+            type="primary">예산 추가하기</Button>
+        </Link>
+        </div>
+      </div>
+    ));
+  }
 
   return (
     <div>
-      <Button 
-        type="primary" 
-        onClick={showModal}
-        style={{ backgroundColor:'#0046FF', fontFamily:"preRg" }}>
-        일정 선택
-      </Button>
-      <Modal
-        // title="Title"
-        open={open}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-        style={{ fontFamily:"preRg" }}
-        maskStyle={{ fontFamily:"preRg" }}
-      >
-      <h3 className='text-center'>일정을 선택해주세요.</h3>
-      <div className='calendar-container'>
-        <Calendar
-          onChange={setDate}
-          value={date}
-          selectRange={true}
-          formatDay ={(locale, date) => dayjs(date).format('DD')}
-        />
-      </div>
-      {date.length > 0 ? (
-        <p className='text-center'>
-          <span className='bold'>시작:</span>{' '}
-          {date[0].toDateString()}
-          &nbsp;|&nbsp;
-          <span className='bold'>종료:</span> {date[1].toDateString()}
-        </p>
+      {lastPlan ? (
+        <div>
+          {renderDateRange(lastPlan.startDate, lastPlan.endDate)}
+        </div>
       ) : (
-        <p className='text-center'>
-          <span className='bold'>선택된 날짜:</span>{' '}
-          {date.toDateString()}
-        </p>
+        <p>선택된 일정이 없습니다.</p>
       )}
-      </Modal>
     </div>
   );
-};
+}
 
-export default CalendarModal;
-
-
-
-
-
-
-// .react-calendar { 
-//     width: 400px;
-//     max-width: 100%;
-//     background-color: #fff;
-//     color: #222;
-//     border-radius: 8px;
-//     box-shadow: none;
-//     font-family: Arial, Helvetica, sans-serif;
-//     line-height: 1.125em;
-//   }
-//   .react-calendar__navigation button {
-//     color: #0046FF;
-//     min-width: 44px;
-//     background: none;
-//     font-size: 16px;
-//     margin-top: 8px;
-//   }
-//   .react-calendar__navigation button:enabled:hover,
-//   .react-calendar__navigation button:enabled:focus {
-//     background-color: #f8f8fa;
-//   }
-//   .react-calendar__navigation button[disabled] {
-//     background-color: #f0f0f0;
-//   }
-//   abbr[title] {
-//     text-decoration: none;
-//   }
-//   /* .react-calendar__month-view__days__day--weekend {
-//   color: #d10000;
-//   } */
-//   .react-calendar__tile:enabled:hover,
-//   .react-calendar__tile:enabled:focus {
-//     background: #f8f8fa;
-//     color: #0046FF;
-//     border-radius: 6px;
-//   }
-//   .react-calendar__tile--now {
-//     background: #6f48eb33;
-//     border-radius: 6px;
-//     font-weight: bold;
-//     color: #0046FF;
-//   }
-//   .react-calendar__tile--now:enabled:hover,
-//   .react-calendar__tile--now:enabled:focus {
-//     background: #6f48eb33;
-//     border-radius: 6px;
-//     font-weight: bold;
-//     color: #0046FF;
-//   }
-//   .react-calendar__tile--hasActive:enabled:hover,
-//   .react-calendar__tile--hasActive:enabled:focus {
-//     background: #f8f8fa;
-//   }
-//   .react-calendar__tile--active {
-//     background: #0046FF;
-//     border-radius: 6px;
-//     font-weight: bold;
-//     color: white;
-//   }  
-//   .react-calendar__tile--active:enabled:hover,
-//   .react-calendar__tile--active:enabled:focus {
-//     background: #0046FF;
-//     color: white;
-//   }
-//   .react-calendar--selectRange .react-calendar__tile--hover {
-//     background-color: #f8f8fa;
-//   }
-//   .react-calendar__tile--range {
-//     background: #f8f8fa;
-//     color: #0046FF;
-//     border-radius: 0;
-//   }
-//   .react-calendar__tile--rangeStart {
-//     border-top-right-radius: 0;
-//     border-bottom-right-radius: 0;
-//     border-top-left-radius: 6px;
-//     border-bottom-left-radius: 6px;
-//     background: #0046FF;
-//     color: white;
-//   }
-//   .react-calendar__tile--rangeEnd {
-//     border-top-left-radius: 0;
-//     border-bottom-left-radius: 0;
-//     border-top-right-radius: 6px;
-//     border-bottom-right-radius: 6px;
-//     background: #0046FF;
-//     color: white;
-//   }
+export default DateList;

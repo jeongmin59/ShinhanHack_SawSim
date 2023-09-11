@@ -63,7 +63,7 @@ const CalendarModal = ({ onDateSelected }) => {
     } finally {
       setConfirmLoading(false);
       setOpen(false);
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
