@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/api/plan")
 @RequiredArgsConstructor
 public class PlanController {
 

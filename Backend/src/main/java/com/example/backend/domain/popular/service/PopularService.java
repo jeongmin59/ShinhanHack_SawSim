@@ -20,6 +20,7 @@ public class PopularService {
         List<PopularResponseDto.PopularPlace> popularPlaces = new ArrayList<>();
         for (Popular popular : popularList) {
             PopularResponseDto.PopularPlace popularPlace = PopularResponseDto.PopularPlace.builder()
+                    .popularId(popular.getPopularId())
                     .store(popular.getStore())
                     .img(popular.getImg())
                     .category(popular.getCategory())
