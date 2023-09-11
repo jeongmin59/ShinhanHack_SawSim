@@ -10,6 +10,7 @@ import CashCreate from './pages/CashCreate'
 import Transaction from './pages/Transaction'
 import TransactionDetail from './pages/TransactionDetail'
 import PlanBudget from './pages/PlanBudget'
+import PlanBudgetDetail from './pages/PlanBudgetDetail'
 import Dutch from './pages/Dutch'
 import PopularPage from './pages/PopularPage'
 import PortfolioPage from './pages/PortfolioPage'
@@ -27,7 +28,7 @@ function App() {
         <Route exact path='/transaction' element={<Transaction/>}/>
         <Route exact path='/transaction/detail' element={<TransactionDetail/>}/>
         <Route exact path='/planbudget' element={<PlanBudget/>}/>
-        <Route exact path='/planbudget/:plan_id' element={<PlanBudget/>}/>
+        <Route exact path='/plan/:formattedDate' element={<PlanBudgetDetail/>}/>
         <Route exact path='/dutch' element={<Dutch/>}/>
         <Route exact path='/popular' element={<PopularPage/>}/>
         <Route exact path='/portfolio' element={<PortfolioPage/>}/>
