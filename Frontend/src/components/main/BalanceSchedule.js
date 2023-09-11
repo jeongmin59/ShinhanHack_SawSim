@@ -11,10 +11,15 @@ import { CalendarOutlined, QuestionCircleOutlined } from '@ant-design/icons';
   // 여기서부턴 메인페이지(여행 시작 전) 넘어가서
   // 9. 메인페이지에서 userNumber 이용해 계좌 조회
   // 10. 계좌번호로 잔액 조회 (신한 api)
-  // ----------------------------------------api오면 할 것
   // 11. 여행 일정 api 조회 (규렬), 일정 있으면 예산 상세보기 및 시작하기 화면 ()
   // 12. 일정 없다면? 여행 시작하기 버튼 없애고 여행 일정 칸에 
   // '아직 일정이 없습니다. 일정을 등록하고 여행을 시작해보세요!' + 바로가기 버튼(toPlan)
+  // -------------------------------남은 할 일
+  // 13. 여행 시작하기 버튼은 여행 시작 날짜가 됐을때 - 끝나는 날짜 사이에만 활성화
+  // 14. 만약 오늘 날짜가 여행 끝나는 날짜를 넘어섰다? 즉 여행이 끝났다?
+  // -> 여행 포트폴리오 버튼으로 변경 & 예산 상세보기 버튼은 '즐거운 여행 되셨나요?' 등의 문구로 변경
+  // 1) 다른 여행 일정을 잡고싶다면? > 포트폴리오 페이지에 여행 끝마치기 하면서 기존 여행 일정 초기화?
+  // 2) 여행 등록하러 GO는 그대로 두고 밑에 예산 상세보기를 포트폴리오 보기로 변경
 
 const BalanceSchedule = () => {
   // const location = useLocation()
@@ -23,7 +28,7 @@ const BalanceSchedule = () => {
   const [account, setAccount] = useState('')
   const [name, setName] = useState('')
   const [balance, setBalance] = useState('')
-  const [plan, setPlan] = useState('')
+  const [plan, setPlan] = useState([])
 
   // 잔액 콤마 표시
   function formatBalance(balance) {
@@ -45,6 +50,7 @@ const BalanceSchedule = () => {
       setAccount(response.data.dataBody.accountNumber)
       console.log(response.data.dataBody.name)
       setName(response.data.dataBody.name)
+      localStorage.setItem('userName', name);
     } catch (error) {
       console.error(error);
     }
@@ -76,7 +82,7 @@ const BalanceSchedule = () => {
     try {
       const response = await axios.get("/api2/plan", { headers: { "User-Number": data } });
       console.log(response.data)
-      setPlan(response.data.dataBody)
+      setPlan(response.data.dataBody[0])
       console.log('플랜',plan)
     } catch (error) {
       console.error(error);
@@ -144,7 +150,7 @@ const BalanceSchedule = () => {
           </>
         ) : (
           <>
-          <p className={styles.schedule}>{plan.startDate}-{plan.endDate}</p>
+          <p className={styles.schedule}>{plan.startDate} ~ {plan.endDate}</p>
           <Link to='/plan'>
           <Button 
             size="medium" 

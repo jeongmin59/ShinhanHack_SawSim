@@ -9,6 +9,7 @@ const Budget = () => {
     <div className={styles.div}>
       <Header/>
       <Report/>
+      <br/><br/><br/><br/>
       <Popular/>
     </div>
   );

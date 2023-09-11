@@ -51,3 +51,30 @@
   display: flex;
   justify-content: start;
 }
+
+.ment {
+  margin: 0 0 0.3rem 0;
+  font-size: 1.1rem;
+}
+
+.day {
+  font-family: 'preBd';
+  font-size: 1.1rem;
+  
+}
+
+.money {
+  color: #316FDF;
+  font-family: 'preBd';
+  font-weight: 900;
+  text-decoration: underline;
+  font-size: 1.1rem;
+}
+
+.money1 {
+  color: #316FDF;
+  font-family: 'preBd';
+  font-weight: 900;
+  font-size: 1.1rem;
+
+}
