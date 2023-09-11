@@ -23,8 +23,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,141 +101,55 @@ public class PortfolioService {
                         .budgetOvers(deficitDates)
                         .build())
                 .build();
-
-
-//        int budget_total = 0; // 예산 총합
-//        int expenditure_total = 0; // 지출 총합
-//
-//        List<LocalDate> budgetOver = new ArrayList<>(); //금액 초과
-//
-//        //신한  계좌 거래내역 조회
-//        ShinhanTransactionRequestDto shinhanTransactionRequestDto = transactionHistoryInquiry(userNumber);
-//
-//        //날짜 반복
-//        for (int i = 0; i < day; i++) {
-//            //해당 일차 예산 총합 구하기
-//            List<Budget> budgets = budgetRepository.findAllByTravelDate(plan.getStartDate().plusDays(i));
-//            int budget_cost = 0; // 예산
-//
-//            for (Budget budget : budgets) {
-//                budget_cost += budget.getAmount();
-//            }
-//
-//            //신한 API에서 해당 거래 내역 일차별 총합
-//            int expenditure_cost = 0; // 지출
-//
-//
-//            //logic
-//            for (ShinhanTransactionRequestDto.DataBody.TransactionHistory transactionHistory : shinhanTransactionRequestDto.getDataBody().getTransactions()) {
-//                // 날짜 비교를 위한 LocalDate 타입 변경
-//                LocalDate date = LocalDate.parse(transactionHistory.getTransactionDate(), DateTimeFormatter.BASIC_ISO_DATE);
-//
-//                // 날짜가 같으면 해당 날짜에 지출이 있다는 것
-//                if (date.equals(plan.getStartDate().plusDays(i))) {
-//                    expenditure_cost += Integer.parseInt(transactionHistory.getWithdrawalAmount());
-//                }
-//            }
-//
-//
-//            // 금액 초과 일자 구하기
-//            if ((budget_cost - expenditure_cost) < 0) {
-//                budgetOver.add(plan.getStartDate().plusDays(i));
-//                BudgetOver budget = new BudgetOver(
-//                        null,
-//                        plan.getStartDate().plusDays(i),
-//                        (long) (budget_cost - expenditure_cost),
-//                        null
-//                );
-//
-//                budgetOverRepository.save(budget);
-//            }
-//
-//            // total 더하기
-//            budget_total += budget_cost;
-//            expenditure_total += expenditure_cost;
-//        }
-//
-//        long totalBudget = (long) ((double) expenditure_total / budget_total);
-//        long consumptionAmount = budget_total - expenditure_total;
-//        // 여행 포트폴리오 저장
-//        Portfolio portfolio = new Portfolio(
-//                null,
-//                totalBudget,
-//                consumptionAmount,
-//                plan
-//        );
-//
-//        portfolioRepository.save(portfolio);
-
-
     }
 
-
+    // 0. 해당 일자의 지도 내역이 없다면?
+    // 1. 결제내역에서 해당 일자의 결제내역을 가져온다.
+    // 2. 가게명을 검색하여 위도와 경도를 저장한다.
+    // 3. 전체 내역을 보여준다.
+    // 있다면? 그냥 전체 내역을 보여준다.
     public PortfolioMapResponseDto portfolioMapGet(String userNumber, Long planId) {
-        // 1. 신한 계좌 거래내역 조회를 통해서 거래 내역을 받아온다.
-        // 2. planId를 통해서 여행 계획 정보를 받아와서 시작 날짜와 끝나는 날짜를 받아온다.
-        // 3. (for문) 시작 날짜부터 끝나는 날짜에 출금 금액이 있는 정보를 받아온다.
-        // 4. 해당 정보에서 "내용"에 해당하는 부분에서 상호명 검색을 통해 "위도", "경도" 정보를 받아온다.
-        // 5. 해당 정보(날짜, 상호명, 가격, 위도, 경도, 시간)를 리스트(dto)에 저장하고 리턴해준다.
+        Account account = accountRepository.findAccountByUserNumber(userNumber)
+                .orElseThrow(UserNotFoundException::new);
 
-        //1.
-        ShinhanTransactionRequestDto shinhanTransactionRequestDto = transactionHistoryInquiry(userNumber);
-
-        //2
-        Plan plan = planRepository.findById(planId)
+        Plan plan = planRepository.findByAccountAndId(account, planId)
                 .orElseThrow(() -> new ResourceNotFoundException("Plan", planId));
 
-        //3.
-
-        // 내역 조회 리스트
+        List<Portfolio> findPortfolios = portfolioRepository.findAllByPlanId(planId);
         List<PortfolioMapResponseDto.DataBody.travelInfo> travelInfoList = new ArrayList<>();
+        for (Portfolio findPortfolio : findPortfolios) {
+            List<TransactionHistory> transactionHistories = transactionRepository.findByTravelDate(findPortfolio.getTravelDate());
+            // 처음 조회라면 저장이 필요하다.
+            if (transactionHistories.isEmpty()) {
+                List<Payment> payments = paymentRepository.findByAccountAndTransactionDate(account, findPortfolio.getTravelDate());
 
-        // 내역 조회 반복
-        for (ShinhanTransactionRequestDto.DataBody.TransactionHistory transactionHistory : shinhanTransactionRequestDto.getDataBody().getTransactions()) {
-            // 날짜 비교를 위한 LocalDate 타입 변경
-            LocalDate date = LocalDate.parse(transactionHistory.getTransactionDate(), DateTimeFormatter.BASIC_ISO_DATE);
+                List<TransactionHistory> transactionHistoryList = new ArrayList<>();
+                for (Payment payment : payments) {
+                    Mono<KakaoPlaceSearchResponseDto> location = findLocation(payment.getStoreName());
+                    KakaoPlaceSearchResponseDto responseDto = location.block(); // Mono의 결과를 동기적으로 가져옴
 
-            // 여행 날짜에 포함되는 거래 내역이고
-            // 출금 금액이 있으면 저장
+                    if (responseDto != null && !responseDto.getDocuments().isEmpty()) {
+                        Double latitude = Double.valueOf(responseDto.getDocuments().get(0).getY()); // 첫 번째 결과의 위도 정보 가져오기
+                        Double longitude = Double.valueOf(responseDto.getDocuments().get(0).getX()); // 첫 번째 결과의 경도 정보 가져오기
 
-            if (!plan.getStartDate().isAfter(date) && !plan.getEndDate().isBefore(date)
-                    && Integer.parseInt(transactionHistory.getWithdrawalAmount()) > 0) {
-
-                //4. 위도 경도 받아오는 api 사용
-                Mono<KakaoPlaceSearchResponseDto> location = findLocation(transactionHistory.getDetail());
-                KakaoPlaceSearchResponseDto responseDto = location.block(); // Mono의 결과를 동기적으로 가져옴
-
-                if (responseDto != null && !responseDto.getDocuments().isEmpty()) {
-                    String latitude = responseDto.getDocuments().get(0).getY(); // 첫 번째 결과의 위도 정보 가져오기
-                    String longitude = responseDto.getDocuments().get(0).getX(); // 첫 번째 결과의 경도 정보 가져오기
-
-                    //5.
-                    PortfolioMapResponseDto.DataBody.travelInfo travelInfo = PortfolioMapResponseDto.DataBody.travelInfo.builder()
-                            .date(date)
-                            .store(transactionHistory.getDetail())
-                            .cost(transactionHistory.getWithdrawalAmount())
-                            .latitude(latitude)
-                            .longitude(longitude)
-                            .time(transactionHistory.getTransactionTime())
-                            .build();
-
-                    travelInfoList.add(travelInfo);
-
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmmss");
-                    LocalTime parsedTime = LocalTime.parse(transactionHistory.getTransactionTime(), formatter);
-
-                    TransactionHistory transaction = new TransactionHistory(
-                            null,
-                            date,
-                            transactionHistory.getDetail(),
-                            Long.parseLong(transactionHistory.getWithdrawalAmount()),
-                            Double.parseDouble(latitude),
-                            Double.parseDouble(longitude),
-                            parsedTime,
-                            null
-                    );
-                    transactionRepository.save(transaction);
+                        transactionHistoryList.add(TransactionHistory.create(payment.getAmount(), payment.getStoreName(), latitude, longitude, payment.getTransactionDate(), payment.getTransactionTime(), findPortfolio));
+                    }
                 }
+                transactionRepository.saveAll(transactionHistoryList);
+
+                transactionHistories = transactionRepository.findByTravelDate(findPortfolio.getTravelDate());
+            }
+
+            for (TransactionHistory transactionHistory : transactionHistories) {
+                PortfolioMapResponseDto.DataBody.travelInfo travelInfo = PortfolioMapResponseDto.DataBody.travelInfo.builder()
+                        .amount(transactionHistory.getAmount())
+                        .storeName(transactionHistory.getStoreName())
+                        .latitude(transactionHistory.getLatitude())
+                        .longitude(transactionHistory.getLongitude())
+                        .transactionDate(transactionHistory.getTransactionDate())
+                        .transactionTime(transactionHistory.getTransactionTime())
+                        .build();
+                travelInfoList.add(travelInfo);
             }
         }
 
@@ -248,7 +160,6 @@ public class PortfolioService {
         return PortfolioMapResponseDto.builder()
                 .dataBody(dataBody)
                 .build();
-
     }
 
     // userNumber로 계좌내역조회 받아오는 메서드

@@ -21,14 +21,27 @@ public class TransactionHistory {
     @Column(name = "TRANSACTION_HISTORY_ID")
     private Long id;
 
-    private LocalDate date;
-    private String store;
-    private Long cost;
+    private Long amount;
+    private String storeName;
     private Double latitude;
     private Double longitude;
-    private LocalTime time;
+    private LocalDate transactionDate;
+    private LocalTime transactionTime;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "PORTFOLIO_ID")
     private Portfolio portfolio;
+
+    public static TransactionHistory create(Long amount, String storeName, Double latitude, Double longitude, LocalDate transactionDate, LocalTime transactionTime, Portfolio portfolio) {
+        TransactionHistory transactionHistory = new TransactionHistory();
+        transactionHistory.amount = amount;
+        transactionHistory.storeName = storeName;
+        transactionHistory.latitude = latitude;
+        transactionHistory.longitude = longitude;
+        transactionHistory.transactionDate = transactionDate;
+        transactionHistory.transactionTime = transactionTime;
+        transactionHistory.portfolio = portfolio;
+
+        return transactionHistory;
+    }
 
 }

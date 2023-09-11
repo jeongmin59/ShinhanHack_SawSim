@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -19,12 +20,12 @@ public class PortfolioMapResponseDto {
         @Getter
         @Builder(toBuilder = true)
         public static class travelInfo {
-            private LocalDate date;
-            private String store;
-            private String cost;
-            private String latitude;
-            private String longitude;
-            private String time; //시간 타입 수정?
+            private Long amount;
+            private String storeName;
+            private Double latitude;
+            private Double longitude;
+            private LocalDate transactionDate;
+            private LocalTime transactionTime;
         }
     }
 
