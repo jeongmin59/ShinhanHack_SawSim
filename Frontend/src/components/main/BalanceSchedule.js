@@ -86,7 +86,11 @@ const BalanceSchedule = () => {
         setPlan(response.data.dataBody[0])
         console.log('플랜',plan)
       } else {
+<<<<<<< HEAD
         console.log('등록된 일정이 없습니다')
+=======
+        console.log('일정이 등록되지 않음')
+>>>>>>> d875f05584e6306518d8b212be0147881be3f121
       }
     } catch (error) {
       console.error(error);
