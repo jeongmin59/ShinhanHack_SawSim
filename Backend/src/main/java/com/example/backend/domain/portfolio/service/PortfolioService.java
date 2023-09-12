@@ -85,14 +85,40 @@ public class PortfolioService {
         }
 
         // 해당 plan의 값을 가져와서 모두 더한다. 총 예산, 총 사용금액
+//        Long totalBudget = findPortfolios.stream()
+//                .mapToLong(Portfolio::getTotalBudget)
+//                .sum();
+
+//        Long totalPayment = findPortfolios.stream()
+//                .mapToLong(Portfolio::getTotalPayment)
+//                .sum();
+
         Long totalBudget = findPortfolios.stream()
-                .mapToLong(Portfolio::getTotalBudget)
+                .mapToLong(portfolio -> {
+                    Long budget = portfolio.getTotalBudget();
+                    return budget != null ? budget : 0L;
+                })
                 .sum();
+
         Long totalPayment = findPortfolios.stream()
-                .mapToLong(Portfolio::getTotalPayment)
+                .mapToLong(portfolio -> {
+                    Long payment = portfolio.getTotalPayment();
+                    return payment != null ? payment : 0L;
+                })
                 .sum();
+
+
+//        List<LocalDate> deficitDates = findPortfolios.stream()
+//                .filter(portfolio -> portfolio.getTotalBudget() - portfolio.getTotalPayment() < 0)
+//                .map(Portfolio::getTravelDate)
+//                .collect(Collectors.toList());
+
         List<LocalDate> deficitDates = findPortfolios.stream()
-                .filter(portfolio -> portfolio.getTotalBudget() - portfolio.getTotalPayment() < 0)
+                .filter(portfolio -> {
+                    Long budget = portfolio.getTotalBudget();
+                    Long payment = portfolio.getTotalPayment();
+                    return budget != null && payment != null && budget - payment < 0;
+                })
                 .map(Portfolio::getTravelDate)
                 .collect(Collectors.toList());
 

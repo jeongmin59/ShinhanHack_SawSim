@@ -40,28 +40,13 @@ public class PlanController {
     }
 
     @GetMapping()
-    public BasicResponse<List<PlanListResponseDto>> planList(@RequestHeader("User-Number") String userNumber){
-        //Header User-Number를 통해서 계좌 ID를 받아옴
-        Account account = accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(UserNotFoundException::new);
+    public BasicResponse<PlanGetResponseDto> planGet(@RequestHeader("User-Number") String userNumber){
 
-        Long accountId = account.getId();
+        PlanGetResponseDto planGetResponseDto = planService.planGet(userNumber);
 
-        List<Plan> planList = planService.planList(accountId);
-
-        List<PlanListResponseDto> planListResponseDtos = new ArrayList<>();
-        for (Plan plan : planList) {
-            PlanListResponseDto planListResponseDto = PlanListResponseDto.builder()
-                    .planId(plan.getId())
-                    .startDate(plan.getStartDate())
-                    .endDate(plan.getEndDate())
-                    .build();
-            planListResponseDtos.add(planListResponseDto);
-        }
-
-        return BasicResponse.<List<PlanListResponseDto>>builder()
+        return BasicResponse.<PlanGetResponseDto>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
-                .dataBody(planListResponseDtos)
+                .dataBody(planGetResponseDto)
                 .build();
     }
 

@@ -2,6 +2,7 @@ package com.example.backend.domain.plan.entity;
 
 import com.example.backend.domain.account.Account;
 import com.example.backend.domain.budget.entity.Budget;
+import com.example.backend.domain.portfolio.entity.Portfolio;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,4 +34,8 @@ public class Plan {
 
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Budget> budgetList;
+
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Portfolio> portfolioList;
+
 }
