@@ -1,35 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Button } from 'antd';
 
-const DeleteBuget = () => {
-
-  // 백엔드 연결 후 수정
-  const handleDelete = async () => {
-    try {
-      const requestData = {
-        dataBody: { 
-          "travelDate":"2023-08-25",
-          "category" : "교통비",
-          "amount" : "9000"
-        },
-        };
-      const response = await axios.delete('/budget/{plan_id}', requestData);
-      console.log('성공:', response);
-    } catch (error) {
-      console.error('에러:', error);
-    }
+function BudgetItem({ plan_id, onDelete }) {
+  const handleDelete = () => {
+    axios.delete(`/budget/${plan_id}`, {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      data: {
+        dataBody: {
+          travelDate: "2023-08-25",
+          category: "교통비",
+          amount: "9000"
+        }
+      }
+    })
+    .then(response => {
+      if (response.data.dataHeader.successCode === "0") {
+        onDelete(); // 삭제가 성공하면 부모 컴포넌트에서 해당 아이템을 업데이트하도록 콜백 호출
+      } else {
+        console.error('삭제 실패:', response.data.dataHeader.resultMessage);
+      }
+    })
+    .catch(error => {
+      console.error('삭제 오류:', error);
+    });
   };
 
   return (
-    <p>
-      <Button 
-        onClick={handleDelete}
-        style={{height: '2.5rem', width: '100%', fontFamily:"preRg"}} 
-        size="large"
-      >삭제</Button>
-    </p>
+    <div>
+      {/* 기타 예산 정보 표시 */}
+      <button onClick={handleDelete}>삭제</button>
+    </div>
   );
 }
 
-export default DeleteBuget;
+export default BudgetItem;

@@ -1,73 +1,157 @@
-import React, { useState, useEffect } from 'react';
-import styles from './SelectedDate.module.css';
-import DateList from './DateList';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import styles from './DateList.module.css';
+import { Button } from 'antd';
+import { Link } from 'react-router-dom';
+import '../../pages/Transaction.css';
+import UpdateBudget from '../../pages/UpdateBudget';
 
-const SelectedDate = () => {
-  const [selectedDates, setSelectedDates] = useState({ startDate: null, endDate: null });
+function DateList() {
+  const [lastPlan, setLastPlan] = useState(null);
+  const [lastPlanId, setLastPlanId] = useState(null);
+  const data = localStorage.getItem('userNumber');
+  const [budgetData, setBudgetData] = useState([]);
 
-  // 선택한 날짜 범위를 백엔드에서 가져오는 함수
-  const fetchSelectedDatesFromBackend = async () => {
-    try {
-      // 백엔드 API 호출
-      const response = await axios.get('/api2/plan'); // API 엔드포인트를 실제 엔드포인트로 변경
-
-      // API 응답에서 선택한 날짜 데이터 추출
-      const { startDate, endDate } = response.data;
-
-      // 상태 업데이트
-      setSelectedDates({ startDate, endDate });
-    } catch (error) {
-      console.error('백엔드 API 호출 에러:', error);
-    }
-  };
-
-  // 컴포넌트가 처음 마운트될 때 백엔드에서 날짜 데이터를 가져옴
   useEffect(() => {
-    fetchSelectedDatesFromBackend();
-  }, []);
+    const getDates = async () => {
+      try {
+        const response = await axios.get("/api2/plan", {
+          headers: { "User-Number": data }
+        });
+        const dataBody = response.data.dataBody;
+        console.log(dataBody)
 
-  // 컴포넌트가 처음 마운트될 때 일정 데이터를 불러옴
-  // useEffect(() => {
-  //   const savedSchedule = getSavedSchedule();
-  //   setSelectedDates(savedSchedule);
-  // }, []);
+        if (dataBody.length > 0) {
+          const lastPlan = dataBody[dataBody.length - 1];
+          setLastPlan(lastPlan);
+          setLastPlanId(lastPlan.planId);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
-  // 선택한 날짜 범위를 연속된 날짜로 변환하는 함수
-  const generateDateRange = (startDate, endDate) => {
-    const dateRange = [];
+    getDates();
+  }, [data]);
+
+  useEffect(() => {
+    if (lastPlan) {
+      getBudgetData(lastPlan.planId);
+    }
+  }, [lastPlan]);
+
+  const getBudgetData = async (planId) => {
+    try {
+      const response = await axios.get(`/api2/budget/${planId}`);
+      const dataBody = response.data.dataBody;
+      setBudgetData(dataBody);
+      console.log(dataBody)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const renderDateRange = (startDate, endDate) => {
+    const dateArray = [];
     const currentDate = new Date(startDate);
-    const lastDate = new Date(endDate);
+    const endDateObj = new Date(endDate);
 
-    while (currentDate <= lastDate) {
-      dateRange.push(currentDate.toISOString());
+    while (currentDate <= endDateObj) {
+      dateArray.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    return dateRange;
-  };
+    return dateArray.map((date, index) => {
+      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+      console.log("formattedDate:", formattedDate);
 
-  // 선택한 날짜 범위를 연속된 날짜 배열로 변환
-  const selectedDateRange = generateDateRange(selectedDates[0], selectedDates[selectedDates.length - 1]);
+      // 현재 날짜에 해당하는 budgetData 필터링
+      const filteredBudgetData = budgetData.filter(item => item.travelDate === formattedDate);
+
+      return (
+        <div key={index}>
+          <p className={styles.dateText}>
+            {index + 1}일차 [{formattedDate}]
+          </p>
+          <div className={styles.dateItem}>
+            <table className={styles.centeredTable}>
+              <thead>
+                <tr>
+                  <th>카테고리</th>
+                  <th>예산</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredBudgetData.map((item) => (
+                  <tr key={item.budgetId}>
+                    <td className={styles.centeredCell}>{item.category}</td>
+                    <td className={styles.centeredCell}>{item.amount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Link
+              to={`/budget/${lastPlanId}`}
+              state={{
+                formattedDate: formattedDate,
+                lastPlanId: lastPlan.planId,
+              }}
+            >
+              <Button
+                size="small"
+                style={{
+                  height: '2rem',
+                  marginTop: '1rem',
+                  backgroundColor: '#316FDF',
+                  fontFamily: "preRg",
+                }}
+                type="primary"
+              >
+                예산 추가하기
+              </Button>
+            </Link>
+            <Link
+              to={`/budget/${lastPlanId}/update`}
+              state={{
+                formattedDate: formattedDate,
+                lastPlanId: lastPlan.planId,
+              }}
+            >
+              <Button
+                size="small"
+                style={{
+                  height: '2rem',
+                  marginTop: '1rem',
+                  backgroundColor: 'white',
+                  color: 'black',
+                  fontFamily: "preRg",
+                }}
+                type="primary"
+              >
+                예산 수정하기
+              </Button>
+            </Link>
+            
+          </div>
+        </div>
+      );
+    });
+  }
 
   return (
     <div>
-    <p>선택된 날짜</p>
-    {selectedDates.startDate && selectedDates.endDate ? (
-      <div className={styles.calendarDiv}>
-        <div>시작 날짜: {selectedDates.startDate}</div>
-        <div>종료 날짜: {selectedDates.endDate}</div>
-      </div>
-    ) : (
-      <div>날짜를 선택하지 않았습니다.</div>
-    )}
-    <DateList dates={selectedDateRange} />
-  </div>
+      {lastPlan ? (
+        <div>
+          {renderDateRange(lastPlan.startDate, lastPlan.endDate)}
+        </div>
+      ) : (
+        <p>선택된 일정이 없습니다.</p>
+      )}
+    </div>
   );
 }
 
-export default SelectedDate;
-
+export default DateList;
 
 
 // import React, { useState, useEffect } from 'react';

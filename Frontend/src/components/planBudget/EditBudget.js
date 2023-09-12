@@ -6,20 +6,22 @@ import { useLocation } from 'react-router-dom';
   
 const { Option } = Select;
   
-const CreateBudget = () => {
-  const [category, setCategory] = useState('');
-  const [amount, setAmount] = useState('');
-  // const [isEditMode, setIsEditMode] = useState(false); // 추가 및 수정 모드
+const EditBudget = () => {
   const { state } = useLocation();
   const formattedDate = state?.formattedDate;
   const lastPlanId = state?.lastPlanId;
+  const category = state?.category;
+  const amount = state?.amount;
+    
+  const [editCategory, setEditCategory] = useState(category);
+  const [editAmount, setEditAmount] = useState(amount);
 
   const handleCategoryChange = (value) => {
-    setCategory(value);
+    setEditCategory(value);
   };
 
   const handleAmountChange = (value) => {
-    setAmount(value);
+    setEditAmount(value);
   };
 
   const handleAddOrUpdateBudget = async () => {
@@ -27,11 +29,11 @@ const CreateBudget = () => {
       const requestData = {
         dataBody: {
           travelDate: formattedDate,
-          category: category,
-          amount: amount,
+          category: editCategory !== category ? editCategory : category,
+          amount: editAmount !== amount ? editAmount : amount,
         },
       };
-      const response = await axios.post(`/api2/budget/${lastPlanId}`, requestData)
+      const response = await axios.put(`/api2/budget/${lastPlanId}`, requestData)
       console.log('성공', response.data);
     } catch (error) {
       console.error('에러', error);
@@ -41,7 +43,10 @@ const CreateBudget = () => {
 
   console.log("formattedDate:", formattedDate);
   console.log("lastPlanId:", lastPlanId);
-
+  console.log("editCategory:", editCategory);
+  console.log("category:", category);
+  console.log("editamount:", editAmount);
+  console.log("amount:", amount);
 
 
 return (
@@ -51,7 +56,7 @@ return (
       <label className={styles.category}>
         <p className={styles.categoryTitle}>카테고리</p>
         <Select
-          placeholder="선택"
+          value={editCategory}
           onChange={handleCategoryChange}
           style={{ width: '40%', fontFamily: "preRg" }}
         >
@@ -69,7 +74,7 @@ return (
         <Space.Compact className={styles.amountInput}>
           <InputNumber addonAfter="₩"
             min={1}
-            value={amount}
+            value={editAmount}
             onChange={handleAmountChange}
             style={{ width: '80%' }}
             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -90,7 +95,7 @@ return (
             fontFamily: "preRg"
           }}
           size="large">
-            예산 추가하기
+            예산 수정하기
         </Button>
       </div>
     </form>
@@ -98,4 +103,4 @@ return (
   );
 };
 
-export default CreateBudget;
+export default EditBudget;

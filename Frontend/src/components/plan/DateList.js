@@ -4,6 +4,7 @@ import styles from './DateList.module.css';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 import '../../pages/Transaction.css';
+import UpdateBudget from '../../pages/UpdateBudget';
 
 function DateList() {
   const [lastPlan, setLastPlan] = useState(null);
@@ -44,6 +45,7 @@ function DateList() {
       const response = await axios.get(`/api2/budget/${planId}`);
       const dataBody = response.data.dataBody;
       setBudgetData(dataBody);
+      console.log(dataBody)
     } catch (error) {
       console.error(error);
     }
@@ -75,17 +77,42 @@ function DateList() {
             <table className={styles.centeredTable}>
               <thead>
                 <tr>
-                  {/* <th>날짜</th> */}
                   <th>카테고리</th>
                   <th>예산</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 {filteredBudgetData.map((item) => (
                   <tr key={item.budgetId}>
-                    {/* <td>{item.travelDate}</td> */}
                     <td className={styles.centeredCell}>{item.category}</td>
                     <td className={styles.centeredCell}>{item.amount}</td>
+                    <td>
+
+                    <Link
+                        to={`/budget/${lastPlanId}/update`}
+                        state={{
+                          formattedDate: formattedDate,
+                          lastPlanId: lastPlan.planId,
+                          category: item.category,
+                          amount: item.amount
+                        }}
+                      >
+                        <Button
+                          size="small"
+                          style={{
+                            height: '2rem',
+                            marginTop: '1rem',
+                            backgroundColor: 'white',
+                            color: 'black',
+                            fontFamily: "preRg",
+                          }}
+                          type="primary"
+                        >
+                          수정
+                        </Button>
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -109,7 +136,7 @@ function DateList() {
               >
                 예산 추가하기
               </Button>
-            </Link>
+            </Link>           
           </div>
         </div>
       );
