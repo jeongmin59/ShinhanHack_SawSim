@@ -209,9 +209,3 @@ const TransferOne = () => {
 }
 
 export default TransferOne
-
-// lineRg일때 패딩탑
-// style={{backgroundColor:'#0046FF', fontFamily:"preRg", paddingTop:'0.5rem', borderRadius:'1.5rem'}} 
-
-// 입금통장 메모
-// <p style={{fontSize:'1.1rem', marginLeft: '0.2rem', paddingTop:'0.1rem'}}>입금통장 메모의 숫자 4자리를 입력해주세요.</p>
