@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Select, InputNumber, Button, Space } from 'antd';
+import { Select, InputNumber, Button, Space, Popconfirm, message } from 'antd';
 import axios from "axios";
 import styles from './CreateBudget.module.css';
 import { useLocation } from 'react-router-dom';
@@ -38,6 +38,25 @@ const EditBudget = () => {
     } catch (error) {
       console.error('에러', error);
       // console.log(response.data);
+    }
+  };
+
+  const handleDeleteBudget = async () => {
+    try {
+      const requestData = {
+        data: {
+            dataBody: {
+              travelDate: formattedDate,
+              category: editCategory !== category ? editCategory : category,
+              amount: editAmount !== amount ? editAmount : amount,
+            },
+        }
+      };
+      const response = await axios.delete(`/api2/budget/${lastPlanId}`, requestData)
+      console.log('성공', response.data);
+      message.success('예산이 삭제되었습니다.');
+    } catch (error) {
+      console.error('에러', error);
     }
   };
 
@@ -96,6 +115,18 @@ return (
           }}
           size="large">
             예산 수정하기
+        </Button>
+        <Button 
+          onClick={handleDeleteBudget}
+          type="danger"
+          style={{
+            height: '2.5rem',
+            width: '40%',
+            marginRight: '1rem',
+            fontFamily: "preRg",
+          }}
+          size="large">
+            삭제하기
         </Button>
       </div>
     </form>

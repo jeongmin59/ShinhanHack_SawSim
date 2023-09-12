@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function BudgetItem({ plan_id, onDelete }) {
+function DeleteBudget({ plan_id, onDelete }) {
   const handleDelete = () => {
     axios.delete(`/budget/${plan_id}`, {
       headers: {
@@ -23,16 +23,15 @@ function BudgetItem({ plan_id, onDelete }) {
       }
     })
     .catch(error => {
-      console.error('삭제 오류:', error);
+      console.error(error);
     });
   };
 
   return (
     <div>
-      {/* 기타 예산 정보 표시 */}
       <button onClick={handleDelete}>삭제</button>
     </div>
   );
 }
 
-export default BudgetItem;
+export default DeleteBudget;
