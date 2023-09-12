@@ -118,7 +118,7 @@ public class PortfolioService {
         List<Portfolio> findPortfolios = portfolioRepository.findAllByPlanId(planId);
         List<PortfolioMapResponseDto.DataBody.travelInfo> travelInfoList = new ArrayList<>();
         for (Portfolio findPortfolio : findPortfolios) {
-            List<TransactionHistory> transactionHistories = transactionRepository.findByTravelDate(findPortfolio.getTravelDate());
+            List<TransactionHistory> transactionHistories = transactionRepository.findByTransactionDate(findPortfolio.getTravelDate());
             // 처음 조회라면 저장이 필요하다.
             if (transactionHistories.isEmpty()) {
                 List<Payment> payments = paymentRepository.findByAccountAndTransactionDate(account, findPortfolio.getTravelDate());
@@ -137,7 +137,7 @@ public class PortfolioService {
                 }
                 transactionRepository.saveAll(transactionHistoryList);
 
-                transactionHistories = transactionRepository.findByTravelDate(findPortfolio.getTravelDate());
+                transactionHistories = transactionRepository.findByTransactionDate(findPortfolio.getTravelDate());
             }
 
             for (TransactionHistory transactionHistory : transactionHistories) {
