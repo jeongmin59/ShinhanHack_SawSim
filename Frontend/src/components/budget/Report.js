@@ -7,17 +7,17 @@ import { Button } from 'antd';
 
 const graphData = [
   { name: '전체', value: 100 },
-  { name: '여행', value: 3 },
-  { name: '기타', value: 3 },
-  { name: '스포츠,레저', value: 5 },
-  { name: '교통,수송', value: 8 },
-  { name: '음식점', value: 12 },
-  { name: '의료,건강', value: 15 },
+  { name: '여행', value: 10 },
+  { name: '스포츠,레저', value: 15 },
+  { name: '의료,건강', value: 20 },
+  { name: '기타', value: 27 },
+  { name: '교통,수송', value: 30 },
+  { name: '음식점', value: 40 },
 ];
 
 const allData = [
   { name: '전체', value: 100 },
-  { name: '오늘', value: 18 },
+  { name: '오늘', value: 27 },
 ];
 
 const COLORS = ['#ededed','#C1D9F5', '#BBDEFA', '#74AADB', '#6197F4', '#327CDC', '#134DE0'];
@@ -78,7 +78,7 @@ const Report = () => {
   <div>
     <div className={styles.titles}>
       <Link className={styles.backLink} to='/main'><p className={styles.toBack}>&lt;</p>
-      <p className={styles.tripCalendarTitle}>예산 실시간 분석</p></Link>
+      <p className={styles.tripCalendarTitle}>실시간 예산 분석</p></Link>
     </div>
     <br/>
     <div className={styles.calendarDiv}>
@@ -130,9 +130,9 @@ const Report = () => {
       </PieChart>
 
       <Link to="/cash">
-        <Button style={{color:'#316FDF', border:'1px solid #316FDF', fontFamily:"preBd", marginRight:'1rem'}}>현금 기록하기</Button>
+        <Button style={{paddingTop:'0.3rem',color:'#316FDF', border:'1px solid #316FDF', fontFamily:"preBd", marginRight:'1rem'}}>현금 기록하기</Button>
       </Link>
-      <Link to="/transaction"><Button style={{color:'#316FDF', border:'1px solid #316FDF', fontFamily:"preBd"}}>내역 상세보기</Button></Link>
+      <Link to="/transaction"><Button style={{paddingTop:'0.3rem',color:'#316FDF', border:'1px solid #316FDF', fontFamily:"preBd"}}>내역 상세보기</Button></Link>
   </div>
   );
 };

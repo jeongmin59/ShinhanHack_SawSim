@@ -86,7 +86,11 @@ const BalanceSchedule = () => {
         setPlan(response.data.dataBody[0])
         console.log('플랜',plan)
       } else {
+<<<<<<< HEAD
+        console.log('등록된 일정이 없습니다')
+=======
         console.log('일정이 등록되지 않음')
+>>>>>>> d875f05584e6306518d8b212be0147881be3f121
       }
     } catch (error) {
       console.error(error);
@@ -100,7 +104,9 @@ const BalanceSchedule = () => {
     if (account) {
       checkBalance();
     }
-    checkPlan()
+    if (plan) {
+      checkPlan()
+    }
  }, [account]); // account 상태 업데이트 될때마다 재실행
 
   return (
@@ -147,7 +153,7 @@ const BalanceSchedule = () => {
       
 
       <div className={styles.scheduleDiv}>
-        {plan.length === 0 ? (
+        {plan && plan.length === 0 ? (
           <>
           <p className={styles.noSchedule1}>등록된 여행 일정이 없습니다</p>
           <p className={styles.noSchedule2}>등록하기를 눌러 일정을 등록해주세요</p>
