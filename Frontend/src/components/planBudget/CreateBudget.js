@@ -41,23 +41,6 @@ const CreateBudget = () => {
       };
       const response = await axios.post(`/api2/budget/${lastPlanId}`, requestData)
       console.log('성공', response.data);
-      // if (isEditMode) {
-      //   const response = await axios.put(`/budget/${lastPlanId}`, requestData);
-      //   if (response.data.dataHeader.successCode === "0") {
-      //     console.log('예산 수정 성공');
-      //   } else {
-      //     console.error('예산 수정 중 오류');
-      //     console.log('예산 수정 성공');
-      //   }
-      // } else {
-      //   const response = await axios.post(`/budget/${lastPlanId}`, requestData);
-      //   if (response.data.dataHeader.successCode === "0") {
-      //     console.log('예산 추가 성공');
-      //   } else {
-      //     console.error('예산 추가 중 오류');
-      //     console.log(response.data.dataHeader);
-      //   }
-      // }
     } catch (error) {
       console.error('에러', error);
       // console.log(response.data);
@@ -71,7 +54,6 @@ const CreateBudget = () => {
 
 return (
   <div>
-    {/* <h2>{isEditMode ? '예산 수정하기' : '예산 추가하기'}</h2> */}
     <form className={styles.dateItem}>
       <label className={styles.category}>
         <p className={styles.categoryTitle}>카테고리</p>
@@ -116,7 +98,6 @@ return (
           }}
           size="large">
             예산 추가하기
-          {/* {isEditMode ? '예산 수정하기' : '예산 추가하기'} */}
         </Button>
         <DeleteBudget />
       </div>
