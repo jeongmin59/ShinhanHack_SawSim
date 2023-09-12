@@ -8,7 +8,8 @@ import com.example.backend.domain.payment.PaymentType;
 import com.example.backend.domain.payment.repository.PaymentRepository;
 import com.example.backend.domain.plan.entity.Plan;
 import com.example.backend.domain.plan.repository.PlanRepository;
-import com.example.backend.global.scheduler.dto.AccountHistoryResponse;
+import com.example.backend.domain.portfolio.dto.ShinhanTransactionRequestDto;
+import com.example.backend.domain.portfolio.service.PortfolioService;
 import com.example.backend.global.scheduler.dto.SOLPushNotificationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,7 @@ public class BudgetScheduler {
     private final BudgetRepository budgetRepository;
     private final PaymentRepository paymentRepository;
     private final RedisService redisService;
+    private final PortfolioService portfolioService;
 
     @Scheduled(cron = "1 0 0 * * *")
     public void saveTodayBudgetToRedis() {
@@ -59,21 +62,23 @@ public class BudgetScheduler {
             // 오늘 여행을 가야하는 계좌의 최근 조회 날짜 불러오기(redis)
             Map<Object, Object> hash = redisService.getHash(plan.getAccount().getUserNumber());
 
-            AccountHistoryResponse accountHistoryResponse = callAccountHistoryApi(plan.getAccount().getNumber());
-            List<AccountHistoryResponse.Transaction> transactionList = accountHistoryResponse.getDataBody().get거래내역();
+            ShinhanTransactionRequestDto shinhanTransactionRequestDto = portfolioService.transactionHistoryInquiry(plan.getAccount().getNumber());
+            List<ShinhanTransactionRequestDto.DataBody.TransactionHistory> transactions = shinhanTransactionRequestDto.getDataBody().getTransactions();
 
             List<Payment> payments = new ArrayList<>();
-            for (AccountHistoryResponse.Transaction transaction : transactionList) {
-                if (transaction.get거래일자().equals(hash.get("latestDate").toString()) &&
-                        transaction.get거래시간().equals(hash.get("latestTime").toString())) break;
-                if (transaction.get입지구분() == 1) continue;
+            LocalDate latestDate = LocalDate.parse(hash.get("latestDate").toString());
+            LocalTime latestTime = LocalTime.parse(hash.get("latestTime").toString());
+            for (ShinhanTransactionRequestDto.DataBody.TransactionHistory transaction : transactions) {
+                if (transaction.getTransactionDate().equals(latestDate) &&
+                        transaction.getTransactionTime().equals(latestTime)) break;
+                if (transaction.getLocationClassification() == 1) continue;
 
                 payments.add(Payment.createPayment(
-                        transaction.get내용(),
-                        transaction.get출금금액(),
-                        transaction.get거래점명(),
-                        transaction.get거래일자(),
-                        transaction.get거래시간(),
+                        transaction.getDetail(),
+                        transaction.getWithdrawalAmount(),
+                        transaction.getStoreName(),
+                        transaction.getTransactionDate(),
+                        transaction.getTransactionTime(),
                         PaymentType.CARD,
                         plan.getAccount()));
             }
@@ -92,34 +97,6 @@ public class BudgetScheduler {
                 callPushNotificationApi(userNumber, username); // TODO: 수행결과 "N" 이면 예외처리해주기(지금은 무조건 성공 나옴)
             }
         }
-    }
-
-    private AccountHistoryResponse callAccountHistoryApi(String accountNumber) {
-        Map<String, String> dataHeader = new HashMap<>();
-        dataHeader.put("apikey", "2023_Shinhan_SSAFY_Hackathon");
-
-        Map<String, String> dataBody = new HashMap<>();
-        dataBody.put("계좌번호", accountNumber);
-
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("dataHeader", dataHeader);
-        requestBody.put("dataBody", dataBody);
-
-        String url = "https://shbhack.shinhan.com/v1/search/transaction";
-
-        // RestTemplate 사용
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Map<String, Object>> entity =
-                new HttpEntity<>(requestBody, headers);
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        ResponseEntity<AccountHistoryResponse> response =
-                restTemplate.postForEntity(url, entity, AccountHistoryResponse.class);
-
-        return response.getBody();
     }
 
     private SOLPushNotificationResponse callPushNotificationApi(String userNumber, String username) {

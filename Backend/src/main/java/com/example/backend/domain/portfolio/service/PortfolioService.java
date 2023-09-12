@@ -163,13 +163,10 @@ public class PortfolioService {
     }
 
     // userNumber로 계좌내역조회 받아오는 메서드
-    public ShinhanTransactionRequestDto transactionHistoryInquiry(String userNumber) {
-        Account account = accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(UserNotFoundException::new);
-
+    public ShinhanTransactionRequestDto transactionHistoryInquiry(String accountNumber) {
         ShinhanTransactionResponseDto shinhanTransactionResponseDto = ShinhanTransactionResponseDto.builder()
                 .dataHeader(ShinhanTransactionResponseDto.DataHeader.builder().apikey("2023_Shinhan_SSAFY_Hackathon").build())
-                .dataBody(ShinhanTransactionResponseDto.DataBody.builder().accountNumber(account.getNumber()).build())
+                .dataBody(ShinhanTransactionResponseDto.DataBody.builder().accountNumber(accountNumber).build())
                 .build();
 
 
@@ -178,18 +175,14 @@ public class PortfolioService {
                 .baseUrl("https://shbhack.shinhan.com")
                 .build();
 
-
-        ShinhanTransactionRequestDto shinhanTransactionRequestDto =
-                webClient
-                        .post()
-                        .uri("v1/search/transaction")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .bodyValue(shinhanTransactionResponseDto)
-                        .retrieve()
-                        .bodyToMono(ShinhanTransactionRequestDto.class)
-                        .block();
-
-        return shinhanTransactionRequestDto;
+        return webClient
+                .post()
+                .uri("v1/search/transaction")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(shinhanTransactionResponseDto)
+                .retrieve()
+                .bodyToMono(ShinhanTransactionRequestDto.class)
+                .block();
     }
 
     // 신한 거래내역 조회에서 내용 부분으로 위도 경도를 찾는 api

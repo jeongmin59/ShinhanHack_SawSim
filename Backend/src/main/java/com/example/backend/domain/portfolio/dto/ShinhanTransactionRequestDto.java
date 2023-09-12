@@ -3,6 +3,8 @@ package com.example.backend.domain.portfolio.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -37,21 +39,21 @@ public class ShinhanTransactionRequestDto {
         @Getter
         public static class TransactionHistory {
             @JsonProperty("거래일자")
-            private String transactionDate;
+            private LocalDate transactionDate;
             @JsonProperty("거래시간")
-            private String transactionTime;
+            private LocalTime transactionTime;
             @JsonProperty("적요")
             private String briefs;
             @JsonProperty("출금금액")
-            private String withdrawalAmount;
+            private long withdrawalAmount;
             @JsonProperty("입금금액")
-            private String depositAmount;
+            private long depositAmount;
             @JsonProperty("내용")
             private String detail;
             @JsonProperty("잔액")
             private String balance;
             @JsonProperty("입지구분")
-            private String locationClassification;
+            private int locationClassification;
             @JsonProperty("거래점명")
             private String storeName;
 
