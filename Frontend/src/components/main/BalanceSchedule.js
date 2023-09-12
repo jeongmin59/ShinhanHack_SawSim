@@ -82,8 +82,12 @@ const BalanceSchedule = () => {
     try {
       const response = await axios.get("/api2/plan", { headers: { "User-Number": data } });
       console.log(response.data)
-      setPlan(response.data.dataBody[0])
-      console.log('플랜',plan)
+      if (response.data.dataBody && response.data.dataBody.length !== 0) {
+        setPlan(response.data.dataBody[0])
+        console.log('플랜',plan)
+      } else {
+        console.log('일정이 등록되지 않음')
+      }
     } catch (error) {
       console.error(error);
     }
@@ -107,15 +111,15 @@ const BalanceSchedule = () => {
           <div className={styles.yejukNAccount}>
             <p className={styles.yejuk}>예적금</p>
             {/* <p className={styles.account}>{formatAccountNumber(String(account))}</p> */}
-            <p className={styles.account}>{account ? formatAccountNumber(account) : 
-            <Skeleton.Input style={{borderRadius:'2rem', width: 150 }} active size="small" />}</p>
+            <div className={styles.account}>{account ? formatAccountNumber(account) : 
+            <Skeleton.Input style={{borderRadius:'2rem', width: 150 }} active size="small" />}</div>
           </div>
         </div>
-        <p className={styles.balance}>
+        <div className={styles.balance}>
           {balance ? `${formatBalance(balance)}원` :
-          <Skeleton.Input style={{marginTop: '-1rem', borderRadius:'2rem', width: 80 }} active size="large" />}</p>
+          <Skeleton.Input style={{marginTop: '-1rem', borderRadius:'2rem', width: 80 }} active size="large" />}</div>
         
-        {plan.length === 0 ? (
+        {plan && plan.length === 0 ? (
           <>
             <Link to='/plan'>
             <Button 
