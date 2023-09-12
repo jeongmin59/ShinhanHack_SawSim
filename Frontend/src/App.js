@@ -15,6 +15,7 @@ import PlanBudgetDetail from './pages/PlanBudgetDetail'
 import Dutch from './pages/Dutch'
 import PopularPage from './pages/PopularPage'
 import PortfolioPage from './pages/PortfolioPage'
+import UpdateBudget from './pages/UpdateBudget';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route exact path='/dutch' element={<Dutch/>}/>
         <Route exact path='/popular' element={<PopularPage/>}/>
         <Route exact path='/portfolio' element={<PortfolioPage/>}/>
+        <Route exact path='/budget/:plan_id/update' element={<UpdateBudget/>}/>
       </Routes>
     </div>
   );
