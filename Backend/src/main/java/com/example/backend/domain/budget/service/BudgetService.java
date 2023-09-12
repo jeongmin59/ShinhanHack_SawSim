@@ -1,6 +1,7 @@
 package com.example.backend.domain.budget.service;
 
 import com.example.backend.domain.budget.dto.BudgetDeleteRequestDto;
+import com.example.backend.domain.budget.dto.BudgetGetResponseDto;
 import com.example.backend.domain.budget.dto.BudgetSaveResponseDto;
 import com.example.backend.domain.budget.dto.BudgetUpdateRequestDto;
 import com.example.backend.domain.budget.entity.Budget;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,18 +23,37 @@ public class BudgetService {
     private final BudgetRepository budgetRepository;
     private final PlanRepository planRepository;
 
-    public List<Budget> budgetGet(Long planId) {
+    public List<BudgetGetResponseDto> budgetGet(Long planId) {
         Plan plan = planRepository.findById(planId)
                 .orElseThrow(() -> new NotFoundException("생성되지 않은 여행계획입니다."));
-        return budgetRepository.findAllByPlan(plan);
+        List<Budget> budgetList = budgetRepository.findAllByPlan(plan);
+
+        List<BudgetGetResponseDto> budgetGetResponseDtoList = new ArrayList<>();
+
+        for (Budget budget : budgetList) {
+            BudgetGetResponseDto budgetGetResponseDto = BudgetGetResponseDto.builder()
+                    .budgetId(budget.getBudgetId())
+                    .travelDate(budget.getTravelDate())
+                    .category(budget.getCategory())
+                    .amount(budget.getAmount())
+                    .build();
+
+            budgetGetResponseDtoList.add(budgetGetResponseDto);
+        }
+
+        return  budgetGetResponseDtoList;
     }
 
     public int budgetSave(BudgetSaveResponseDto budgetSaveDto) {
 
-        Optional<Budget> find_budget = budgetRepository.findByTravelDateAndCategory(budgetSaveDto.getTravelDate(), budgetSaveDto.getCategory());
-
         Plan plan = planRepository.findById(budgetSaveDto.getPlanId())
                 .orElseThrow(() -> new NotFoundException("생성되지 않은 여행계획입니다."));
+
+        Optional<Budget> find_budget = budgetRepository.findByTravelDateAndCategoryAndPlan(
+                budgetSaveDto.getTravelDate(),
+                budgetSaveDto.getCategory(),
+                plan
+        );
 
         //값이 존재하면 중복으로 실패 의미 1리턴
         if (find_budget.isPresent()) {
@@ -51,8 +72,15 @@ public class BudgetService {
         return 0;
     }
 
-    public void budgetUpdate(BudgetUpdateRequestDto budgetUpdateRequestDto) {
-        Optional<Budget> budget = budgetRepository.findByTravelDateAndCategory(budgetUpdateRequestDto.getDataBody().getTravelDate(), budgetUpdateRequestDto.getDataBody().getCategory());
+    public void budgetUpdate(BudgetUpdateRequestDto budgetUpdateRequestDto,Long planId) {
+        Plan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new NotFoundException("생성되지 않은 여행계획입니다."));
+
+        Optional<Budget> budget = budgetRepository.findByTravelDateAndCategoryAndPlan(
+                budgetUpdateRequestDto.getDataBody().getTravelDate(),
+                budgetUpdateRequestDto.getDataBody().getCategory(),
+                plan
+        );
 
         if (budget.isPresent()) {
             budget.get().setAmount(budgetUpdateRequestDto.getDataBody().getAmount());
@@ -61,9 +89,16 @@ public class BudgetService {
 
     }
 
-    public void budgetDelete(BudgetDeleteRequestDto budgetDeleteRequestDto) {
+    public void budgetDelete(BudgetDeleteRequestDto budgetDeleteRequestDto,Long planId) {
+        Plan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new NotFoundException("생성되지 않은 여행계획입니다."));
+
         budgetRepository.delete(
-                budgetRepository.findByTravelDateAndCategory(budgetDeleteRequestDto.getDataBody().getTravelDate(), budgetDeleteRequestDto.getDataBody().getCategory())
+                budgetRepository.findByTravelDateAndCategoryAndPlan(
+                            budgetDeleteRequestDto.getDataBody().getTravelDate(),
+                            budgetDeleteRequestDto.getDataBody().getCategory(),
+                            plan
+                        )
                         .orElseThrow(() -> new NullPointerException())
         );
     }

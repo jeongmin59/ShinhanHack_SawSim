@@ -7,5 +7,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<TransactionHistory, Long> {
-    List<TransactionHistory> findByTravelDate(LocalDate travelDate);
+    List<TransactionHistory> findByTransactionDate(LocalDate travelDate);
 }
