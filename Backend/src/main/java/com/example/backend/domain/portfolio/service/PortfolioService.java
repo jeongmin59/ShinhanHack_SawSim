@@ -25,7 +25,9 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -162,6 +164,28 @@ public class PortfolioService {
                 .build();
     }
 
+    public PortfolioListGetResponseDto portfolioListGet(String userNumber) {
+        Account account = accountRepository.findAccountByUserNumber(userNumber)
+                .orElseThrow(UserNotFoundException::new);
+
+        List<Plan> planList = planRepository.findAllByAccountId(account.getId()).orElse(Collections.emptyList());
+
+        List<PortfolioListGetResponseDto.PlanInfo> planInfoList = planList.stream()
+                .map(plan -> PortfolioListGetResponseDto.PlanInfo.builder()
+                        .id(plan.getId())
+                        .startDate(plan.getStartDate())
+                        .endDate(plan.getEndDate())
+                        .build())
+                .collect(Collectors.toList());
+
+        return PortfolioListGetResponseDto.builder()
+                .planList(planInfoList)
+                .build();
+    }
+
+
+
+
     // userNumber로 계좌내역조회 받아오는 메서드
     public ShinhanTransactionRequestDto transactionHistoryInquiry(String accountNumber) {
         ShinhanTransactionResponseDto shinhanTransactionResponseDto = ShinhanTransactionResponseDto.builder()
@@ -205,6 +229,5 @@ public class PortfolioService {
                 .bodyToMono(KakaoPlaceSearchResponseDto.class);
 
     }
-
 
 }
