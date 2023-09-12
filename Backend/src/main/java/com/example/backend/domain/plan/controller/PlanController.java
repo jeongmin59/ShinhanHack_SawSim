@@ -4,9 +4,7 @@ import com.example.backend.domain.account.Account;
 import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.common.BasicResponse;
-import com.example.backend.domain.plan.dto.PlanDetailResponseDto;
-import com.example.backend.domain.plan.dto.PlanListResponseDto;
-import com.example.backend.domain.plan.dto.PlanSaveRequestDto;
+import com.example.backend.domain.plan.dto.*;
 import com.example.backend.domain.plan.entity.Plan;
 import com.example.backend.domain.plan.service.PlanService;
 import lombok.RequiredArgsConstructor;
@@ -24,16 +22,19 @@ public class PlanController {
     private final AccountRepository accountRepository;
 
     @PostMapping()
-    public BasicResponse<Plan> planSave(@RequestBody PlanSaveRequestDto planSaveRequestDto,@RequestHeader("User-Number") String userNumber){
-        //Header User-Number를 통해서 계좌 ID를 받아옴
-        Account account = accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(UserNotFoundException::new);
+    public BasicResponse<PlanSaveResponseDto> planSave(@RequestBody PlanSaveRequestDto planSaveRequestDto, @RequestHeader("User-Number") String userNumber){
+        planService.planSave(planSaveRequestDto,userNumber);
 
-        Long accountId = account.getId();
+        return BasicResponse.<PlanSaveResponseDto>builder()
+                .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
+                .build();
+    }
 
-        planService.planSave(planSaveRequestDto,accountId);
+    @PostMapping("{planId}")
+    public BasicResponse<PlanUpdateResponseDto> planUpdate(@RequestBody PlanUpdateRequestDto planUpdateRequestDto,  @RequestHeader("User-Number") String userNumber , @PathVariable Long planId){
+        planService.planUpdate(planUpdateRequestDto,userNumber,planId);
 
-        return BasicResponse.<Plan>builder()
+        return BasicResponse.<PlanUpdateResponseDto>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
                 .build();
     }

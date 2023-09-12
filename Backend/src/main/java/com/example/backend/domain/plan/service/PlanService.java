@@ -5,6 +5,8 @@ import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.plan.dto.PlanDetailResponseDto;
 import com.example.backend.domain.plan.dto.PlanSaveRequestDto;
+import com.example.backend.domain.plan.dto.PlanUpdateRequestDto;
+import com.example.backend.domain.plan.dto.PlanUpdateResponseDto;
 import com.example.backend.domain.plan.entity.Plan;
 import com.example.backend.domain.plan.repository.PlanRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.webjars.NotFoundException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,18 +24,46 @@ public class PlanService {
     private final PlanRepository planRepository;
     private final AccountRepository accountRepository;
 
-    public void planSave(PlanSaveRequestDto planSaveRequestDto, Long accountId) {
-        Account account = accountRepository.findById(accountId)
+    public void planSave(PlanSaveRequestDto planSaveRequestDto, String userNumber) {
+        //Header User-Number를 통해서 계좌 ID를 받아옴
+        Account account = accountRepository.findAccountByUserNumber(userNumber)
                 .orElseThrow(UserNotFoundException::new);
+
 
         Plan plan = new Plan(
                 null,
                 planSaveRequestDto.getDataBody().getStartDate(),
                 planSaveRequestDto.getDataBody().getEndDate(),
-                account
+                account,
+                null
         );
 
         planRepository.save(plan);
+
+    }
+
+    public void planUpdate(PlanUpdateRequestDto planUpdateRequestDto, String userNumber, Long planId) {
+        Plan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new NotFoundException("생성되지 않은 여행계획입니다."));
+
+        System.out.println(plan.getId());
+        // 해당 계획과 해당하는 예산 지우기
+        planRepository.delete(plan);
+
+        //Header User-Number를 통해서 계좌 ID를 받아옴
+        Account account = accountRepository.findAccountByUserNumber(userNumber)
+                .orElseThrow(UserNotFoundException::new);
+
+
+        Plan updatePlan = new Plan(
+                null,
+                planUpdateRequestDto.getDataBody().getStartDate(),
+                planUpdateRequestDto.getDataBody().getEndDate(),
+                account,
+                null
+        );
+
+        planRepository.save(updatePlan);
 
     }
 

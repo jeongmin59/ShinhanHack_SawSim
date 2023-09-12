@@ -1,12 +1,14 @@
 package com.example.backend.domain.plan.entity;
 
 import com.example.backend.domain.account.Account;
+import com.example.backend.domain.budget.entity.Budget;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -28,4 +30,7 @@ public class Plan {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "ACCOUNT_ID")
     private Account account;
+
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Budget> budgetList;
 }
