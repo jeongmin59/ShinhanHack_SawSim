@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BudgetRepository extends JpaRepository<Budget, Long> {
-    Optional<Budget> findByTravelDateAndCategory(LocalDate travelDate, String category);
+    Optional<Budget> findByTravelDateAndCategoryAndPlan(LocalDate travelDate, String category, Plan plan);
     List<Budget> findAllByPlan(Plan plan);
 
     // 여행 포트폴리오 예산 조회할 때 사용

@@ -17,10 +17,10 @@ public class BudgetController {
     private final BudgetService budgetService;
 
     @GetMapping()
-    public BasicResponse<List<Budget>> budgetGet(@PathVariable Long planId){
-        List<Budget> budgets = budgetService.budgetGet(planId);
+    public BasicResponse<List<BudgetGetResponseDto>> budgetGet(@PathVariable Long planId){
+        List<BudgetGetResponseDto> budgets = budgetService.budgetGet(planId);
 
-        return BasicResponse.<List<Budget>>builder()
+        return BasicResponse.<List<BudgetGetResponseDto>>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
                 .dataBody(budgets)
                 .build();
@@ -54,8 +54,8 @@ public class BudgetController {
     }
 
     @PutMapping()
-    public BasicResponse<BudgetUpdateResponseDto> budgetUpdate(@RequestBody BudgetUpdateRequestDto budgetUpdateRequestDto){
-        budgetService.budgetUpdate(budgetUpdateRequestDto);
+    public BasicResponse<BudgetUpdateResponseDto> budgetUpdate(@RequestBody BudgetUpdateRequestDto budgetUpdateRequestDto,@PathVariable Long planId){
+        budgetService.budgetUpdate(budgetUpdateRequestDto,planId);
 
         return BasicResponse.<BudgetUpdateResponseDto>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
@@ -63,8 +63,8 @@ public class BudgetController {
     }
 
     @DeleteMapping()
-    public BasicResponse<BudgetDeleteResponseDto> budgetDelete(@RequestBody BudgetDeleteRequestDto budgetDeleteRequestDto){
-        budgetService.budgetDelete(budgetDeleteRequestDto);
+    public BasicResponse<BudgetDeleteResponseDto> budgetDelete(@RequestBody BudgetDeleteRequestDto budgetDeleteRequestDto,@PathVariable Long planId){
+        budgetService.budgetDelete(budgetDeleteRequestDto,planId);
 
         return BasicResponse.<BudgetDeleteResponseDto>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
