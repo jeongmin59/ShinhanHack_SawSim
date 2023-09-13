@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder(toBuilder = true)
-public class PlanListResponseDto {
+public class PlanGetResponseDto {
     private Long planId;
     private LocalDate startDate;
     private LocalDate endDate;

@@ -28,12 +28,12 @@ public class Portfolio {
     @JoinColumn(name = "PLAN_ID")
     private Plan plan;
 
-    public static Portfolio createPortfolio(Long totalBudget, Long totalPayment, LocalDate travelDate) {
+    public static Portfolio createPortfolio(Long totalBudget, Long totalPayment, LocalDate travelDate, Plan plan) {
         Portfolio portfolio = new Portfolio();
         portfolio.totalBudget = totalBudget;
         portfolio.totalPayment = totalPayment;
         portfolio.travelDate = travelDate;
-
+        portfolio.plan = plan;
         return portfolio;
     }
 }

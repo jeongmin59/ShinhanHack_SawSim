@@ -4,9 +4,7 @@ import com.example.backend.domain.account.Account;
 import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.common.BasicResponse;
-import com.example.backend.domain.plan.dto.PlanDetailResponseDto;
-import com.example.backend.domain.plan.dto.PlanListResponseDto;
-import com.example.backend.domain.plan.dto.PlanSaveRequestDto;
+import com.example.backend.domain.plan.dto.*;
 import com.example.backend.domain.plan.entity.Plan;
 import com.example.backend.domain.plan.service.PlanService;
 import lombok.RequiredArgsConstructor;
@@ -24,43 +22,31 @@ public class PlanController {
     private final AccountRepository accountRepository;
 
     @PostMapping()
-    public BasicResponse<Plan> planSave(@RequestBody PlanSaveRequestDto planSaveRequestDto,@RequestHeader("User-Number") String userNumber){
-        //Header User-Number를 통해서 계좌 ID를 받아옴
-        Account account = accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(UserNotFoundException::new);
+    public BasicResponse<PlanSaveResponseDto> planSave(@RequestBody PlanSaveRequestDto planSaveRequestDto, @RequestHeader("User-Number") String userNumber){
+        planService.planSave(planSaveRequestDto,userNumber);
 
-        Long accountId = account.getId();
+        return BasicResponse.<PlanSaveResponseDto>builder()
+                .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
+                .build();
+    }
 
-        planService.planSave(planSaveRequestDto,accountId);
+    @PostMapping("{planId}")
+    public BasicResponse<PlanUpdateResponseDto> planUpdate(@RequestBody PlanUpdateRequestDto planUpdateRequestDto,  @RequestHeader("User-Number") String userNumber , @PathVariable Long planId){
+        planService.planUpdate(planUpdateRequestDto,userNumber,planId);
 
-        return BasicResponse.<Plan>builder()
+        return BasicResponse.<PlanUpdateResponseDto>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
                 .build();
     }
 
     @GetMapping()
-    public BasicResponse<List<PlanListResponseDto>> planList(@RequestHeader("User-Number") String userNumber){
-        //Header User-Number를 통해서 계좌 ID를 받아옴
-        Account account = accountRepository.findAccountByUserNumber(userNumber)
-                .orElseThrow(UserNotFoundException::new);
+    public BasicResponse<PlanGetResponseDto> planGet(@RequestHeader("User-Number") String userNumber){
 
-        Long accountId = account.getId();
+        PlanGetResponseDto planGetResponseDto = planService.planGet(userNumber);
 
-        List<Plan> planList = planService.planList(accountId);
-
-        List<PlanListResponseDto> planListResponseDtos = new ArrayList<>();
-        for (Plan plan : planList) {
-            PlanListResponseDto planListResponseDto = PlanListResponseDto.builder()
-                    .planId(plan.getId())
-                    .startDate(plan.getStartDate())
-                    .endDate(plan.getEndDate())
-                    .build();
-            planListResponseDtos.add(planListResponseDto);
-        }
-
-        return BasicResponse.<List<PlanListResponseDto>>builder()
+        return BasicResponse.<PlanGetResponseDto>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
-                .dataBody(planListResponseDtos)
+                .dataBody(planGetResponseDto)
                 .build();
     }
 
