@@ -16,6 +16,15 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
+    @GetMapping("/{planId}")
+    public BasicResponse<Void> portfolioSave(@RequestHeader("User-Number") String userNumber,@PathVariable Long planId){
+        portfolioService.portfolioSave(userNumber,planId);
+
+        return BasicResponse.<Void>builder()
+                .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
+                .build();
+    }
+
     @GetMapping("/{planId}/budget")
     public BasicResponse<PortfolioResponseDto> portfolioBudgetGet(@RequestHeader("User-Number") String userNumber,@PathVariable Long planId){
         PortfolioResponseDto portfolioResponseDto = portfolioService.portfolioBudgetGet(userNumber, planId);
