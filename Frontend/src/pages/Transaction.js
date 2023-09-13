@@ -122,7 +122,7 @@ const Transaction = () => {
 // 3. 그걸 그대로 테이블의 data로 넣는다
 const getTransactions = async () => {
   try {
-    const response = await axios.get("/api2/transactions", { headers: { "User-Number": userNumber } });
+    const response = await axios.get("https://sawsim.site/api/transactions", { headers: { "User-Number": userNumber } });
     console.log(response.data)      
     setAllTransactions(response.data.dataBody)
     console.log(allTransactions)

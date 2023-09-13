@@ -33,7 +33,7 @@ const EditBudget = () => {
           amount: editAmount !== amount ? editAmount : amount,
         },
       };
-      const response = await axios.put(`/api2/budget/${planId}`, requestData)
+      const response = await axios.put(`https://sawsim.site/api/budget/${planId}`, requestData)
       console.log('성공', response.data);
     } catch (error) {
       console.error('에러', error);
@@ -51,7 +51,7 @@ const EditBudget = () => {
             },
         }
       };
-      const response = await axios.delete(`/api2/budget/${planId}`, requestData)
+      const response = await axios.delete(`https://sawsim.site/api/budget/${planId}`, requestData)
       console.log('성공', response.data);
       message.success('예산이 삭제되었습니다.');
     } catch (error) {

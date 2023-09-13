@@ -20,7 +20,7 @@ const Analysis = () => {
 
   const getPortDetail = async () => {
     try {
-      const response = await axios.get(`/api2/portfolio/${planId}/budget`, { headers: { "User-Number": data } });
+      const response = await axios.get(`https://sawsim.site/api/portfolio/${planId}/budget`, { headers: { "User-Number": data } });
       console.log(response)
       console.log(response.data.dataBody.dataBody.totalBudget)
       const total = response.data.dataBody.dataBody.totalBudget

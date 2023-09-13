@@ -14,7 +14,7 @@ const PopularSpots = () => {
   // 인기장소 조회
   const getPopular = async () => {
     try {
-      const response = await axios.get("/api2/popular");
+      const response = await axios.get("https://sawsim.site/api/popular");
       console.log(response)
       console.log(response.data.dataBody.popularPlaces)
       setPopulars(response.data.dataBody.popularPlaces)
