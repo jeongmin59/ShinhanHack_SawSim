@@ -12,7 +12,7 @@ public class PopularResponseDto {
     @Getter
     @Builder(toBuilder = true)
     public static class PopularPlace {
-       private Integer popularId;
+       private Long popularId;
        private String store;
        private String img;
        private String category;
