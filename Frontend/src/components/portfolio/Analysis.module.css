@@ -24,3 +24,27 @@
   display: flex;
   justify-content: start;
 }
+
+.balanceDiv {
+  margin-top: 1.1rem;
+  /* border: 0.5px solid gray; */
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 20px rgb(236, 236, 236), -1px -1px 20px rgb(236, 236, 236);
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.7rem 0;
+}
+
+.analysisMent {
+  margin: 0.5rem 0;
+}
+
+.emphasis {
+  font-family: 'preBd';
+}
+.emphasisBlue {
+  font-family: 'preBd';
+  color: #316FDF;
+}

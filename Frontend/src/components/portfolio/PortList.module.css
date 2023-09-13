@@ -31,7 +31,7 @@
 
 .sadMent {
   color: grey;
-  font-style: italic;
+  /* font-style: italic; */
   font-size: 1.1rem;
 }
 
@@ -42,7 +42,7 @@
 }
 
 .test_obj {
-  background: linear-gradient(to right, rgba(0, 0, 0, .3) 3px, rgba(255, 255, 255, 0.5) 5px, rgba(255, 255, 255, 0.25) 7px, rgba(255, 255, 255, 0.25) 10px, transparent 12px, transparent 16px, rgba(255, 255, 255, 0.25) 20px, transparent 22px), url('https://www.outdoornews.co.kr/news/photo/201104/435_1088_188.jpg');
+  background: linear-gradient(to right, rgba(0, 0, 0, .3) 3px, rgba(255, 255, 255, 0.5) 5px, rgba(255, 255, 255, 0.25) 7px, rgba(255, 255, 255, 0.25) 10px, transparent 12px, transparent 16px, rgba(255, 255, 255, 0.25) 20px, transparent 22px), url('https://blog.kakaocdn.net/dn/cgWuEd/btrMvs9NVch/k9EJMkfKBzktzFUc1sFgVK/img.jpg');
   box-shadow: 0 0 5px -1px rgba(0, 0, 0, 1), inset -1px 1px 2px rgba(255, 255, 255, 0.5);
   border-radius: 5px;
   width: 42vw;
@@ -81,4 +81,9 @@
 
 .link {
   text-decoration: none;
+}
+
+.plane {
+  width: 60px;
+
 }

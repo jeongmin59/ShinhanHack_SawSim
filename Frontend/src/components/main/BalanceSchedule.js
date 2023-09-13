@@ -29,6 +29,7 @@ const BalanceSchedule = () => {
   const [name, setName] = useState('')
   const [balance, setBalance] = useState('')
   const [plan, setPlan] = useState([])
+  const [planId, setPlanId] = useState([])
 
   // 잔액 콤마 표시
   function formatBalance(balance) {
@@ -85,6 +86,7 @@ const BalanceSchedule = () => {
       if (response.data.dataBody !== null) {
         console.log('왜 안찍힘?', response.data.dataBody)
         setPlan(response.data.dataBody)
+        setPlanId(response.data.dataBody.planId)
         // console.log('플랜',plan)
       } else {
         console.log('등록된 일정이 없습니다')
@@ -160,7 +162,7 @@ const BalanceSchedule = () => {
         ) : (
           <>
           <p className={styles.schedule}>{plan.startDate} ~ {plan.endDate}</p>
-          <Link to='/plan'>
+          <Link to={`/plan/${planId}`}>
           <Button 
             size="medium" 
             style={{ 
