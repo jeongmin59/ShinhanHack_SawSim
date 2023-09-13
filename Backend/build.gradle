@@ -38,6 +38,9 @@ dependencies {
 
     // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
+    // postgresql
+    implementation 'org.postgresql:postgresql'
+
 
     //webflux
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'

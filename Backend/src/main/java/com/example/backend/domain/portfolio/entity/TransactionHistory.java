@@ -1,5 +1,6 @@
 package com.example.backend.domain.portfolio.entity;
 
+import com.example.backend.domain.common.BaseEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class TransactionHistory {
+public class TransactionHistory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TRANSACTION_HISTORY_ID")

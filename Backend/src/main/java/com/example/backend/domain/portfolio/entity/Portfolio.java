@@ -1,5 +1,6 @@
 package com.example.backend.domain.portfolio.entity;
 
+import com.example.backend.domain.common.BaseEntity;
 import com.example.backend.domain.plan.entity.Plan;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Portfolio {
+public class Portfolio extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PORTFOLIO_ID")
