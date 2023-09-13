@@ -1,4 +1,4 @@
-import {React,useState} from 'react';
+import {React,useState, useEffect} from 'react';
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import styles from "./TransferOne.module.css";
 import { Button, Input, Space } from 'antd';
@@ -11,6 +11,7 @@ const TransferOne = () => {
   const data = location.state?.data
   const navigate = useNavigate()
 
+  const [random, setRandom] = useState('')
   const [name, setName] = useState(data || "")
   const [account, setAccount] = useState(data || "")
   const [ranInput, setRanInput] = useState("")
@@ -101,6 +102,8 @@ const TransferOne = () => {
         // 1원 이체 입금통장메모에 랜덤 숫자 4개 넣어서 보냄 (신한 api) = 인증번호 발송
         const randomNumber = Array.from({ length: 4 }, () => Math.floor(Math.random() * 10)).join('');
         console.log('랜덤번호 : ', randomNumber)
+        sessionStorage.setItem('randomNumber', randomNumber);
+        setRandom(randomNumber)
         sendRandom(randomNumber);
         // 동시에 1원 이체 입금통장메모 저장 api도 보냄 (백 api) - 인증번호 뭔지 백에도 알리기
         sendRandomToBack(randomNumber);
@@ -155,6 +158,7 @@ const TransferOne = () => {
         <>
           <div style={{marginTop: '3rem', display: 'flex', justifyContent: 'center'}}>
             <p style={{fontSize:'1.1rem'}}>입금통장 메모의 숫자 4자리를 입력해주세요.</p>
+            <p style={{fontSize:'0.7rem'}}>{random}</p>
           </div>
           <Space.Compact style={{width: '45%'}}>
             <Input.Password
