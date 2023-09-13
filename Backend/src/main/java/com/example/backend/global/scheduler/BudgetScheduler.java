@@ -2,6 +2,7 @@ package com.example.backend.global.scheduler;
 
 import com.example.backend.domain.budget.entity.Budget;
 import com.example.backend.domain.budget.repository.BudgetRepository;
+import com.example.backend.domain.common.exception.ResourceNotFoundException;
 import com.example.backend.domain.common.redis.service.RedisService;
 import com.example.backend.domain.payment.Payment;
 import com.example.backend.domain.payment.PaymentType;
@@ -48,8 +49,8 @@ public class BudgetScheduler {
             List<Budget> budgets = budgetRepository.findAllByPlanAndTravelDate(plan, today);
             long totalAmount = budgets.stream().mapToLong(Budget::getAmount).sum();
 
-            redisService.setValues(86400, "todayBudget_" + plan.getAccount().getNumber(), String.valueOf(totalAmount));
-            redisService.setValues(86400, "todayBudgetOver_" + plan.getAccount().getNumber(), "N");
+            redisService.setValues(86500, "todayBudget_" + plan.getAccount().getNumber(), String.valueOf(totalAmount));
+            redisService.setValues(86500, "todayBudgetOver_" + plan.getAccount().getNumber(), "N");
         }
     }
 
@@ -88,7 +89,9 @@ public class BudgetScheduler {
             // 알림을 보낸 적 있으면 보내지 않기
             if (redisService.getValues("todayBudget_" + plan.getAccount().getNumber()).equals("Y")) continue;
 
-            long todayBudget = Long.parseLong(redisService.getValues("todayBudget_" + plan.getAccount().getNumber()));
+            String redis = redisService.getValues("todayBudget_" + plan.getAccount().getNumber())
+                    .orElseThrow(() -> new ResourceNotFoundException("Redis", "todayBudget_" + plan.getAccount().getNumber()));
+            long todayBudget = Long.parseLong(redis);
             List<Payment> paymentList = paymentRepository.findByAccountAndTransactionDate(plan.getAccount(), today);
 
             long totalAmount = paymentList.stream()
@@ -100,7 +103,7 @@ public class BudgetScheduler {
             if (todayBudget <= totalAmount) {
                 SOLPushNotificationResponse solPushNotificationResponse = callPushNotificationApi(userNumber, username);// TODO: 수행결과 "N" 이면 예외처리해주기(지금은 무조건 성공 나옴)
                 if (solPushNotificationResponse.getDataBody().get수행결과().equals("Y")) {
-                    redisService.setValues(86400, "todayBudgetOver_" + plan.getAccount().getNumber(), "Y");
+                    redisService.setValues(86500, "todayBudgetOver_" + plan.getAccount().getNumber(), "Y");
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.example.backend.domain.common.redis.controller;
 
+import com.example.backend.domain.common.exception.ResourceNotFoundException;
 import com.example.backend.domain.common.redis.service.RedisService;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,8 @@ public class RedisController {
     @RequestMapping(value = "/redis/test/getString")
     @ResponseBody
     public String getValue(String testKey) {
-        return redisService.getValues(testKey);
+        return redisService.getValues(testKey)
+                .orElseThrow(() -> new ResourceNotFoundException("Redis", testKey));
     }
 
     @RequestMapping(value = "/redis/test/setSets")

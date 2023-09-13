@@ -1,8 +1,10 @@
 package com.example.backend.domain.popular.entity;
 
+import com.example.backend.domain.common.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
 
@@ -10,14 +12,33 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Popular {
+public class Popular extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer popularId;
+    @Column(name = "POPULAR_ID")
+    private Long id;
 
-    private String store;
-    private String img;
+    private String storeName;
+    private String thumbnail;
     private String category;
+    @Column(columnDefinition = "geometry(Point,4326)")
+    private Point location;
+    private Integer count;
+
+    public void addCount() {
+        this.count++;
+    }
+
+    public static Popular toEntity(String storeName, String category, Point location) {
+        Popular popular = new Popular();
+        popular.storeName = storeName;
+        popular.thumbnail = "";
+        popular.category = category;
+        popular.location = location;
+        popular.count = 1;
+
+        return popular;
+    }
 
 
 }

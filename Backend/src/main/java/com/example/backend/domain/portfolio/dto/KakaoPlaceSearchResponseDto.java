@@ -20,8 +20,8 @@ public class KakaoPlaceSearchResponseDto {
     public static class Document {
         private String place_name;
         private String address_name;
-        private String x; // longitude
-        private String y; // latitude
+        private double x; // longitude
+        private double y; // latitude
         private String category_name;
 
         // Getter and Setter methods
