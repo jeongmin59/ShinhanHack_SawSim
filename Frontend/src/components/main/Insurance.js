@@ -6,7 +6,7 @@ import axios from "axios";
 const Insurance = () => {
   return (
   <div>
-    <p className={styles.insuranceTitle}>여행할 때 필요한 보험은?</p>
+    <p className={styles.insuranceTitle}>나만의 여행 포트폴리오</p>
     <div className={styles.insurances}>
       <div className={styles.insuranceDiv}>     
         <p className={styles.insurance}>신한 여행자 보험</p>
