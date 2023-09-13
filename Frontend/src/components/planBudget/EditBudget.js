@@ -69,6 +69,8 @@ const EditBudget = () => {
 
 return (
   <div>
+    <Link className={styles.backLink} to={`/plan/${planId}`}><p className={styles.toBack}>&lt;</p>
+    <p className={styles.popularTitle}>뒤로가기</p></Link> 
     <h3>{formattedDate}</h3>
     <form className={styles.dateItem}>
       <label className={styles.category}>
@@ -110,7 +112,7 @@ return (
           onClick={handleAddOrUpdateBudget}
           style={{
             height: '2.5rem',
-            width: '40%',
+            width: '42%',
             marginRight: '1rem',
             backgroundColor: '#316FDF',
             fontFamily: "preRg"
@@ -119,12 +121,12 @@ return (
             수정하기
         </Button>
 
-        <Button 
+        <Button danger
           onClick={handleDeleteBudget}
-          type="danger"
+          // type="dashed"
           style={{
             height: '2.5rem',
-            width: '40%',
+            width: '42%',
             marginRight: '1rem',
             fontFamily: "preRg",
           }}

@@ -25,8 +25,25 @@
 
 .centeredTable {
   text-align: center;
+  width: 100%;
+  /* border-top: 1px solid #444444; */
+  border-collapse: collapse;
+  /* border-collapse: collapse; */
 }
 
-.centeredCell {
+.elementTitle {
+  /* color: grey; */
   text-align: center;
+  border-bottom: 0.001rem solid rgb(154, 154, 154);
+  padding-bottom: 0.8rem;
+  /* margin: 0.8rem 0; */
+}
+.elementContent {
+  color: black;
+  /* margin: 0.8rem 0; */
+  /* padding-right: 1rem; */
+  text-align: center;
+  /* padding: 1rem; */
+  /* border-bottom: 1px solid grey; */
+  padding: 0.2rem;
 }

@@ -39,7 +39,7 @@ const CalendarModal = ({ onDateSelected }) => {
     console.log('변환된 End Date:', formattedEndDate);
   
     try {
-      // 기존 계획이 있는지 확인
+      // 기존 계획을 가져옴
       const existingPlanResponse = await axios.get(`/api2/plan`, {
         headers: { "User-Number": data }
       });
@@ -48,15 +48,32 @@ const CalendarModal = ({ onDateSelected }) => {
   
       // 사용자가 계획을 수정하려고 할 때
       if (existingPlanData !== null) {
-        const requestData = {
+        // 기존 계획을 업데이트하는 POST 요청
+        const updateRequestData = {
           dataBody: {
             startDate: formattedStartDate,
             endDate: formattedEndDate
           },
         };
-    
-        const addPlanResponse = await axios.post(`/api2/plan/${existingPlanData.planId}`, requestData, 
-          { headers: { "User-Number": data } });
+  
+        const updatePlanResponse = await axios.post(`/api2/plan/${existingPlanData.planId}`, updateRequestData, {
+          headers: { "User-Number": data }
+        });
+  
+        console.log('기존 계획 수정 성공', updatePlanResponse.data);
+      } else {
+        // 기존 계획이 없을 때, 새로운 계획 추가
+        const addRequestData = {
+          dataBody: {
+            startDate: formattedStartDate,
+            endDate: formattedEndDate
+          },
+        };
+  
+        const addPlanResponse = await axios.post('/api2/plan', addRequestData, {
+          headers: { "User-Number": data }
+        });
+  
         console.log('새로운 계획 추가 성공', addPlanResponse.data);
       }
   
@@ -71,6 +88,7 @@ const CalendarModal = ({ onDateSelected }) => {
       window.location.reload();
     }
   };
+  
   
 
   const handleCancel = () => {
