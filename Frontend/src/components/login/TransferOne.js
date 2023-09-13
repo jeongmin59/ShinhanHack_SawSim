@@ -58,7 +58,7 @@ const TransferOne = () => {
           입금통장메모: randomNumber
         },
       };
-      const response = await axios.post("/api1/v1/auth/1transfer", requestData);
+      const response = await axios.post("https://shbhack.shinhan.com/v1/auth/1transfer", requestData);
       console.log(response.data)
     } catch (error) {
       console.error(error);
@@ -74,7 +74,7 @@ const TransferOne = () => {
           name: name,
           authMemo: randomNumber
       }}
-      const response = await axios.post("/api2/auth/memo", requestData);
+      const response = await axios.post("https://sawsim.site/api/auth/memo", requestData);
       console.log(response.data)
     } catch (error) {
       console.error(error);
@@ -93,7 +93,7 @@ const TransferOne = () => {
           입금계좌번호: account,
         },
       };
-      const response = await axios.post("/api1/v1/search/name", requestData);
+      const response = await axios.post("https://shbhack.shinhan.com/v1/search/name", requestData);
       console.log(response.data)
       // console.log(response.data.dataBody.입금계좌성명);
       // console.log(name)
@@ -124,7 +124,7 @@ const TransferOne = () => {
           authNumber : ranInput
         },
       };
-      const response = await axios.post("/api2/auth/verify", requestData);
+      const response = await axios.post("https://sawsim.site/api/auth/verify", requestData);
       console.log('여길봐라',response.data)
       console.log('이놈아',response.data.dataHeader.successCode);
       if (response.data.dataHeader.successCode === '0' && response.data.dataHeader.resultCode === 'OK') {// 인증번호가 맞다면?
