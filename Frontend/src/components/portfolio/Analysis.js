@@ -9,11 +9,7 @@ const Analysis = () => {
 
   return (
     <div>
-      <div className={styles.titles}>
-        <Link className={styles.backLink} to='/main'><p className={styles.toBack}>&lt;</p>
-        <p className={styles.portfolioTitle}>여행 포트폴리오</p></Link>
-      </div>
-      <p></p>
+      <p>디텔페이지</p>
     </div>
   )
 }

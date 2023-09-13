@@ -82,9 +82,10 @@ const BalanceSchedule = () => {
     try {
       const response = await axios.get("/api2/plan", { headers: { "User-Number": data } });
       console.log(response.data)
-      if (response.data.dataBody !== 'null' && response.data.dataBody.length !== 0) {
-        setPlan(response.data.dataBody[0])
-        console.log('플랜',plan)
+      if (response.data.dataBody !== null) {
+        console.log('왜 안찍힘?', response.data.dataBody)
+        setPlan(response.data.dataBody)
+        // console.log('플랜',plan)
       } else {
         console.log('등록된 일정이 없습니다')
       }
@@ -100,10 +101,12 @@ const BalanceSchedule = () => {
     if (account) {
       checkBalance();
     }
-    if (plan) {
-      checkPlan()
-    }
+    checkPlan()
  }, [account]); // account 상태 업데이트 될때마다 재실행
+
+ useEffect(() => {
+  console.log('플랜', plan);
+}, [plan]);
 
   return (
     <div className={styles.div}>
@@ -121,7 +124,7 @@ const BalanceSchedule = () => {
           {balance ? `${formatBalance(balance)}원` :
           <Skeleton.Input style={{marginTop: '-1rem', borderRadius:'2rem', width: 80 }} active size="large" />}</div>
         
-        {plan && plan.length === 0 ? (
+        {Array.isArray(plan) && plan.length === 0 ? (
           <>
             <Link to='/plan'>
             <Button 
@@ -149,7 +152,7 @@ const BalanceSchedule = () => {
       
 
       <div className={styles.scheduleDiv}>
-        {plan && plan.length === 0 ? (
+        {Array.isArray(plan) && plan.length === 0 ? (
           <>
           <p className={styles.noSchedule1}>등록된 여행 일정이 없습니다</p>
           <p className={styles.noSchedule2}>등록하기를 눌러 일정을 등록해주세요</p>
