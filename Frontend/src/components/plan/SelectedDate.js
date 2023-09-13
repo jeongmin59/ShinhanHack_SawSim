@@ -13,7 +13,7 @@ function SelectedDate() {
 
   const getDate = async () => {
     try {
-      const response = await axios.get("/api2/plan", {
+      const response = await axios.get("https://sawsim.site/api/plan", {
         headers: { "User-Number": data }
       });
       console.log('왓나?', response.data)

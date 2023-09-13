@@ -53,7 +53,7 @@ const Report = () => {
           "todayDate" : getFormattedDate(),
         }
       };
-      const response = await axios.post(`/api2/analyze/${plan_id}`, requestData, { headers: { "User-Number": data } });
+      const response = await axios.post(`https://sawsim.site/api/analyze/${plan_id}`, requestData, { headers: { "User-Number": data } });
       console.log(response.data)
       console.log(response.data.dataBody.day) // 여행 몇일차
       setDay()

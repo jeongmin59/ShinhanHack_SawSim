@@ -45,7 +45,7 @@ const BalanceSchedule = () => {
   // 9. data에 저장된 userName 이용해 계좌 조회 > accountNumber 나옴
   const checkAccount = async () => {
     try {
-      const response = await axios.get("/api2/auth/accounts", { headers: { "User-Number": data } });
+      const response = await axios.get("https://sawsim.site/api/auth/accounts", { headers: { "User-Number": data } });
       console.log(response.data)
       console.log(response.data.dataBody.accountNumber)
       setAccount(response.data.dataBody.accountNumber)
@@ -68,7 +68,7 @@ const BalanceSchedule = () => {
           출금계좌번호: account,
         },
       };
-      const response = await axios.post("/api1/v1/account/balance/detail", requestData);
+      const response = await axios.post("https://shbhack.shinhan.com/v1/account/balance/detail", requestData);
       console.log(response.data)
       console.log(response.data.dataBody.지불가능잔액)
       const numericBalance = parseInt(response.data.dataBody.지불가능잔액, 10);
@@ -81,7 +81,7 @@ const BalanceSchedule = () => {
   // 11. 등록된 여행 일정 조회 (백 api)
   const checkPlan = async () => {
     try {
-      const response = await axios.get("/api2/plan", { headers: { "User-Number": data } });
+      const response = await axios.get("https://sawsim.site/api/plan", { headers: { "User-Number": data } });
       console.log(response.data)
       if (response.data.dataBody !== null) {
         console.log('왜 안찍힘?', response.data.dataBody)

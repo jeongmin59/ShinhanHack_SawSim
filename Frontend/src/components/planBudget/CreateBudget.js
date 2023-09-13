@@ -32,7 +32,7 @@ const CreateBudget = () => {
           amount: amount,
         },
       };
-      const response = await axios.post(`/api2/budget/${planId}`, requestData)
+      const response = await axios.post(`https://sawsim.site/api/budget/${planId}`, requestData)
       console.log('성공', response.data);
     } catch (error) {
       console.error('에러', error);

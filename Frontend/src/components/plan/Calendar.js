@@ -40,7 +40,7 @@ const CalendarModal = ({ onDateSelected }) => {
   
     try {
       // 기존 계획을 가져옴
-      const existingPlanResponse = await axios.get(`/api2/plan`, {
+      const existingPlanResponse = await axios.get(`https://sawsim.site/api/plan`, {
         headers: { "User-Number": data }
       });
   
@@ -56,7 +56,7 @@ const CalendarModal = ({ onDateSelected }) => {
           },
         };
   
-        const updatePlanResponse = await axios.post(`/api2/plan/${existingPlanData.planId}`, updateRequestData, {
+        const updatePlanResponse = await axios.post(`https://sawsim.site/api/plan/${existingPlanData.planId}`, updateRequestData, {
           headers: { "User-Number": data }
         });
   
@@ -70,7 +70,7 @@ const CalendarModal = ({ onDateSelected }) => {
           },
         };
   
-        const addPlanResponse = await axios.post('/api2/plan', addRequestData, {
+        const addPlanResponse = await axios.post('https://sawsim.site/api/plan', addRequestData, {
           headers: { "User-Number": data }
         });
   

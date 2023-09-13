@@ -21,7 +21,7 @@ function DateList() {
   useEffect(() => {
     const getDates = async () => {
       try {
-        const response = await axios.get("/api2/plan", {
+        const response = await axios.get("https://sawsim.site/api/plan", {
           headers: { "User-Number": data }
         });
         const dataBody = response.data.dataBody;
@@ -39,7 +39,7 @@ function DateList() {
 
   const getBudgetData = async () => {
     try {
-      const response = await axios.get(`/api2/budget/${planId}`);
+      const response = await axios.get(`https://sawsim.site/api/budget/${planId}`);
       const dataBody = response.data.dataBody;
       setBudgetData(dataBody);
       console.log(dataBody)

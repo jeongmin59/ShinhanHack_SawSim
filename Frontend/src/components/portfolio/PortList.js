@@ -14,7 +14,7 @@ const PortList = () => {
 
   const getPorts = async () => {
     try {
-      const response = await axios.get("/api2/portfolio", { headers: { "User-Number": data } });
+      const response = await axios.get("https://sawsim.site/api/portfolio", { headers: { "User-Number": data } });
       console.log(response)
       console.log(response.data.dataBody.planList)
       setPorts(response.data.dataBody.planList)
