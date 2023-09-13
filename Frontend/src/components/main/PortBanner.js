@@ -3,6 +3,8 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import styles from "./PortBanner.module.css";
 import axios from "axios";
 import location from "../../assets/location.png"
+import diary from "../../assets/diary.png"
+import book from "../../assets/books3.png"
 
 
 const Insurance = () => {
@@ -20,7 +22,8 @@ const Insurance = () => {
         display:'flex',margin: 0, textDecoration:'none'}} className={styles.more}>보러가기 &gt; 
         </button></Link>
     </div>
-    <img style={{margin:'0.5rem 0 0.3rem 0', alignItems:'center',width:'5rem', height:'4.7rem'}} src={location} alt="png"/>
+    <img style={{margin:'0', alignItems:'center',width:'6rem', height:'5.5rem'}} src={book} alt="png"/>
+    {/* <img style={{margin:'0.5rem 0 0.3rem 0', alignItems:'center',width:'5rem', height:'4.7rem'}} src={diary} alt="png"/> */}
   </div>
   </div>
   );
