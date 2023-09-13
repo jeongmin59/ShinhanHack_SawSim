@@ -195,6 +195,7 @@ public class PortfolioService {
         List<Plan> planList = planRepository.findAllByAccountId(account.getId()).orElse(Collections.emptyList());
 
         List<PortfolioListGetResponseDto.PlanInfo> planInfoList = planList.stream()
+                .filter(plan -> !plan.getPortfolioList().isEmpty()) // 포트폴리오가 있는지 확인
                 .map(plan -> PortfolioListGetResponseDto.PlanInfo.builder()
                         .id(plan.getId())
                         .startDate(plan.getStartDate())
