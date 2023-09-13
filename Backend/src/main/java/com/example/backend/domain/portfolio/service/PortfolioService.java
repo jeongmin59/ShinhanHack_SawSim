@@ -77,7 +77,7 @@ public class PortfolioService {
                         .mapToLong(Payment::getAmount)
                         .sum();
 
-                portfolios.add(Portfolio.createPortfolio(totalBudgetOnTargetDate, totalPaymentOnTargetDate, targetDate));
+                portfolios.add(Portfolio.createPortfolio(totalBudgetOnTargetDate, totalPaymentOnTargetDate, targetDate,plan));
             }
             portfolioRepository.saveAll(portfolios);
 
