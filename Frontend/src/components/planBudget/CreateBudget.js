@@ -2,17 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Select, InputNumber, Button, Space } from 'antd';
 import axios from "axios";
 import styles from './CreateBudget.module.css';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+// import Link from 'antd/es/typography/Link';
   
 const { Option } = Select;
   
 const CreateBudget = () => {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
-  // const [isEditMode, setIsEditMode] = useState(false); // 추가 및 수정 모드
   const { state } = useLocation();
   const formattedDate = state?.formattedDate;
-  const lastPlanId = state?.lastPlanId;
+  const planId = state?.planId;
+
 
   const handleCategoryChange = (value) => {
     setCategory(value);
@@ -31,17 +32,15 @@ const CreateBudget = () => {
           amount: amount,
         },
       };
-      const response = await axios.post(`/api2/budget/${lastPlanId}`, requestData)
+      const response = await axios.post(`/api2/budget/${planId}`, requestData)
       console.log('성공', response.data);
     } catch (error) {
       console.error('에러', error);
-      // console.log(response.data);
     }
   };
 
   console.log("formattedDate:", formattedDate);
-  console.log("lastPlanId:", lastPlanId);
-
+  console.log("planId:", planId);
 
 
 return (
@@ -80,11 +79,14 @@ return (
       <br />
       <br />
       <div className={styles.btnContainer}>
+        <Link
+          to={`/plan/${planId}`}
+        >
         <Button type="primary"
           onClick={handleAddOrUpdateBudget}
           style={{
             height: '2.5rem',
-            width: '40%',
+            // width: '60%',
             marginRight: '1rem',
             backgroundColor: '#316FDF',
             fontFamily: "preRg"
@@ -92,6 +94,7 @@ return (
           size="large">
             예산 추가하기
         </Button>
+        </Link>
       </div>
     </form>
   </div>

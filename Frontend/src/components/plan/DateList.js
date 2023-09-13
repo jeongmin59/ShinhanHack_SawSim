@@ -6,8 +6,10 @@ import { Link } from 'react-router-dom';
 import '../../pages/Transaction.css';
 
 function DateList() {
-  const [lastPlan, setLastPlan] = useState(null);
-  const [lastPlanId, setLastPlanId] = useState(null);
+  const [planId, setPlanId] = useState(null);
+  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState('');
+
   const data = localStorage.getItem('userNumber');
   const [budgetData, setBudgetData] = useState([]);
 
@@ -19,12 +21,9 @@ function DateList() {
         });
         const dataBody = response.data.dataBody;
         console.log(dataBody)
-
-        if (dataBody.length > 0) {
-          const lastPlan = dataBody[dataBody.length - 1];
-          setLastPlan(lastPlan);
-          setLastPlanId(lastPlan.planId);
-        }
+        setPlanId(dataBody.planId)
+        setEndDate(dataBody.endDate)
+        setStartDate(dataBody.startDate)
       } catch (error) {
         console.error(error);
       }
@@ -33,13 +32,7 @@ function DateList() {
     getDates();
   }, [data]);
 
-  useEffect(() => {
-    if (lastPlan) {
-      getBudgetData(lastPlan.planId);
-    }
-  }, [lastPlan]);
-
-  const getBudgetData = async (planId) => {
+  const getBudgetData = async () => {
     try {
       const response = await axios.get(`/api2/budget/${planId}`);
       const dataBody = response.data.dataBody;
@@ -50,6 +43,12 @@ function DateList() {
     }
   }
 
+  useEffect(() => {
+    if (planId) {
+      getBudgetData();
+    }
+  }, [planId]);
+  
   const renderDateRange = (startDate, endDate) => {
     const dateArray = [];
     const currentDate = new Date(startDate);
@@ -89,10 +88,10 @@ function DateList() {
                     <td>
 
                     <Link
-                        to={`/budget/${lastPlanId}/update`}
+                        to={`/budget/${planId}/update`}
                         state={{
                           formattedDate: formattedDate,
-                          lastPlanId: lastPlan.planId,
+                          planId: planId,
                           category: item.category,
                           amount: item.amount
                         }}
@@ -117,10 +116,10 @@ function DateList() {
               </tbody>
             </table>
             <Link
-              to={`/budget/${lastPlanId}`}
+              to={`/budget/${planId}`}
               state={{
                 formattedDate: formattedDate,
-                lastPlanId: lastPlan.planId,
+                planId: planId,
               }}
             >
               <Button
@@ -144,9 +143,9 @@ function DateList() {
 
   return (
     <div>
-      {lastPlan ? (
+      {planId ? (
         <div>
-          {renderDateRange(lastPlan.startDate, lastPlan.endDate)}
+          {renderDateRange(startDate, endDate)}
         </div>
       ) : (
         <p>선택된 일정이 없습니다.</p>
