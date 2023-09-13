@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Select, InputNumber, Button, Space, Popconfirm, message } from 'antd';
 import axios from "axios";
 import styles from './CreateBudget.module.css';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
   
 const { Option } = Select;
   
 const EditBudget = () => {
   const { state } = useLocation();
   const formattedDate = state?.formattedDate;
-  const lastPlanId = state?.lastPlanId;
+  const planId = state?.planId;
   const category = state?.category;
   const amount = state?.amount;
     
@@ -33,11 +33,10 @@ const EditBudget = () => {
           amount: editAmount !== amount ? editAmount : amount,
         },
       };
-      const response = await axios.put(`/api2/budget/${lastPlanId}`, requestData)
+      const response = await axios.put(`/api2/budget/${planId}`, requestData)
       console.log('성공', response.data);
     } catch (error) {
       console.error('에러', error);
-      // console.log(response.data);
     }
   };
 
@@ -52,7 +51,7 @@ const EditBudget = () => {
             },
         }
       };
-      const response = await axios.delete(`/api2/budget/${lastPlanId}`, requestData)
+      const response = await axios.delete(`/api2/budget/${planId}`, requestData)
       console.log('성공', response.data);
       message.success('예산이 삭제되었습니다.');
     } catch (error) {
@@ -61,7 +60,7 @@ const EditBudget = () => {
   };
 
   console.log("formattedDate:", formattedDate);
-  console.log("lastPlanId:", lastPlanId);
+  console.log("planId:", planId);
   console.log("editCategory:", editCategory);
   console.log("category:", category);
   console.log("editamount:", editAmount);
@@ -104,6 +103,9 @@ return (
       <br />
       <br />
       <div className={styles.btnContainer}>
+      <Link
+          to={`/plan/${planId}`}
+        >
         <Button type="primary"
           onClick={handleAddOrUpdateBudget}
           style={{
@@ -114,8 +116,9 @@ return (
             fontFamily: "preRg"
           }}
           size="large">
-            예산 수정하기
+            수정하기
         </Button>
+
         <Button 
           onClick={handleDeleteBudget}
           type="danger"
@@ -128,6 +131,7 @@ return (
           size="large">
             삭제하기
         </Button>
+        </Link>
       </div>
     </form>
   </div>

@@ -11,9 +11,7 @@ const CalendarModal = ({ onDateSelected }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
-  // localStorage.setItem('date', date);
   const data = localStorage.getItem('userNumber');
-  // const data = localStorage.getItem('date');
 
   const onChange = (dates) => {
     const [start, end] = dates;
@@ -27,42 +25,53 @@ const CalendarModal = ({ onDateSelected }) => {
 
   const handleOk = async () => {
     setConfirmLoading(true);
-
+  
     const formattedStartDate = startDate.toISOString().split('T')[0];
     let formattedEndDate = null;
-
+  
     if (endDate !== null) {
       formattedEndDate = endDate.toISOString().split('T')[0];
     } else {
       formattedEndDate = formattedStartDate;
     }
-
+  
     console.log('변환된 Start Date:', formattedStartDate);
     console.log('변환된 End Date:', formattedEndDate);
-
+  
     try {
-      const requestData = {
-        dataBody: { 
-          startDate : formattedStartDate,
-          endDate : formattedEndDate
-        },
-      };
-
-      // const headers = {"User-Number": "44b78142-4320-4115-88f1-86bb562fbc0c"}
-      const response = await axios.post('/api2/plan', requestData, { headers: { "User-Number" : data } });
-      console.log('성공', response.data);
-
-      localStorage.setItem('startDate', formattedStartDate);
-      localStorage.setItem('endDate', formattedEndDate);
-
+      // 기존 계획이 있는지 확인
+      const existingPlanResponse = await axios.get(`/api2/plan`, {
+        headers: { "User-Number": data }
+      });
+  
+      const existingPlanData = existingPlanResponse.data.dataBody;
+  
+      // 사용자가 계획을 수정하려고 할 때
+      if (existingPlanData !== null) {
+        const requestData = {
+          dataBody: {
+            startDate: formattedStartDate,
+            endDate: formattedEndDate
+          },
+        };
+    
+        const addPlanResponse = await axios.post(`/api2/plan/${existingPlanData.planId}`, requestData, 
+          { headers: { "User-Number": data } });
+        console.log('새로운 계획 추가 성공', addPlanResponse.data);
+      }
+  
+      // localStorage.setItem('startDate', formattedStartDate);
+      // localStorage.setItem('endDate', formattedEndDate);
+  
     } catch (error) {
-      console.error('그냥 에러:', error);
+      console.error('에러:', error);
     } finally {
       setConfirmLoading(false);
       setOpen(false);
       window.location.reload();
     }
   };
+  
 
   const handleCancel = () => {
     console.log('취소');

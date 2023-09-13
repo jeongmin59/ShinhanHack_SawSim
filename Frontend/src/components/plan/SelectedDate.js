@@ -5,11 +5,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from 'antd';
 
 function SelectedDate() {
-  const [lastPlan, setLastPlan] = useState([]);
-  const [planId, setPlanId] = useState('');
+  const [planId, setPlanId] = useState(null);
   const [endDate, setEndDate] = useState('');
   const [startDate, setStartDate] = useState('');
-  // const [budgetData, setBudgetData] = useState([]);
   const data = localStorage.getItem('userNumber');
   const location = useLocation();
 
@@ -20,40 +18,23 @@ function SelectedDate() {
       });
       console.log('왓나?', response.data)
       const dataBody = response.data.dataBody;
-      console.log('일정', lastPlan)
       if (dataBody !== null) {
-        // const lastPlan = dataBody[dataBody.length - 1];
-        // setLastPlan(lastPlan);
         setPlanId(dataBody.planId)
         setEndDate(dataBody.endDate)
         setStartDate(dataBody.startDate)
+      } else {
+        setPlanId(null);
       }
     } catch (error) {
       console.error(error);
     }
   }
 
-  // const getBudgetData = async (lastPlanId) => {
-  //   try {
-  //     const response = await axios.get(`/api2/budget/${lastPlanId}`);
-  //     const dataBody = response.data.dataBody;
-  //     setBudgetData(dataBody);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
   useEffect(() => {
     getDate();
   }, []);
 
-  // useEffect(() => {
-  //   if (lastPlan) {
-  //     getBudgetData(lastPlan.planId);
-  //   }
-  // }, [lastPlan]);
-
-  const isButtonVisible = location.pathname !== `/plan/${lastPlan?.planId}`;
+  const isButtonVisible = location.pathname !== `/plan/${planId}`;
 
   return (
     <div>
@@ -69,7 +50,7 @@ function SelectedDate() {
                   size="small"
                   style={{
                     height: '2rem',
-                    marginTop: '1rem',
+                    marginTop: '0.5rem',
                     backgroundColor: '#316FDF',
                     fontFamily: "preRg"
                   }}
@@ -84,26 +65,6 @@ function SelectedDate() {
       ) : (
         <p>일정을 선택해주세요.</p>
       )}
-
-      {/* <h3>저장된 예산</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>날짜</th>
-            <th>카테고리</th>
-            <th>예산</th>
-          </tr>
-        </thead>
-        <tbody>
-          {budgetData.map((item) => (
-            <tr key={item.budgetId}>
-              <td>{item.travelDate}</td>
-              <td>{item.category}</td>
-              <td>{item.amount}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
     </div>
   );
 }
