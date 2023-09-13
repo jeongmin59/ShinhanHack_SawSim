@@ -43,7 +43,7 @@ const Report = () => {
     return formattedDate;
   }
   
-  const plan_id = 3
+  const plan_id = 72
 
   // 일자별 여행비 분석
   const analyzeBudget = async () => {

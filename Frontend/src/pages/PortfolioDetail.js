@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from "./PortfolioPage.module.css";
+import styles from "./PortfolioDetail.module.css";
 import Header from "../components/common/Header";
 import Map from "../components/portfolio/Map"
 import Analysis from "../components/portfolio/Analysis"
-import PortList from "../components/portfolio/PortList"
 
-const PortfolioPage = () => {
+const PortfolioDetail = () => {
   return (
     <div>
       <Header/>
-      <PortList/>
+      <Analysis/>
+      <Map/>
     </div>
   )
 }
 
-export default PortfolioPage
+export default PortfolioDetail

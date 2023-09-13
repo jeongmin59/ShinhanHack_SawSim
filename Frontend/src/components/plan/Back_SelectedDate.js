@@ -5,10 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from 'antd';
 
 function SelectedDate() {
-  const [lastPlan, setLastPlan] = useState([]);
-  const [planId, setPlanId] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [startDate, setStartDate] = useState('');
+  const [lastPlan, setLastPlan] = useState(null);
   // const [budgetData, setBudgetData] = useState([]);
   const data = localStorage.getItem('userNumber');
   const location = useLocation();
@@ -18,15 +15,11 @@ function SelectedDate() {
       const response = await axios.get("/api2/plan", {
         headers: { "User-Number": data }
       });
-      console.log('왓나?', response.data)
       const dataBody = response.data.dataBody;
-      console.log('일정', lastPlan)
-      if (dataBody !== null) {
-        // const lastPlan = dataBody[dataBody.length - 1];
-        // setLastPlan(lastPlan);
-        setPlanId(dataBody.planId)
-        setEndDate(dataBody.endDate)
-        setStartDate(dataBody.startDate)
+
+      if (dataBody.length > 0) {
+        const lastPlan = dataBody[dataBody.length - 1];
+        setLastPlan(lastPlan);
       }
     } catch (error) {
       console.error(error);
@@ -45,7 +38,7 @@ function SelectedDate() {
 
   useEffect(() => {
     getDate();
-  }, []);
+  }, [data]);
 
   // useEffect(() => {
   //   if (lastPlan) {
@@ -58,13 +51,13 @@ function SelectedDate() {
   return (
     <div>
       <h3>여행 일정</h3>
-      {planId !== null ? (
+      {lastPlan ? (
         <div className={styles.dateItem}>
-          <p>여행 시작 일자: {startDate}</p>
-          <p>여행 종료 일자: {endDate}</p>
+          <p>여행 시작 일자: {lastPlan.startDate}</p>
+          <p>여행 종료 일자: {lastPlan.endDate}</p>
           <div>
             {isButtonVisible && (
-              <Link to={`/plan/${planId}`}>
+              <Link to={`/plan/${lastPlan.planId}`}>
                 <Button
                   size="small"
                   style={{
