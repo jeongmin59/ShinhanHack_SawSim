@@ -45,6 +45,8 @@ const CreateBudget = () => {
 
 return (
   <div>
+    <Link className={styles.backLink} to={`/plan/${planId}`}><p className={styles.toBack}>&lt;</p>
+    <p className={styles.popularTitle}>뒤로가기</p></Link> 
     <h3>{formattedDate}</h3>
     <form className={styles.dateItem}>
       <label className={styles.category}>

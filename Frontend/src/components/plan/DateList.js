@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './DateList.module.css';
-import { Button } from 'antd';
+import { Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import '../../pages/Transaction.css';
+
+const gridStyle = {
+  width: '25%',
+  textAlign: 'center',
+};
 
 function DateList() {
   const [planId, setPlanId] = useState(null);
@@ -75,17 +80,17 @@ function DateList() {
             <table className={styles.centeredTable}>
               <thead>
                 <tr>
-                  <th>카테고리</th>
-                  <th>예산</th>
-                  <th></th>
+                  <th className={styles.elementTitle}>카테고리</th>
+                  <th className={styles.elementTitle}>예산</th>
+                  <th className={styles.elementTitle}></th>
                 </tr>
               </thead>
               <tbody>
                 {filteredBudgetData.map((item) => (
                   <tr key={item.budgetId}>
-                    <td className={styles.centeredCell}>{item.category}</td>
-                    <td className={styles.centeredCell}>{item.amount}</td>
-                    <td>
+                    <td className={styles.elementContent}>{item.category}</td>
+                    <td className={styles.elementContent}>{item.amount}</td>
+                    <td className={styles.elementContent}>
 
                     <Link
                         to={`/budget/${planId}/update`}
@@ -100,7 +105,8 @@ function DateList() {
                           size="small"
                           style={{
                             height: '2rem',
-                            marginTop: '1rem',
+                            marginTop: '0.5rem',
+                            paddingBottom: '0.2rem',
                             backgroundColor: 'white',
                             color: 'black',
                             fontFamily: "preRg",
