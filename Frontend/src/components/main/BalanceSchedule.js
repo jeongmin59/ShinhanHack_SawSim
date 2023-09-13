@@ -82,7 +82,7 @@ const BalanceSchedule = () => {
     try {
       const response = await axios.get("/api2/plan", { headers: { "User-Number": data } });
       console.log(response.data)
-      if (response.data.dataBody && response.data.dataBody.length !== 0) {
+      if (response.data.dataBody !== 'null' && response.data.dataBody.length !== 0) {
         setPlan(response.data.dataBody[0])
         console.log('플랜',plan)
       } else {
