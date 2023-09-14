@@ -68,7 +68,7 @@ const BalanceSchedule = () => {
           출금계좌번호: account,
         },
       };
-      const response = await axios.post("https://shbhack.shinhan.com/v1/account/balance/detail", requestData);
+      const response = await axios.post("https://sawsim.site/api/v1/account/balance/detail", requestData);
       console.log(response.data)
       console.log(response.data.dataBody.지불가능잔액)
       const numericBalance = parseInt(response.data.dataBody.지불가능잔액, 10);
@@ -156,8 +156,8 @@ const BalanceSchedule = () => {
       <div className={styles.scheduleDiv}>
         {Array.isArray(plan) && plan.length === 0 ? (
           <>
-          <p className={styles.noSchedule1}>등록된 여행 일정이 없습니다</p>
-          <p className={styles.noSchedule2}>등록하기를 눌러 일정을 등록해주세요</p>
+            <p className={styles.noSchedule1}>등록된 여행 일정이 없습니다</p>
+            <p className={styles.noSchedule2}>등록하기를 눌러 일정을 등록해주세요</p>
           </>
         ) : (
           <>
