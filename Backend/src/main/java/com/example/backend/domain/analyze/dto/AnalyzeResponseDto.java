@@ -15,7 +15,7 @@ public class AnalyzeResponseDto {
     @Builder(toBuilder = true)
     public static class DataBody {
 
-        private LocalDate day;
+        private Long day;
         private Long totalBudget;
         private Integer amountUsed;
 
