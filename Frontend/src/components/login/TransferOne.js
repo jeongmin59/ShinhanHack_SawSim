@@ -1,7 +1,7 @@
 import {React,useState, useEffect} from 'react';
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import styles from "./TransferOne.module.css";
-import { Button, Input, Space } from 'antd';
+import { Button, Input, Space, message } from 'antd';
 import axios from "axios";
 import Api from '../../Api/Api';
 import { EyeInvisibleOutlined, EyeTwoTone, ExclamationCircleOutlined } from '@ant-design/icons';
@@ -16,6 +16,11 @@ const TransferOne = () => {
   const [account, setAccount] = useState(data || "")
   const [ranInput, setRanInput] = useState("")
   const [showRandomInput, setShowRandomInput] = useState(false);
+
+  const [messageApi, contextHolder] = message.useMessage();
+  const info = () => {
+    messageApi.info(`인증번호는 ${random}입니다.` );
+  };
 
 
   // 1차로 예금주 일치 확인, 2차로 본인 계좌인지 검증(랜덤번호)
@@ -109,6 +114,7 @@ const TransferOne = () => {
         sendRandomToBack(randomNumber);
         // 예금주, 계좌번호 입력창 사라지고 인증번호 입력 인풋으로 바뀌기 위한 set 
         setShowRandomInput(true)
+        
       } else {
         window.alert('예금주를 다시 확인해주세요.')
       }
@@ -152,13 +158,19 @@ const TransferOne = () => {
     console.log(userNumber)
   }
 
+  useEffect(() => {
+    if (showRandomInput) {
+      messageApi.info(`인증번호는 ${random}입니다.`);
+    }
+  }, [showRandomInput])
+
   return (
     <div>
       {showRandomInput ? ( // 인증번호 입력 인풋
         <>
           <div style={{marginTop: '3rem', display: 'flex', justifyContent: 'center'}}>
             <p style={{fontSize:'1.1rem'}}>입금통장 메모의 숫자 4자리를 입력해주세요.</p>
-            <p style={{fontSize:'0.7rem'}}>{random}</p>
+            {contextHolder}
           </div>
           <Space.Compact style={{width: '45%'}}>
             <Input.Password

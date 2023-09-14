@@ -172,7 +172,7 @@ const BalanceSchedule = () => {
               borderColor:'grey', 
               fontWeight: '900', 
               fontFamily:"preBd",
-              paddingTop: '0.3rem'}}
+              paddingTop: '0.2rem'}}
               className={styles.startTrip}
             >예산 상세보기</Button></Link>
           </>
