@@ -12,7 +12,6 @@ import com.example.backend.domain.payment.repository.PaymentRepository;
 import com.example.backend.domain.plan.entity.Plan;
 import com.example.backend.domain.plan.repository.PlanRepository;
 import com.example.backend.domain.portfolio.dto.KakaoPlaceSearchResponseDto;
-import com.example.backend.domain.portfolio.dto.ShinhanTransactionRequestDto;
 import com.example.backend.domain.portfolio.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,14 +51,6 @@ public class AnalyzeService {
         /**
          * 신한이 아닌 payment 테이블을 탐색한다.
          */
-
-//        String accountNumber = accountRepository.findAccountByUserNumber(userNumber)
-//                .orElseThrow(UserNotFoundException::new).getNumber();
-
-        // 1. 유저 번호를 통해서 계좌 번화를 알아내서 신한 거래내역 조회 API로 거래 내역 받아오기
-        //ShinhanTransactionRequestDto shinhanTransactionRequestDto = portfolioService.transactionHistoryInquiry(accountNumber);
-
-
         // 카테고리 갯수
         Map<String, Integer> category = new HashMap<>();
 
@@ -76,15 +66,11 @@ public class AnalyzeService {
         int total_cost = 0; // 전체 예산 값
 
         // 2. plan id를 통해서 해당 여행 시작 일자를 구한다.
-        Optional<Plan> plan = planRepository.findById(planId);
+        Plan plan = planRepository.findById(planId).orElseThrow(() -> new NullPointerException());
 
-        if (plan.isEmpty()) {
-            return null;
-        }
         //시작 날짜와 오늘 날짜 차이 구함
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        long day = ChronoUnit.DAYS.between(plan.get().getStartDate(), LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter));
-
+        long day = ChronoUnit.DAYS.between(plan.getStartDate(), LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter));
 
         //실제 결제 내역 조회
         Account account = accountRepository.findAccountByUserNumber(userNumber)
@@ -93,11 +79,11 @@ public class AnalyzeService {
         List<Payment> paymentList = paymentRepository.findByAccountId(account.getId());
 
         for (int i = 0; i <= day; i++) {
-
+            amountUsed=0; //마지막 날만 저장
             // payment 결제 내역으로 상호명 검색
             for (Payment payment : paymentList) {
                 // 결제 날짜가 같고 해당 결제가 지출인 경우
-                if(payment.getTransactionDate().equals(plan.get().getStartDate().plusDays(i))){
+                if(payment.getTransactionDate().equals(plan.getStartDate().plusDays(i))){
                     // 거래내역조회 내용(상호명) 카카오 api로 정보 찾기
                     Mono<KakaoPlaceSearchResponseDto> location = portfolioService.findLocation(payment.getStoreName());
                     KakaoPlaceSearchResponseDto responseDto = location.block(); // Mono의 결과를 동기적으로 가져옴
@@ -115,33 +101,32 @@ public class AnalyzeService {
                     }
 
                     //오늘 일차일 경우 총 사용 금액 계산.
-//                    if (LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter)
-//                            .equals(plan.get().getStartDate().plusDays(i))) {
-                        amountUsed += payment.getAmount();
-                    //}
+                    amountUsed += payment.getAmount();
                 }
 
             }
 
-
-            List<Budget> budgets = budgetRepository.findAllByTravelDate(plan.get().getStartDate().plusDays(i));
+            List<Budget> budgets = budgetRepository.findAllByPlanAndTravelDate(plan,plan.getStartDate().plusDays(i));
             // 오늘 일차 예상 예산 총 값 구히기(비율 구할 때 사용)
-//            if (LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter)
-//                    .equals(plan.get().getStartDate().plusDays(i))) {
-                for (Budget budget : budgets) {
-                    budget_cost += budget.getAmount();
-                }
-//            }
+
+            //마지막 값만 저장
+            budget_cost=0;
+
             for (Budget budget : budgets) {
+                budget_cost += budget.getAmount();
                 total_cost += budget.getAmount();
             }
         }
 
         // 4. 오늘 일차 사용 예산 퍼센트
-        long totalBudget = (long) ((double) amountUsed / budget_cost * 100.0);
+        long totalBudget = 100L;
+
+        if (budget_cost!=0){
+            totalBudget = (amountUsed * 100L) / budget_cost;
+        }
 
 
-        LocalDate startDate = plan.get().getStartDate();
+        LocalDate startDate = plan.getStartDate();
         LocalDate endDate   = LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter);
 
         // 카테고리 퍼센트 비율 구하기
