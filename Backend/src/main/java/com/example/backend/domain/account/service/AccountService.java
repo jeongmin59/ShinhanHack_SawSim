@@ -1,19 +1,13 @@
 package com.example.backend.domain.account.service;
 
 import com.example.backend.domain.account.Account;
-import com.example.backend.domain.account.dto.CheckDepositAccountRequestDto;
-import com.example.backend.domain.account.dto.CheckDepositAccountResponseDto;
-import com.example.backend.domain.account.dto.ConfirmTransferRequestDto;
-import com.example.backend.domain.account.dto.ConfirmTransferResponseDto;
 import com.example.backend.domain.account.exception.CertificationCodeNotMatchedException;
 import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
 import com.example.backend.domain.common.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Map;
 import java.util.UUID;
@@ -54,44 +48,5 @@ public class AccountService {
         Account saveAccount = accountRepository.save(account);
 
         return saveAccount.getUserNumber();
-    }
-
-    /**
-     * 예금주 실명 조회
-     */
-
-    public CheckDepositAccountResponseDto checkDepositAccount(CheckDepositAccountRequestDto checkDepositAccountRequestDto) {
-
-        //신한 거래내역조회 api 요청
-        WebClient webClient = WebClient.builder()
-                .baseUrl("https://shbhack.shinhan.com")
-                .build();
-
-        return webClient
-                .post()
-                .uri("/v1/search/name")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(checkDepositAccountRequestDto)
-                .retrieve()
-                .bodyToMono(CheckDepositAccountResponseDto.class)
-                .block();
-    }
-
-
-    public ConfirmTransferResponseDto confirmTransfer(ConfirmTransferRequestDto confirmTransferRequestDto) {
-        //신한 거래내역조회 api 요청
-        WebClient webClient = WebClient.builder()
-                .baseUrl("https://shbhack.shinhan.com")
-                .build();
-
-        return webClient
-                .post()
-                .uri("/v1/auth/1transfer")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(confirmTransferRequestDto)
-                .retrieve()
-                .bodyToMono(ConfirmTransferResponseDto.class)
-                .block();
-
     }
 }

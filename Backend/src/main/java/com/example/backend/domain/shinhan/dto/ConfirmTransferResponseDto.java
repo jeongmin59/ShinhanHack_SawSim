@@ -1,10 +1,10 @@
-package com.example.backend.domain.account.dto;
+package com.example.backend.domain.shinhan.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class CheckDepositAccountResponseDto {
+public class ConfirmTransferResponseDto {
     private DataHeader dataHeader;
     private DataBody dataBody;
 
@@ -22,7 +22,5 @@ public class CheckDepositAccountResponseDto {
         private String depositBankCode;
         @JsonProperty("입금계좌번호")
         private String depositAccountNumber;
-        @JsonProperty("입금계좌성명")
-        private String depositAccountName;
     }
 }

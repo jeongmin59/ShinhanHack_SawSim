@@ -85,18 +85,4 @@ public class AccountController {
                 .dataBody(userNumberResponseDto)
                 .build();
     }
-
-    @PostMapping("/v1/search/name")
-    public CheckDepositAccountResponseDto checkDepositAccount(@RequestBody CheckDepositAccountRequestDto checkDepositAccountRequestDto){
-        return accountService.checkDepositAccount(checkDepositAccountRequestDto);
-    }
-
-
-    /**
-     * 1원 이체 확인
-     */
-    @PostMapping("/v1/auth/1transfer")
-    public ConfirmTransferResponseDto confirmTransfer(@RequestBody ConfirmTransferRequestDto confirmTransferRequestDto){
-        return accountService.confirmTransfer(confirmTransferRequestDto);
-    }
 }
