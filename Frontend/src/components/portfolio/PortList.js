@@ -54,7 +54,7 @@ const PortList = () => {
     search: `?planId=${item.id}`
   }}  className={styles.link} >       
                   <div className={styles.test_obj}>
-                    <p className={styles.objText}>{formatDate(item.startDate)} -<br />{formatDate(item.endDate)}</p>
+                    <p className={styles.objText}>{formatDate(item.startDate)} <br />-<br />{formatDate(item.endDate)}</p>
                     <img className={styles.plane} src={paperplane} alt="emoji" />
                   </div>
                 </Link>   

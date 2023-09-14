@@ -16,7 +16,6 @@ const Analysis = () => {
   // setData한다
   // 분석을 완료한다
 
-  
 
   const getPortDetail = async () => {
     try {

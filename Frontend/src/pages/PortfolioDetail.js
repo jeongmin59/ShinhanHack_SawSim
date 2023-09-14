@@ -17,7 +17,7 @@ const PortfolioDetail = () => {
           <CloseOutlined style={{fontSize: '1.3rem', marginRight: '1.3rem', marginTop: '1.5rem'}} />
         </Link>
       </div>
-      <Analysis/><br/><br/><br/>
+      <Analysis/><br/><br/>
       <Map/>
     </div>
   )

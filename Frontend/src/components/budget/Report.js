@@ -27,6 +27,10 @@ const Report = () => {
   // const data = useLocation().state?.userNumber;
   const data = localStorage.getItem('userNumber');
   const name = localStorage.getItem('userName');
+  const [dimensions, setDimensions] = useState({
+    width: window.innerWidth,
+    height: 200
+  });
 
   const [day, setDay] = useState("")
   const [totalBudget, setTotalBudget] = useState("")
@@ -71,6 +75,19 @@ const Report = () => {
     console.log(data)
     console.log(getFormattedDate())
     analyzeBudget()
+
+    function handleResize() {
+      setDimensions({
+        width: window.innerWidth,
+        height: 200
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [data]);
 
 
@@ -94,11 +111,11 @@ const Report = () => {
       <p style={{marginBottom:0}}>전체 예산</p>
     </div>
 
-    <PieChart width={350} height={200}>
+    <PieChart width={dimensions.width} height={200}>
         <Pie
           startAngle={-270}
           data={graphData}
-          cx={90}
+          cx={dimensions.width / 4}
           cy={90}
           innerRadius={50}
           outerRadius={80}
@@ -114,7 +131,7 @@ const Report = () => {
         <Pie
           startAngle={-270}
           data={allData}
-          cx={260}
+          cx={dimensions.width / 4 * 2.9}
           cy={90}
           innerRadius={50}
           outerRadius={80}
