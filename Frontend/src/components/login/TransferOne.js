@@ -59,7 +59,7 @@ const TransferOne = () => {
           입금통장메모: randomNumber
         },
       };
-      const response = await axios.post("https://shbhack.shinhan.com/v1/auth/1transfer", requestData);
+      const response = await axios.post("https://sawsim.site/api/v1/auth/1transfer", requestData);
       console.log(response.data)
     } catch (error) {
       console.error(error);
@@ -94,7 +94,7 @@ const TransferOne = () => {
           입금계좌번호: account,
         },
       };
-      const response = await axios.post("https://shbhack.shinhan.com/v1/search/name", requestData);
+      const response = await axios.post("https://sawsim.site/api/v1/search/name", requestData);
       console.log(response.data)
       // console.log(response.data.dataBody.입금계좌성명);
       // console.log(name)

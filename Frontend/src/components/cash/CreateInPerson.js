@@ -109,7 +109,7 @@ const handleSubmit= () => {
         }
       };
       
-      const response = await axios.post("/api2/transactions", requestData, { headers: { "User-Number": data } });
+      const response = await axios.post("https://sawsim.site/api/transactions", requestData, { headers: { "User-Number": data } });
       console.log(response.data)
       if (response.data.dataHeader.successCode === '0') {
         window.alert('등록이 완료되었습니다')
