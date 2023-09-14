@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS")
-                .allowedHeaders("User-Content", "Content-Type")
+                .allowedHeaders("*")
                 .exposedHeaders("Content-Type") // 서버가 클라이언트로 보내고, 브라우저가 접근 가능하게 할 response 헤더를 설정
                 .allowCredentials(true)
                 .maxAge(3600); // preflight request를 3600초동안 캐시하도록 설정

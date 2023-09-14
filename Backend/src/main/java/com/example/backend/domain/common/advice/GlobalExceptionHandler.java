@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
     public BasicResponse<Void> ExceptionHandler(UserNotFoundException e) {
         return BasicResponse.<Void>builder()
                 .dataHeader(BasicResponse.DataHeader.builder()
+                        .successCode("1")
                         .resultCode(HttpStatus.NOT_FOUND)
                         .resultMessage(e.getMessage()).build())
                 .build();
@@ -24,6 +25,7 @@ public class GlobalExceptionHandler {
     public BasicResponse<Void> ExceptionHandler(CertificationCodeNotMatchedException e) {
         return BasicResponse.<Void>builder()
                 .dataHeader(BasicResponse.DataHeader.builder()
+                        .successCode("1")
                         .resultCode(HttpStatus.BAD_REQUEST)
                         .resultMessage(e.getMessage()).build())
                 .build();
@@ -33,6 +35,7 @@ public class GlobalExceptionHandler {
     public BasicResponse<Void> ExceptionHandler(ResourceNotFoundException e) {
         return BasicResponse.<Void>builder()
                 .dataHeader(BasicResponse.DataHeader.builder()
+                        .successCode("1")
                         .resultCode(HttpStatus.NOT_FOUND)
                         .resultMessage(e.getMessage()).build())
                 .build();

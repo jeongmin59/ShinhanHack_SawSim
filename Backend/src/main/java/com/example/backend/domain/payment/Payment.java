@@ -17,7 +17,7 @@ import java.time.LocalTime;
 public class Payment extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PAYMENT_ID")
     private Long id;
 

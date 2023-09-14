@@ -71,8 +71,8 @@ public class AccountController {
 
     @Operation(summary = "회원 번호 조회", description = "등록했던 여행 계좌로 회원 번호 조회")
     @GetMapping("/user-number")
-    public BasicResponse<UserNumberResponseDto> getAccount(@RequestBody UserNumberRequestDto userNumberRequestDto) {
-        Account account = accountRepository.findAccountByNumber(userNumberRequestDto.getDataBody().getAccountNumber())
+    public BasicResponse<UserNumberResponseDto> getUserNumber(@RequestParam String accountNumber) {
+        Account account = accountRepository.findAccountByNumber(accountNumber)
                 .orElseThrow(UserNotFoundException::new);
 
         UserNumberResponseDto userNumberResponseDto = UserNumberResponseDto.builder()
