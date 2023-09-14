@@ -1,5 +1,6 @@
 package com.example.backend.domain.budget.entity;
 
+import com.example.backend.domain.common.BaseEntity;
 import com.example.backend.domain.plan.entity.Plan;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @Entity
 @Table(name = "BUDGET")
-public class Budget {
+public class Budget extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

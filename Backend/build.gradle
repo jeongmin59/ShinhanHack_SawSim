@@ -38,6 +38,11 @@ dependencies {
 
     // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
+    // postgresql
+    implementation 'org.postgresql:postgresql'
+    // 공간 쿼리를 위한 point 타입
+    implementation 'org.locationtech.jts:jts-core:1.18.1'
+    implementation 'org.hibernate:hibernate-spatial'
 
     //webflux
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'

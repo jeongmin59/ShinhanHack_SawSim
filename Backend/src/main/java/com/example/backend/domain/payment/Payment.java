@@ -28,6 +28,8 @@ public class Payment extends BaseEntity {
     private LocalDate transactionDate;
     @DateTimeFormat(pattern = "HHmmss")
     private LocalTime transactionTime;
+
+    @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
     @ManyToOne(fetch = FetchType.LAZY)
