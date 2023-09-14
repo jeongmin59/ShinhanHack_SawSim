@@ -27,6 +27,7 @@ public class PopularScheduler {
     private final PortfolioService portfolioService;
     private final PopularRepository popularRepository;
 
+//    @Scheduled(cron = "0 * * * * *")
     @Scheduled(cron = "1 0 0 * * *")
     public void savePopularCount() {
         // 1. redis에서 결제내역 아이디 가져오기
@@ -50,6 +51,8 @@ public class PopularScheduler {
                             },
                             () -> {
                                 KakaoPlaceSearchResponseDto.Document document = portfolioService.findLocation(payment.getStoreName()).block().getDocuments().get(0);
+                                System.out.println("document.getX() = " + document.getX());
+                                System.out.println("document.getY() = " + document.getY());
                                 GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
                                 Coordinate coordinate = new Coordinate(document.getX(), document.getY());
                                 Point point = geometryFactory.createPoint(coordinate);
