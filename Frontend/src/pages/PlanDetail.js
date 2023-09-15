@@ -19,20 +19,10 @@ const PlanDetail = () => {
       <Link
         to="/main"
       >
-        <Button
-          onClick={success}
-          size="small"
-          style={{
-            height: '2rem',
-            marginTop: '3rem',
-            width: '4rem',
-            backgroundColor: '#316FDF',
-            fontFamily: "preRg",
-          }}
-          type="primary"
-        >
-          완료
-        </Button>
+      <Button 
+        style={{margin:"1.5rem 0", height: '3rem', width: '90%', backgroundColor:'#316FDF', fontFamily:"preRg"}} 
+        size="large" 
+        type="primary">확인</Button>
       </Link>      
       </div>
     </div>
