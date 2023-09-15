@@ -178,10 +178,23 @@ const BalanceSchedule = () => {
                   className={styles.startTrip}
                   type="primary"
                   onClick={finishTrip}>여행 종료하기</Button>
+            ) : getToday() < plan.startDate ? (
+                <Link to={{
+                  pathname: '/budget',
+                  search: `?planId=${planId}`
+                }} >
+                <Button 
+                  size="large" 
+                  style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
+                  className={styles.startTrip}
+                  type="primary" disabled>여행 시작하기</Button></Link>
             ) : getToday() > plan.endDate ? (
                 finishTrip()
             ) : (
-                <Link to='/budget'>
+                <Link to={{
+                  pathname: '/budget',
+                  search: `?planId=${planId}`
+                }} >
                 <Button 
                   size="large" 
                   style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
