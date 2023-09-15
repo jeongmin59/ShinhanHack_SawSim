@@ -68,7 +68,7 @@ function SelectedDate() {
       ) : (
         <div className={styles.noPort}>
           <img className={styles.sad} src={sad} alt="sad"/>
-          <p className={styles.sadMent}>일정을 선택해주세요.</p>
+          <p className={styles.sadMent}>일정을 선택해주세요</p>
         </div>
       )}
     </div>
