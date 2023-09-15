@@ -5,20 +5,7 @@ import styles from "./Report.module.css";
 import axios from "axios";
 import { Button } from 'antd';
 
-const graphData = [
-  { name: '전체', value: 100 },
-  { name: '여행', value: 10 },
-  { name: '스포츠,레저', value: 15 },
-  { name: '의료,건강', value: 20 },
-  { name: '기타', value: 27 },
-  { name: '교통,수송', value: 30 },
-  { name: '음식점', value: 40 },
-];
 
-const allData = [
-  { name: '전체', value: 100 },
-  { name: '오늘', value: 27 },
-];
 
 const COLORS = ['#ededed','#C1D9F5', '#BBDEFA', '#74AADB', '#6197F4', '#327CDC', '#134DE0'];
 const COLORS2 = ['#ededed','#EDB4C6']
@@ -27,14 +14,24 @@ const Report = () => {
   // const data = useLocation().state?.userNumber;
   const data = localStorage.getItem('userNumber');
   const name = localStorage.getItem('userName');
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search);
+  const planId = searchParams.get('planId');
   const [dimensions, setDimensions] = useState({
     width: window.innerWidth,
     height: 200
   });
 
-  const [day, setDay] = useState("")
-  const [totalBudget, setTotalBudget] = useState("")
-  const [amount, setAmount] = useState("")
+  const [day, setDay] = useState(0)
+  const [totalBudget, setTotalBudget] = useState(0)
+  const [amountUsed, setAmountUsed] = useState(0)
+  const [food, setFood] = useState(0)
+  const [transport, setTransport] = useState(0)
+  const [sport, setSport] = useState(0)
+  const [trip, setTrip] = useState(0)
+  const [medical, setMedical] = useState(0)
+  const [etc, setEtc] = useState(0)
+  const [loading, setLoading] = useState(true);
 
   // 오늘 날짜
   function getFormattedDate() {
@@ -46,8 +43,6 @@ const Report = () => {
     const formattedDate = `${year}${month}${day}`;
     return formattedDate;
   }
-  
-  const plan_id = 72
 
   // 일자별 여행비 분석
   const analyzeBudget = async () => {
@@ -57,19 +52,55 @@ const Report = () => {
           "todayDate" : getFormattedDate(),
         }
       };
-      const response = await axios.post(`https://sawsim.site/api/analyze/${plan_id}`, requestData, { headers: { "User-Number": data } });
-      console.log(response.data)
-      console.log(response.data.dataBody.day) // 여행 몇일차
-      setDay()
-      console.log(response.data.dataBody.totalBudget) // 전체에서 사용 비율
-      setTotalBudget()
-      console.log(response.data.dataBody.amountUsed) // 사용한 총액
-      setAmount()
-      console.log(response.data.dataBody.category) // 사용한 카테고리별 비율
+      const response = await axios.post(`https://sawsim.site/api/analyze/${planId}`, requestData, { headers: { "User-Number": data } });
+      console.log(response.data.dataBody)
+      const dataBody = response.data.dataBody
+      console.log(dataBody.dataBody.day) // 여행 몇일차
+      setDay(dataBody.dataBody.day)
+      console.log(dataBody.dataBody.totalBudget) // 전체에서 사용 비율
+      setTotalBudget(dataBody.dataBody.totalBudget)
+      console.log(dataBody.dataBody.amountUsed) // 사용한 총액
+      setAmountUsed(dataBody.dataBody.amountUsed)
+      setFood(dataBody.dataBody[3])
+      setTransport(dataBody.dataBody[4])
+      setSport(dataBody.dataBody[5])
+      setTrip(dataBody.dataBody[6])
+      setMedical(dataBody.dataBody[7])
+      setEtc(dataBody.dataBody[8])
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
   }
+
+  const graphData = [
+    { name: '전체', value: 100 },
+    { name: '여행', value: trip },
+    { name: '스포츠,레저', value: sport },
+    { name: '의료,건강', value: medical },
+    { name: '기타', value: etc },
+    { name: '교통,수송', value: transport },
+    { name: '음식점', value: food },
+  ];
+
+  // const sortedGraphData = graphData.sort((a, b) => a.value - b.value);
+
+  // '전체' 항목을 제외한 새로운 배열 생성
+  const graphDataWithoutTotal = graphData.filter(item => item.name !== '전체');
+
+  // 새로운 배열 정렬
+  const sortedGraphDataWithoutTotal = graphDataWithoutTotal.sort((a, b) => a.value - b.value);
+
+  // '전체' 항목 찾기
+  const totalItem = graphData.find(item => item.name === '전체');
+
+  // 정렬된 배열의 맨 앞에 '전체' 항목 추가
+  sortedGraphDataWithoutTotal.unshift(totalItem);
+
+  const allData = [
+    { name: '전체', value: 100 - totalBudget },
+    { name: '오늘', value: totalBudget },
+  ];
 
   useEffect(() => {
     console.log(data)
@@ -90,7 +121,9 @@ const Report = () => {
     };
   }, [data]);
 
-
+  if (loading) { // 만약 loading 중이라면,
+    return <div>Loading...</div>; // 혹은 다른 로딩 화면 컴포넌트
+  } else {
   return (
   <div>
     <div className={styles.titles}>
@@ -99,11 +132,8 @@ const Report = () => {
     </div>
     <br/>
     <div className={styles.calendarDiv}>
-      {/* <p className={styles.ment}>{name}님의 여행 {day}일차</p> */}
-      <p className={styles.ment}>{name}님의 <span className={styles.day}>여행 3일차</span></p>
-      {/* <p className={styles.ment}>오늘 예산의 {totalBudget}%인 {amount}원을 사용했습니다.</p> */}
-      <p className={styles.ment}>오늘 예산의 <span className={styles.money1}>75%</span>인 <span className={styles.money}>340,120원</span>을 사용했어요.</p>
-      
+      <p className={styles.ment}>{name}님의 <span className={styles.day}>여행 {day}일차</span></p>
+      <p className={styles.ment}>오늘 예산의 <span className={styles.money1}>{totalBudget}%</span>인 <span className={styles.money}>{amountUsed}원</span>을 사용했어요.</p>   
     </div>
 
     <div style={{display:'flex',justifyContent:'space-around', padding:'0 0.5rem'}}>
@@ -114,7 +144,7 @@ const Report = () => {
     <PieChart width={dimensions.width} height={200}>
         <Pie
           startAngle={-270}
-          data={graphData}
+          data={sortedGraphDataWithoutTotal}
           cx={dimensions.width / 4}
           cy={90}
           innerRadius={50}
@@ -123,7 +153,7 @@ const Report = () => {
           paddingAngle={0}
           dataKey="value"
         >
-          {graphData.map((entry, index) => (
+          {sortedGraphDataWithoutTotal.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
@@ -152,6 +182,6 @@ const Report = () => {
       <Link to="/transaction"><Button style={{paddingTop:'0.3rem',color:'#316FDF', border:'1px solid #316FDF', fontFamily:"preBd"}}>내역 상세보기</Button></Link>
   </div>
   );
-};
+};}
 
 export default Report;
