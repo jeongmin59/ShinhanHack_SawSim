@@ -76,10 +76,6 @@ const CalendarModal = ({ onDateSelected }) => {
   
         console.log('새로운 계획 추가 성공', addPlanResponse.data);
       }
-  
-      // localStorage.setItem('startDate', formattedStartDate);
-      // localStorage.setItem('endDate', formattedEndDate);
-  
     } catch (error) {
       console.error('에러:', error);
     } finally {
@@ -105,9 +101,12 @@ const CalendarModal = ({ onDateSelected }) => {
       onClick={showModal}
       style={{height: '2rem', 
         width: '25%', 
-        backgroundColor:'#316FDF', 
-        // marginTop: '3rem',
-        fontFamily:"preRg"}} 
+        backgroundColor:'white', 
+        marginTop: '2rem',
+        // fontFamily:"preRg",
+        color:'#316FDF', border:'1px solid #316FDF', 
+        fontFamily:'preBd', fontSize: '1rem'
+      }} 
       size="middle"
       >
         일정 선택
@@ -120,7 +119,7 @@ const CalendarModal = ({ onDateSelected }) => {
         onCancel={handleCancel}
         width={290}
         style={{height: '2.5rem', width: '30%', 
-        backgroundColor:'#316FDF', fontFamily:"preRg"}} 
+          backgroundColor:'#316FDF', fontFamily:"preRg"}} 
         size="large"
         okText="확인"
         cancelText="취소" 
