@@ -54,7 +54,7 @@ public class BudgetScheduler {
         }
     }
 
-    @Scheduled(cron = "59 29/59 * * * *")
+    @Scheduled(cron = "59 */10 * * * *")
     public void callAccountHistoryApi() {
         LocalDate today = LocalDate.now();
 

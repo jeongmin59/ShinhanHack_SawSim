@@ -13,11 +13,12 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
         format_sql: true
+        dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
 
   logging.level:
     org.hibernate.SQL: debug

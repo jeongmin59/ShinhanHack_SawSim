@@ -1,6 +1,7 @@
 package com.example.backend.domain.popular.entity;
 
 import com.example.backend.domain.common.BaseEntity;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Popular extends BaseEntity {
     @Id
@@ -22,7 +23,7 @@ public class Popular extends BaseEntity {
     private String thumbnail;
     private String category;
     @Column(columnDefinition = "geometry(Point,4326)")
-    private Point location;
+    private Point locations;
     private Integer count;
 
     public void addCount() {
@@ -34,7 +35,7 @@ public class Popular extends BaseEntity {
         popular.storeName = storeName;
         popular.thumbnail = "";
         popular.category = category;
-        popular.location = location;
+        popular.locations = location;
         popular.count = 1;
 
         return popular;

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,7 @@ public class PopularScheduler {
     private final PortfolioService portfolioService;
     private final PopularRepository popularRepository;
 
+//    @Scheduled(cron = "0 * * * * *")
     @Scheduled(cron = "1 0 0 * * *")
     public void savePopularCount() {
         // 1. redis에서 결제내역 아이디 가져오기
@@ -43,13 +45,18 @@ public class PopularScheduler {
         for (Payment payment : payments) {
             popularRepository.findByStoreName(payment.getStoreName())
                     .ifPresentOrElse(
-                            Popular::addCount,
+                            popular -> {
+                                popular.addCount();
+                                popularRepository.save(popular);
+                            },
                             () -> {
                                 KakaoPlaceSearchResponseDto.Document document = portfolioService.findLocation(payment.getStoreName()).block().getDocuments().get(0);
-                                GeometryFactory geometryFactory = new GeometryFactory();
+                                System.out.println("document.getX() = " + document.getX());
+                                System.out.println("document.getY() = " + document.getY());
+                                GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
                                 Coordinate coordinate = new Coordinate(document.getX(), document.getY());
                                 Point point = geometryFactory.createPoint(coordinate);
-                                String categoryName = document.getCategory_name();
+                                String categoryName = document.getCategory_name().split(">")[0].trim();
                                 if (!category.contains(categoryName)) categoryName = "기타";
                                 popularRepository.save(Popular.toEntity(payment.getStoreName(), categoryName, point));
                             }
