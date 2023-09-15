@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { Button, message } from 'antd';
 
 const PlanDetail = () => {
-  // const [messageApi, contextHolder] = message.useMessage();
   const success = () => {
     message.success('예산이 저장되었습니다.');
   }

@@ -8,4 +8,30 @@
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   background-color: white;
+  font-size: 1.1rem;
+}
+
+.sad {
+  width: 150px;
+}
+
+.sadMent {
+  color: grey;
+  /* font-style: italic; */
+  font-size: 1.1rem;
+}
+
+.noPort {
+  /* margin: 0 auto; */
+  align-items: center;
+  padding-top: 10%
+}
+
+.planDateTitle {
+  /* margin-bottom: 0; */
+  margin-top: 2rem;
+  font-size: 1.4rem;
+  /* text-align: start; */
+  /* padding-left: 1.5rem; */
+  font-weight: bolder;
 }
