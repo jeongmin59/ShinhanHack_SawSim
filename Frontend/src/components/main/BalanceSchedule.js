@@ -20,6 +20,12 @@ import { CalendarOutlined, QuestionCircleOutlined } from '@ant-design/icons';
   // -> 여행 포트폴리오 버튼으로 변경 & 예산 상세보기 버튼은 '즐거운 여행 되셨나요?' 등의 문구로 변경
   // 1) 다른 여행 일정을 잡고싶다면? > 포트폴리오 페이지에 여행 끝마치기 하면서 기존 여행 일정 초기화?
   // 2) 여행 등록하러 GO는 그대로 두고 밑에 예산 상세보기를 포트폴리오 보기로 변경
+  // ------------------------------- 여행 종료 분기
+  // 15. 만약 조회되는 여행 일정이 있고, endDate가 오늘 날짜와 같다면
+  // 16. 여행 시작하기 버튼 -> 여행 종료하기 버튼 (여행 종료 및 포폴 등록 api 쏘는 함수 등록)
+  // 17. 만약 오늘날짜가 endDate를 지났다면(더 크다면)
+  // 18. 자동으로 여행 종료 (api 호출 함수 실행)
+  // 19. 일정 조회가 안되기때문에 여행 등록하러 GO로 바뀌어야 정상
 
 const BalanceSchedule = () => {
   // const location = useLocation()
@@ -29,7 +35,7 @@ const BalanceSchedule = () => {
   const [name, setName] = useState('')
   const [balance, setBalance] = useState('')
   const [plan, setPlan] = useState([])
-  const [planId, setPlanId] = useState([])
+  const [planId, setPlanId] = useState('')
 
   // 잔액 콤마 표시
   function formatBalance(balance) {
@@ -96,6 +102,27 @@ const BalanceSchedule = () => {
     }
   }
 
+  // 15~ 오늘 날짜 겟
+  const getToday = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ("0" + (today.getMonth() + 1)).slice(-2);
+    const day = ("0" + today.getDate()).slice(-2);
+    
+    return `${year}-${month}-${day}`;
+  }
+
+  // 18. 자동으로 여행 종료 (api 호출 함수 실행)
+  const finishTrip = async () => {
+    try {
+      const response = await axios.get(`https://sawsim.site/api/portfolio/${planId}`, { headers: { "User-Number": data } });
+      console.log('여행종료',response.data)
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     checkAccount();
     console.log(localStorage.getItem('userNumber'))
@@ -109,6 +136,12 @@ const BalanceSchedule = () => {
  useEffect(() => {
   console.log('플랜', plan);
 }, [plan]);
+
+  useEffect(() => {
+    if (getToday() > plan.endDate) {
+      finishTrip();
+    }
+  }, [plan]);
 
   return (
     <div className={styles.div}>
@@ -136,15 +169,27 @@ const BalanceSchedule = () => {
               type="primary">여행 등록하러 GO</Button></Link>
           </>
         ) : (
+          // 현재날짜와 plan.endDate 비교해서 분기처리
           <>
-            <Link to='/budget'>
-            <Button 
-              size="large" 
-              style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
-              className={styles.startTrip}
-              type="primary">여행 시작하기</Button></Link>
+            {getToday() === plan.endDate ? (
+                <Button 
+                  size="large" 
+                  style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
+                  className={styles.startTrip}
+                  type="primary"
+                  onClick={finishTrip}>여행 종료하기</Button>
+            ) : getToday() > plan.endDate ? (
+                finishTrip()
+            ) : (
+                <Link to='/budget'>
+                <Button 
+                  size="large" 
+                  style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
+                  className={styles.startTrip}
+                  type="primary">여행 시작하기</Button></Link>
+            )}
           </>
-        )}
+      )}
 
       </div>
       <div className={styles.scheduleNIcon}>
@@ -157,7 +202,7 @@ const BalanceSchedule = () => {
         {Array.isArray(plan) && plan.length === 0 ? (
           <>
             <p className={styles.noSchedule1}>등록된 여행 일정이 없습니다</p>
-            <p className={styles.noSchedule2}>등록하기를 눌러 일정을 등록해주세요</p>
+            <p className={styles.noSchedule2}>쏠트립과 함께 새로운 여행을 시작해보세요!</p>
           </>
         ) : (
           <>
@@ -167,9 +212,10 @@ const BalanceSchedule = () => {
             size="medium" 
             style={{ 
               border:'1px solid', 
-              color: 'black',
-              backgroundColor: '#FFFFFF',
-              borderColor:'grey', 
+              color: 'white',
+              background: 'rgba(255, 255, 255, 0.2)',
+              // opacity: 0.4,
+              borderColor:'white', 
               fontWeight: '900', 
               fontFamily:"preBd",
               paddingTop: '0.2rem'}}

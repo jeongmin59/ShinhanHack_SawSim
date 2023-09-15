@@ -66,7 +66,8 @@
   border-radius: 0.5rem;
   background-blend-mode: multiply;
   background-color: rgba(255, 255, 255, 1);
-  background-image: url('./trip1.png');
+  /* background-image: url('./trip1.png'); */
+  background-image: url('../../assets/sea.gif');
   background-size: cover;
   box-shadow: 4px 4px 20px rgb(236, 236, 236), -4px -4px 20px rgb(236, 236, 236);
   width: 90%;
@@ -75,6 +76,7 @@
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
   position: relative;
+  
 }
 
 .scheduleDiv::before{
@@ -96,10 +98,10 @@
   margin-bottom: 0.5rem;
   /* text-shadow: -1px 0px rgb(255, 255, 255), 0px 1px rgb(255, 255, 255), 1px 0px rgb(255, 255, 255), 0px -1px rgb(255, 255, 255); */
   position: relative;
-  background: linear-gradient(to top, #ffffff 50%, transparent 50%);
+  /* background: linear-gradient(to top, #ffffff 50%, transparent 50%); */
   width: 63vw;
   margin: 0 auto 0.5rem auto;
-
+  /* color: white; */
 }
 
 .scheduleNIcon {
@@ -108,23 +110,23 @@
 }
 .noSchedule1 {
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 700;
   margin-top: 0;
   margin-bottom: 0.5rem;
   position: relative;
+  color:rgb(85, 85, 85);
   /* background: linear-gradient(to top, #96b2e5 50%, transparent 50%); */
-  background: linear-gradient(to top, #ffffff 50%, transparent 50%);
-  
+  /* background: linear-gradient(to top, #ffffff 50%, transparent 50%); */
   width: 55vw;
   margin: 0 auto 0.5rem auto;
 }
 .noSchedule2 {
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 700;
   margin-top: 0;
   margin-bottom: 0.5rem;
   position: relative;
-  background: linear-gradient(to top, #ffffff 50%, transparent 50%);
+  /* background: linear-gradient(to top, #ffffff 50%, transparent 50%); */
   width: 70vw;
   margin: 0 auto;
 }
