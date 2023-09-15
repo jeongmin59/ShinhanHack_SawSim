@@ -7,6 +7,7 @@ import com.example.backend.domain.analyze.dto.AnalyzeRequestDto;
 import com.example.backend.domain.analyze.dto.AnalyzeResponseDto;
 import com.example.backend.domain.budget.entity.Budget;
 import com.example.backend.domain.budget.repository.BudgetRepository;
+import com.example.backend.domain.common.exception.ResourceNotFoundException;
 import com.example.backend.domain.payment.Payment;
 import com.example.backend.domain.payment.repository.PaymentRepository;
 import com.example.backend.domain.plan.entity.Plan;
@@ -47,11 +48,6 @@ public class AnalyzeService {
      * 4. 마지막 오늘 일차일 경우 오늘 총 사용 금액과 예산 비율을 계산해준다.
      */
     public AnalyzeResponseDto analyzeGet(AnalyzeRequestDto analyzeRequestDto, String userNumber, Long planId) {
-
-        /**
-         * 신한이 아닌 payment 테이블을 탐색한다.
-         */
-        // 카테고리 갯수
         Map<String, Integer> category = new HashMap<>();
 
         category.put("음식점", 0);
@@ -66,7 +62,7 @@ public class AnalyzeService {
         int total_cost = 0; // 전체 예산 값
 
         // 2. plan id를 통해서 해당 여행 시작 일자를 구한다.
-        Plan plan = planRepository.findById(planId).orElseThrow(() -> new NullPointerException());
+        Plan plan = planRepository.findById(planId).orElseThrow(() -> new ResourceNotFoundException("Plan", planId));
 
         //시작 날짜와 오늘 날짜 차이 구함
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -79,11 +75,11 @@ public class AnalyzeService {
         List<Payment> paymentList = paymentRepository.findByAccountId(account.getId());
 
         for (int i = 0; i <= day; i++) {
-            amountUsed=0; //마지막 날만 저장
+            amountUsed = 0; //마지막 날만 저장
             // payment 결제 내역으로 상호명 검색
             for (Payment payment : paymentList) {
                 // 결제 날짜가 같고 해당 결제가 지출인 경우
-                if(payment.getTransactionDate().equals(plan.getStartDate().plusDays(i))){
+                if (payment.getTransactionDate().equals(plan.getStartDate().plusDays(i))) {
                     // 거래내역조회 내용(상호명) 카카오 api로 정보 찾기
                     Mono<KakaoPlaceSearchResponseDto> location = portfolioService.findLocation(payment.getStoreName());
                     KakaoPlaceSearchResponseDto responseDto = location.block(); // Mono의 결과를 동기적으로 가져옴
@@ -106,11 +102,11 @@ public class AnalyzeService {
 
             }
 
-            List<Budget> budgets = budgetRepository.findAllByPlanAndTravelDate(plan,plan.getStartDate().plusDays(i));
+            List<Budget> budgets = budgetRepository.findAllByPlanAndTravelDate(plan, plan.getStartDate().plusDays(i));
             // 오늘 일차 예상 예산 총 값 구히기(비율 구할 때 사용)
 
             //마지막 값만 저장
-            budget_cost=0;
+            budget_cost = 0;
 
             for (Budget budget : budgets) {
                 budget_cost += budget.getAmount();
@@ -121,13 +117,13 @@ public class AnalyzeService {
         // 4. 오늘 일차 사용 예산 퍼센트
         long totalBudget = 100L;
 
-        if (budget_cost!=0){
+        if (budget_cost != 0) {
             totalBudget = (amountUsed * 100L) / budget_cost;
         }
 
 
         LocalDate startDate = plan.getStartDate();
-        LocalDate endDate   = LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter);
+        LocalDate endDate = LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter);
 
         // 카테고리 퍼센트 비율 구하기
         AnalyzeResponseDto.DataBody dataBody = AnalyzeResponseDto.DataBody.builder()
@@ -147,41 +143,3 @@ public class AnalyzeService {
                 .build();
     }
 }
-
-
-
-            // 3.
-//            for (ShinhanTransactionRequestDto.DataBody.TransactionHistory transactionHistory : shinhanTransactionRequestDto.getDataBody().getTransactions()) {
-//                // 날짜가 같고 지출 금액이 있으면 카테고리를 찾아서 계산해준다.
-//                if (transactionHistory.getTransactionDate().equals(plan.get().getStartDate().plusDays(i)) && transactionHistory.getWithdrawalAmount() > 0) {
-//                    // 거래내역조회 내용(상호명) 카카오 api로 정보 찾기
-//                    Mono<KakaoPlaceSearchResponseDto> location = portfolioService.findLocation(transactionHistory.getDetail());
-//                    KakaoPlaceSearchResponseDto responseDto = location.block(); // Mono의 결과를 동기적으로 가져옴
-//
-////                    String categoryName = responseDto.getDocuments().get(0).getCategory_name();
-////                    String extractedCategory = categoryName.split(">")[0].trim();
-//
-//                    String extractedCategory = "";
-//                    if (responseDto != null && !responseDto.getDocuments().isEmpty()) {
-//                        String categoryName = responseDto.getDocuments().get(0).getCategory_name();
-//                        extractedCategory = categoryName.split(">")[0].trim();
-//                    }
-//
-//                    if (category.containsKey(extractedCategory)) {
-//                        category.put(extractedCategory, (int) (category.get(extractedCategory) + transactionHistory.getWithdrawalAmount()));
-//                    } else { // 기타 상승
-//                        category.put("기타", (int) (category.get("기타") + transactionHistory.getWithdrawalAmount()));
-//                    }
-//
-//                    //오늘 일차일 경우 총 사용 금액 계산.
-//                    if (LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter)
-//                            .equals(plan.get().getStartDate().plusDays(i))) {
-//                        amountUsed += transactionHistory.getWithdrawalAmount();
-//                    }
-//
-//                }
-//            }
-
-
-
-

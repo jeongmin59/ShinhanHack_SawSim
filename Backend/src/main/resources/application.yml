@@ -1,16 +1,4 @@
 spring:
-  datasource:
-#    url: jdbc:h2:tcp://localhost/~/shinhan
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/test
-#    url: jdbc:mysql://localhost:3306/shinhan?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
-    username: test
-    password: 1234
-
   jpa:
     hibernate:
       ddl-auto: update
