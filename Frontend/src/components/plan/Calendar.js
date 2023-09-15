@@ -26,18 +26,25 @@ const CalendarModal = ({ onDateSelected }) => {
   const handleOk = async () => {
     setConfirmLoading(true);
   
-    const formattedStartDate = startDate.toISOString().split('T')[0];
+    // Increment the start date by one day
+    const nextDayStartDate = new Date(startDate);
+    nextDayStartDate.setDate(nextDayStartDate.getDate() + 1);
+    const formattedStartDate = nextDayStartDate.toISOString().split('T')[0];
+  
     let formattedEndDate = null;
   
     if (endDate !== null) {
-      formattedEndDate = endDate.toISOString().split('T')[0];
+      // Increment the end date by one day
+      const nextDayEndDate = new Date(endDate);
+      nextDayEndDate.setDate(nextDayEndDate.getDate() + 1);
+      formattedEndDate = nextDayEndDate.toISOString().split('T')[0];
     } else {
       formattedEndDate = formattedStartDate;
     }
   
     console.log('변환된 Start Date:', formattedStartDate);
     console.log('변환된 End Date:', formattedEndDate);
-  
+    
     try {
       // 기존 계획을 가져옴
       const existingPlanResponse = await axios.get(`https://sawsim.site/api/plan`, {
