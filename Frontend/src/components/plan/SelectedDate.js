@@ -12,6 +12,11 @@ function SelectedDate() {
   const data = localStorage.getItem('userNumber');
   const location = useLocation();
 
+  const formatDate = (date) => {
+    // 날짜 형식이 'yyyymmdd'라고 가정합니다.
+    return `${date.substring(0, 4)}-${date.substring(4, 6)}-${date.substring(6, 8)}`;
+  };
+
   const getDate = async () => {
     try {
       const response = await axios.get("https://sawsim.site/api/plan", {
@@ -21,8 +26,8 @@ function SelectedDate() {
       const dataBody = response.data.dataBody;
       if (dataBody !== null) {
         setPlanId(dataBody.planId)
-        setEndDate(dataBody.endDate)
-        setStartDate(dataBody.startDate)
+        setEndDate(formatDate(dataBody.endDate))
+        setStartDate(formatDate(dataBody.startDate))
       } else {
         setPlanId(null);
       }
