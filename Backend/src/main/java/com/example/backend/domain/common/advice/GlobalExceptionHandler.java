@@ -4,6 +4,7 @@ import com.example.backend.domain.account.exception.CertificationCodeNotMatchedE
 import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.common.BasicResponse;
 import com.example.backend.domain.common.exception.ResourceNotFoundException;
+import com.example.backend.domain.plan.exception.PlanNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -33,6 +34,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = ResourceNotFoundException.class)
     public BasicResponse<Void> ExceptionHandler(ResourceNotFoundException e) {
+        return BasicResponse.<Void>builder()
+                .dataHeader(BasicResponse.DataHeader.builder()
+                        .successCode("1")
+                        .resultCode(HttpStatus.NOT_FOUND)
+                        .resultMessage(e.getMessage()).build())
+                .build();
+    }
+
+    @ExceptionHandler(value = PlanNotFoundException.class)
+    public BasicResponse<Void> ExceptionHandler(PlanNotFoundException e) {
         return BasicResponse.<Void>builder()
                 .dataHeader(BasicResponse.DataHeader.builder()
                         .successCode("1")
