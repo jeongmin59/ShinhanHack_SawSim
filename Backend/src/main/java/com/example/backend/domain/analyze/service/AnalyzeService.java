@@ -122,10 +122,10 @@ public class AnalyzeService {
         }
 
         // 4. 오늘 일차 사용 예산 퍼센트
-        long totalBudget = 100L;
+        double totalBudget = 100.0;
 
         if (budget_cost != 0) {
-            totalBudget = (amountUsed * 100L) / budget_cost;
+            totalBudget = ((double) amountUsed * 100) / (double) budget_cost;
         }
 
 

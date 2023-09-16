@@ -14,7 +14,7 @@ public class AnalyzeResponseDto {
     public static class DataBody {
 
         private Long day;
-        private Long totalBudget;
+        private Double totalBudget;
         private Integer amountUsed;
 
         @JsonProperty("음식점")
