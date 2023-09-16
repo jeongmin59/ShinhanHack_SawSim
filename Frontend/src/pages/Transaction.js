@@ -251,9 +251,9 @@ const Transaction = () => {
       };
       const response = await axios.post("https://sawsim.site/api/transactions", requestData, { headers: { "User-Number": userNumber } });
       console.log(response.data)
-      if (response.data.dataHeader.successCode === '0') {
-        window.alert('새로운 거래내역이 성공적으로 저장되었습니다.')
-      }
+      // if (response.data.dataHeader.successCode === '0') {
+      //   window.alert('새로운 거래내역이 성공적으로 저장되었습니다.')
+      // }
       // 이후, 전체 거래내역을 다시 가져오는 함수 실행
       await getTransactions();
     } catch (error) {
