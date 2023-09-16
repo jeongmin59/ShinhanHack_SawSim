@@ -1,0 +1,12 @@
+::placeholder {
+  font-family: 'preRg';
+}
+
+.input {
+  font-family: 'preRg';
+  padding-bottom: 1rem;
+}
+
+.submit {
+  margin-top: 1rem;
+}

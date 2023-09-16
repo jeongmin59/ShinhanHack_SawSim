@@ -1,0 +1,26 @@
+.title {
+  margin-bottom: 0;
+  margin-top: 1.5rem;
+  font-size: 1.4rem;
+  text-align: start;
+  padding-left: 0.5rem;
+  font-weight: 900;
+  color: black
+}
+
+.toBack {
+  margin-bottom: 0;
+  margin-top: 1rem;
+  font-size: 1.9rem;
+  text-align: start;
+  padding-left: 0.8rem;
+  font-weight: 400;
+  text-decoration: none;
+  color: black
+}
+
+.backLink {
+  text-decoration: none;
+  display: flex;
+  justify-content: start;
+}

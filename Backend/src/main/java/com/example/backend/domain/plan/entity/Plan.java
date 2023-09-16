@@ -4,6 +4,7 @@ import com.example.backend.domain.account.Account;
 import com.example.backend.domain.budget.entity.Budget;
 import com.example.backend.domain.common.BaseEntity;
 import com.example.backend.domain.portfolio.entity.Portfolio;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,5 +39,4 @@ public class Plan extends BaseEntity {
 
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Portfolio> portfolioList;
-
 }

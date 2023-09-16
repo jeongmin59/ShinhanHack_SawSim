@@ -1,0 +1,52 @@
+.popularTitle {
+  margin-bottom: 0;
+  margin-top: 3rem;
+  font-size: 1.4rem;
+  text-align: start;
+  padding-left: 1.5rem;
+  font-weight: 900;
+}
+
+.popularDiv {
+  margin-top: 0.7rem;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 10px rgb(236, 236, 236), -1px -1px 10px rgb(236, 236, 236);
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.scheduleNIcon {
+  display: flex;
+  justify-content: start;
+}
+
+.popularTitles {
+  display: flex;
+  justify-content: space-between;
+}
+
+.more {
+  margin-top: 3.3rem;
+  margin-right: 1.3rem;
+  font-family: 'preRg';
+  font-size: 0.8rem;
+  border: 1px solid grey;
+  border-radius: 2rem;
+  background-color: transparent;
+  color: grey;
+  padding-top: 0.15rem;
+}
+
+.img {
+  width: 30vw;
+  height: 13vh;
+  object-fit: cover;
+  border-radius: 0.4rem
+}
+
+.store {
+  margin-top: 0.5rem;
+}

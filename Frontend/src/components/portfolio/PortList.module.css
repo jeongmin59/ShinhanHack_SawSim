@@ -1,0 +1,88 @@
+.portfolioTitle {
+  margin-bottom: 0;
+  margin-top: 1.5rem;
+  font-size: 1.4rem;
+  text-align: start;
+  padding-left: 0.5rem;
+  font-weight: 900;
+  color: black
+}
+
+.toBack {
+  margin-bottom: 0;
+  margin-top: 1rem;
+  font-size: 1.9rem;
+  text-align: start;
+  padding-left: 0.8rem;
+  font-weight: 400;
+  text-decoration: none;
+  color: black
+}
+
+.backLink {
+  text-decoration: none;
+  display: flex;
+  justify-content: start;
+}
+
+.sad {
+  width: 150px;
+}
+
+.sadMent {
+  color: grey;
+  /* font-style: italic; */
+  font-size: 1.1rem;
+}
+
+.noPort {
+  margin: 0 auto;
+  align-items: center;
+  padding-top: 30%
+}
+
+.test_obj {
+  background: linear-gradient(to right, rgba(0, 0, 0, .3) 3px, rgba(255, 255, 255, 0.5) 5px, rgba(255, 255, 255, 0.25) 7px, rgba(255, 255, 255, 0.25) 10px, transparent 12px, transparent 16px, rgba(255, 255, 255, 0.25) 20px, transparent 22px), url('https://blog.kakaocdn.net/dn/cgWuEd/btrMvs9NVch/k9EJMkfKBzktzFUc1sFgVK/img.jpg');
+  box-shadow: 0 0 5px -1px rgba(0, 0, 0, 1), inset -1px 1px 2px rgba(255, 255, 255, 0.5);
+  border-radius: 5px;
+  width: 42vw;
+  height: 26vh;
+  /* width: 276px;
+  height: 380px; */
+  color: white;
+
+
+}
+
+.hisData {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  float: left;
+  /* margin: 0 0.8rem; */
+  /* padding: 0 0.8rem;*/
+  padding-left: 1.2rem;
+  text-decoration: none;
+
+}
+
+.objText {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  padding-top: 50px;
+  word-wrap: break-word;
+  word-break: break-all;
+  text-decoration: none;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.plane {
+  width: 60px;
+
+}

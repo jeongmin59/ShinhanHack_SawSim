@@ -5,9 +5,60 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* 이게 원래 색*/
+  /* background-color: #FEFEFE; */
+  /* 이게 쏠 메인화면 색*/
+  background-color: #F4F4FA;
+
+  font-family: 'preRg';
+  image-rendering:-webkit-optimize-contrast;
+
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@font-face {
+  font-family: "light";
+  src: url("../public/OneShinhanLight.ttf") format('truetype');
+  font-weight: 100;
+}
+@font-face {
+  font-family: "medium";
+  src: url("../public/OneShinhanMedium.ttf") format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: "bold";
+  src: url("../public/OneShinhanBold.ttf") format('truetype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'lineRg';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Rg.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* pretendard 폰트 */
+@font-face {
+    font-family: 'preLt';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'preRg';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'preBd';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
 }
