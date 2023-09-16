@@ -67,8 +67,9 @@ public class BudgetScheduler {
             List<ShinhanTransactionRequestDto.DataBody.TransactionHistory> transactions = shinhanTransactionRequestDto.getDataBody().getTransactions();
 
             // 처음이면 불러온 값 다 저장
+            List<Payment> payments;
             if (hash.isEmpty()) {
-                List<Payment> payments = shinhanTransactionRequestDto.getDataBody().getTransactions().stream()
+                payments = shinhanTransactionRequestDto.getDataBody().getTransactions().stream()
                         .map(transaction -> Payment.createPayment(
                                 transaction.getDetail(),
                                 transaction.getWithdrawalAmount(),
@@ -90,9 +91,8 @@ public class BudgetScheduler {
                     redisService.setHash(plan.getAccount().getUserNumber(), map);
                 });
 
-                paymentRepository.saveAll(payments);
             } else {
-                List<Payment> payments = new ArrayList<>();
+                payments = new ArrayList<>();
                 String latestDate = hash.get("latestDate").toString();
                 String latestTime = hash.get("latestTime").toString();
                 for (ShinhanTransactionRequestDto.DataBody.TransactionHistory transaction : transactions) {
@@ -109,8 +109,8 @@ public class BudgetScheduler {
                             PaymentType.CARD,
                             plan.getAccount()));
                 }
-                paymentRepository.saveAll(payments);
             }
+            paymentRepository.saveAll(payments);
 
             // 알림을 보낸 적 있으면 보내지 않기
             if (redisService.getValues("todayBudget_" + plan.getAccount().getNumber()).equals("Y")) continue;

@@ -28,7 +28,8 @@ public class PopularScheduler {
     private final PortfolioService portfolioService;
     private final PopularRepository popularRepository;
 
-    @Scheduled(cron = "0 */5 * * * *")
+//    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 * * * * *")
 //    @Scheduled(cron = "1 0 0 * * *")
     public void savePopularCount() {
         // 1. redis에서 결제내역 아이디 가져오기
