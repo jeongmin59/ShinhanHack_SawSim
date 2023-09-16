@@ -2,6 +2,7 @@ package com.example.backend.domain.payment.dto;
 
 
 import com.example.backend.domain.payment.PaymentType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -24,9 +25,9 @@ public class TransactionHistoryRequestDto {
         private Long amount;
         private String storeName;
 
-        @DateTimeFormat(pattern = "yyyyMMdd")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
         private LocalDate transactionDate;
-        @DateTimeFormat(pattern = "HHmmss")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
         private LocalTime transactionTime;
         private PaymentType paymentType;
     }
