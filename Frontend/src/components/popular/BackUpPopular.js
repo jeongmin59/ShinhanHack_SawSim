@@ -5,74 +5,34 @@ import axios from "axios";
 import { Space, Tag } from 'antd';
 
 const { CheckableTag } = Tag;
-const tagsData = ['음식점', '관광지', '스포츠,레저'];
+const tagsData = ['음식점', '관광', '스포츠/레저'];
 
 const PopularSpots = () => {
   const [populars, setPopulars] = useState([]);
   const [selectedTag, setSelectedTag] = useState('음식점');
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLatitude(position.coords.latitude);
-          setLongitude(position.coords.longitude);
-        },
-        (error) => console.error('위치 안 받아짐', error)
-        );
-      } else {
-        console.error('브라우저 지원 에러');
-      }
-    };
-    console.log(latitude)
-    console.log(longitude)
-    
-  // 위치 정보 가져오기
-  useEffect(() => {
-    getLocation();
-  }, []);
-
 
   // 인기장소 조회
   const getPopular = async () => {
     try {
-      let categoryType;
-      if (selectedTag === '음식점') {
-        categoryType = 'RESTAURANT';
-      } else if (selectedTag === '관광지') {
-        categoryType = 'SIGHTS';
-      } else if (selectedTag === '스포츠,레저') {
-        categoryType = 'LEISURE';
-      }
-
-      if (latitude !== null && longitude !== null) {
-        const response = await axios.get(`https://sawsim.site/api/popular/${categoryType}?lon=${longitude}&lat=${latitude}`);
-        console.log(response);
-        console.log(response.data.dataBody);
-        setPopulars(response.data.dataBody);
-      } else {
-        console.error('위도 경도 유효하지 않음');
-      }
+      const response = await axios.get("https://sawsim.site/api/popular");
+      console.log(response)
+      console.log(response.data.dataBody)
+      setPopulars(response.data.dataBody)
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
-  // 위치 정보 가져오기
   useEffect(() => {
-    if (latitude !== null && longitude !== null) {
-      getPopular();
-    }
-  }, [latitude, longitude, selectedTag]);
+    getPopular();
+  }, []);
 
-    const handleChange = (tag, checked) => {
-      if (checked) {
-        console.log('선택한 태그: ', tag);
-        setSelectedTag(tag);
-      }
-    };
+   const handleChange = (tag, checked) => {
+    if (checked) {
+      console.log('선택한 태그: ', tag);
+      setSelectedTag(tag);
+    }
+  };
 
   return (
     <div>
@@ -108,10 +68,10 @@ const PopularSpots = () => {
         
         <div style={{ marginTop: '1rem', display: 'flex', flexWrap: 'wrap' }}>
        {populars.filter(item=>item.category===selectedTag).map((item, index) => (
-         <div className={styles.popularDiv} style={{ width: '50%' }} key={item.popularId}>
+         <div className={styles.popularDiv} style={{ width: '50%' }}>
             <a href={`https://www.google.com/search?q=${item.storeName}&oq=${item.storeName}&aqs=edge..69i57.1023j0j4&sourceid=chrome&ie=UTF-8`} target="_blank" rel="noopener noreferrer">
-            <img loading="lazy" className={styles.img} src={item.thumbnail} alt="img"/></a>
-           <p className={styles.store}>{item.storeName}</p>
+            <img loading="lazy" className={styles.img} src={item.img} alt="img"/></a>
+           <p className={styles.store}>{item.store}</p>
          </div>
        ))}
         </div>  
