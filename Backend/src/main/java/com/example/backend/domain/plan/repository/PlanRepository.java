@@ -14,6 +14,6 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
 
     Optional<Plan> findByAccountAndId(Account account, Long id);
 
-    @Query("select p from Plan p where :today between p.startDate and p.endDate")
+    @Query("select p from Plan p left join fetch p.account where :today between p.startDate and p.endDate")
     List<Plan> findByDate(LocalDate today);
 }
