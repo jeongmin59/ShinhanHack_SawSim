@@ -1,0 +1,26 @@
+.dutchTitle {
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+  font-size: 1.4rem;
+  text-align: start;
+  padding-left: 1.5rem;
+  font-weight: 900;
+}
+
+.dutchTitleNIcon {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tableDiv {
+  margin-top: 0.7rem;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 10px rgb(236, 236, 236), -1px -1px 10px rgb(236, 236, 236);
+  width: 97%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.toBack {
+  margin-top: 1.5rem;
+}

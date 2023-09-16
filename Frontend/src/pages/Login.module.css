@@ -1,0 +1,41 @@
+.body {
+  margin-top: 3rem;
+}
+
+.ment1 {
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+.ment2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.money {
+  width: 13rem;
+  animation: up-down 0.8s linear 0s infinite alternate;
+  margin-top: 0;
+}
+
+.money2 {
+  width: 14rem;
+  animation: up-down 1s linear 0s infinite alternate;
+  margin: 1rem 0;
+}
+
+@keyframes up-down{
+  from{
+    transform: translatey(0px);
+  }
+  to{
+    transform: translatey(-10px);
+  }
+}
+
+.soltrip {
+  color: #316FDF;
+  font-family: 'preBd';
+}
+

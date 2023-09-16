@@ -1,0 +1,137 @@
+.balanceDiv {
+  margin-top: 1.5rem;
+  /* border: 0.5px solid gray; */
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 20px rgb(236, 236, 236), -1px -1px 20px rgb(236, 236, 236);
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.logoNAccount {
+  display: flex;
+  justify-content: start;
+  margin-left: 1rem;
+}
+
+.logo {
+  width: 4rem;
+  height: 4rem;
+}
+
+.yejukNAccount {
+  padding-top: 0.6rem;
+  margin-left: 0.5rem;
+}
+.yejuk {
+  text-align: start;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1.1rem;
+  font-weight: 100;
+}
+.account {
+  text-align: start;
+  margin-top: 0;
+  font-size: 1.3rem;
+  margin-bottom: 0;
+  font-family: 'lineRg';
+}
+
+.balance {
+  font-size: 1.9rem;
+  text-align: start;
+  margin-left: 1.4rem;
+  font-weight: 900;
+  margin-bottom: 0.9rem;
+  margin-top: 0.9rem;
+}
+
+
+.scheduleTitle {
+  margin-bottom: 0;
+  margin-top: 3rem;
+  font-size: 1.4rem;
+  text-align: start;
+  padding-left: 1.5rem;
+  font-weight: 900;
+}
+
+.scheduleDiv {
+  margin-top: 0.7rem;
+  /* border: 0.5px solid gray; */
+  border-radius: 0.5rem;
+  background-blend-mode: multiply;
+  background-color: rgba(255, 255, 255, 1);
+  /* background-image: url('./trip1.png'); */
+  background-image: url('../../assets/sea.gif');
+  background-size: cover;
+  box-shadow: 4px 4px 20px rgb(236, 236, 236), -4px -4px 20px rgb(236, 236, 236);
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  position: relative;
+  
+}
+
+.scheduleDiv::before{
+  content: "";
+  opacity: 0.4;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: #ffffff;
+}
+
+.schedule {
+  /* width: 70%; */
+  font-size: 1.2rem;
+  font-weight: 900;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  /* text-shadow: -1px 0px rgb(255, 255, 255), 0px 1px rgb(255, 255, 255), 1px 0px rgb(255, 255, 255), 0px -1px rgb(255, 255, 255); */
+  position: relative;
+  /* background: linear-gradient(to top, #ffffff 50%, transparent 50%); */
+  width: 63vw;
+  margin: 0 auto 0.5rem auto;
+  /* color: white; */
+}
+
+.scheduleNIcon {
+  display: flex;
+  justify-content: start;
+}
+.noSchedule1 {
+  font-size: 1rem;
+  font-weight: 700;
+  /* margin-top: 0;
+  margin-bottom: 0; */
+  position: relative;
+  color:rgb(83, 83, 83);
+  /* background: linear-gradient(to top, #96b2e5 50%, transparent 50%); */
+  /* background: linear-gradient(to top, #ffffff 50%, transparent 50%); */
+  width: 47vw;
+  margin: 0.3rem auto 0.4rem auto;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.5) 100%, transparent 50%);
+
+}
+.noSchedule2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  position: relative;
+  /* background: linear-gradient(to top, #ffffff 100%, transparent 50%); */
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.5) 100%, transparent 50%);
+
+  width: 70vw;
+  margin: 0 auto 0.3rem auto;
+  color:rgb(85, 85, 85);
+}
