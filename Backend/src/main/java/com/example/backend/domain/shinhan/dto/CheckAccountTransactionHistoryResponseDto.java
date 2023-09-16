@@ -1,5 +1,6 @@
 package com.example.backend.domain.shinhan.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -38,10 +39,10 @@ public class CheckAccountTransactionHistoryResponseDto {
         @Getter
         public static class TransactionHistory {
             @JsonProperty("거래일자")
-            @DateTimeFormat(pattern = "yyyyMMdd")
+            @JsonFormat(pattern = "yyyyMMdd")
             private LocalDate transactionDate;
             @JsonProperty("거래시간")
-            @DateTimeFormat(pattern = "HHmmss")
+            @JsonFormat(pattern = "HHmmss")
             private LocalTime transactionTime;
             @JsonProperty("적요")
             private String briefs;
