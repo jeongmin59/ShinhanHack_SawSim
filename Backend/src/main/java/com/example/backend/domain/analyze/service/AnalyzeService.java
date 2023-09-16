@@ -42,8 +42,8 @@ public class AnalyzeService {
      * 음식점
      * 교통,수송
      * 스포츠,레저
-     * 여행
-     * 의료,건강
+     * 관광지
+     * 숙박
      * 기타
      * 4. 마지막 오늘 일차일 경우 오늘 총 사용 금액과 예산 비율을 계산해준다.
      */
@@ -57,8 +57,9 @@ public class AnalyzeService {
         category.put("숙박", 0);
         category.put("기타", 0);
 
-        int amountUsed = 0; // 오늘 일차 사용 금액
-        int budget_cost = 0; // 오늘 예산 값
+        int dayAmount =0; // 오늘 예산 값
+        int dayAmountUsed = 0; // 오늘 일차 사용 금액
+
         int total_cost = 0; // 전체 예산 값
 
         // 2. plan id를 통해서 해당 여행 시작 일자를 구한다.
@@ -75,7 +76,7 @@ public class AnalyzeService {
         List<Payment> paymentList = paymentRepository.findByAccountId(account.getId());
 
         for (int i = 0; i <= day; i++) {
-            amountUsed = 0; //마지막 날만 저장
+            dayAmountUsed = 0; //마지막 날만 저장
             // payment 결제 내역으로 상호명 검색
             for (Payment payment : paymentList) {
                 // 결제 날짜가 같고 해당 결제가 지출인 경우
@@ -105,7 +106,7 @@ public class AnalyzeService {
                     }
 
                     //오늘 일차일 경우 총 사용 금액 계산.
-                    amountUsed += payment.getAmount();
+                    dayAmountUsed += payment.getAmount();
                 }
             }
 
@@ -113,37 +114,42 @@ public class AnalyzeService {
             // 오늘 일차 예상 예산 총 값 구히기(비율 구할 때 사용)
 
             //마지막 값만 저장
-            budget_cost = 0;
+            dayAmount = 0;
 
             for (Budget budget : budgets) {
-                budget_cost += budget.getAmount();
+                dayAmount += budget.getAmount();
                 total_cost += budget.getAmount();
             }
         }
 
-        // 4. 오늘 일차 사용 예산 퍼센트
-        double totalBudget = 100.0;
+        AnalyzeResponseDto.DataBody.Category dayCategory = AnalyzeResponseDto.DataBody.Category.builder()
+                .meal(((double) category.get("음식점") / dayAmount) * 100.0)
+                .traffic(((double) category.get("교통,수송") / dayAmount) * 100.0)
+                .sports(((double) category.get("스포츠,레저") / dayAmount) * 100.0)
+                .travel(((double) category.get("관광지") / dayAmount) * 100.0)
+                .lodge(((double) category.get("숙박") / dayAmount) * 100.0)
+                .etc(((double) category.get("기타") / dayAmount) * 100.0)
+                .build();
 
-        if (budget_cost != 0) {
-            totalBudget = ((double) amountUsed * 100) / (double) budget_cost;
-        }
-
-
-        LocalDate startDate = plan.getStartDate();
-        LocalDate endDate = LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter);
-
-        // 카테고리 퍼센트 비율 구하기
-        // TODO: 만약 double 이 안되면 long 으로 다시 바꿔주기
-        AnalyzeResponseDto.DataBody dataBody = AnalyzeResponseDto.DataBody.builder()
-                .day(ChronoUnit.DAYS.between(startDate, endDate))
-                .totalBudget(totalBudget)
-                .amountUsed(amountUsed)
+        AnalyzeResponseDto.DataBody.Category totalCategory = AnalyzeResponseDto.DataBody.Category.builder()
                 .meal(((double) category.get("음식점") / total_cost) * 100.0)
                 .traffic(((double) category.get("교통,수송") / total_cost) * 100.0)
                 .sports(((double) category.get("스포츠,레저") / total_cost) * 100.0)
                 .travel(((double) category.get("관광지") / total_cost) * 100.0)
                 .lodge(((double) category.get("숙박") / total_cost) * 100.0)
                 .etc(((double) category.get("기타") / total_cost) * 100.0)
+                .build();
+
+        LocalDate startDate = plan.getStartDate();
+        LocalDate endDate = LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter);
+
+        // 카테고리 퍼센트 비율 구하기
+        AnalyzeResponseDto.DataBody dataBody = AnalyzeResponseDto.DataBody.builder()
+                .day(ChronoUnit.DAYS.between(startDate, endDate)+1) // 뺄셈 하나 더 추가
+                .dayAmount(dayAmount)
+                .dayAmountUsed(dayAmountUsed)
+                .dayCategory(dayCategory)
+                .totalCategory(totalCategory)
                 .build();
 
         return AnalyzeResponseDto.builder()

@@ -14,21 +14,25 @@ public class AnalyzeResponseDto {
     public static class DataBody {
 
         private Long day;
-        private Double totalBudget;
-        private Integer amountUsed;
+        private Integer dayAmount; // 일자별 예산
+        private Integer dayAmountUsed; //일자별 사용액
+        private Category dayCategory; //왼쪽 그래프 일차별 카테고리 분석
+        private Category totalCategory;//오른쪽 그래프 일차별 카테고리 분석
 
-        @JsonProperty("음식점")
-        private Double meal;
-        @JsonProperty("교통,수송")
-        private Double traffic;
-        @JsonProperty("스포츠,레저")
-        private Double sports;
-        @JsonProperty("관광지")
-        private Double travel;
-        @JsonProperty("숙박")
-        private Double lodge;
-        @JsonProperty("기타")
-        private Double etc;
-
+        @Builder(toBuilder = true)
+        public static class Category{
+            @JsonProperty("음식점")
+            private Double meal;
+            @JsonProperty("교통,수송")
+            private Double traffic;
+            @JsonProperty("스포츠,레저")
+            private Double sports;
+            @JsonProperty("관광지")
+            private Double travel;
+            @JsonProperty("숙박")
+            private Double lodge;
+            @JsonProperty("기타")
+            private Double etc;
+        }
     }
 }
