@@ -122,23 +122,23 @@ public class AnalyzeService {
             }
         }
 
-        AnalyzeResponseDto.DataBody.Category dayCategory = AnalyzeResponseDto.DataBody.Category.builder()
-                .meal(((double) category.get("음식점") / dayAmount) * 100.0)
-                .traffic(((double) category.get("교통,수송") / dayAmount) * 100.0)
-                .sports(((double) category.get("스포츠,레저") / dayAmount) * 100.0)
-                .travel(((double) category.get("관광지") / dayAmount) * 100.0)
-                .lodge(((double) category.get("숙박") / dayAmount) * 100.0)
-                .etc(((double) category.get("기타") / dayAmount) * 100.0)
-                .build();
-
-        AnalyzeResponseDto.DataBody.Category totalCategory = AnalyzeResponseDto.DataBody.Category.builder()
-                .meal(((double) category.get("음식점") / total_cost) * 100.0)
-                .traffic(((double) category.get("교통,수송") / total_cost) * 100.0)
-                .sports(((double) category.get("스포츠,레저") / total_cost) * 100.0)
-                .travel(((double) category.get("관광지") / total_cost) * 100.0)
-                .lodge(((double) category.get("숙박") / total_cost) * 100.0)
-                .etc(((double) category.get("기타") / total_cost) * 100.0)
-                .build();
+//        AnalyzeResponseDto.DataBody.Category dayCategory = AnalyzeResponseDto.DataBody.Category.builder()
+//                .meal(((double) category.get("음식점") / dayAmount) * 100.0)
+//                .traffic(((double) category.get("교통,수송") / dayAmount) * 100.0)
+//                .sports(((double) category.get("스포츠,레저") / dayAmount) * 100.0)
+//                .travel(((double) category.get("관광지") / dayAmount) * 100.0)
+//                .lodge(((double) category.get("숙박") / dayAmount) * 100.0)
+//                .etc(((double) category.get("기타") / dayAmount) * 100.0)
+//                .build();
+//
+//        AnalyzeResponseDto.DataBody.Category totalCategory = AnalyzeResponseDto.DataBody.Category.builder()
+//                .meal(((double) category.get("음식점") / total_cost) * 100.0)
+//                .traffic(((double) category.get("교통,수송") / total_cost) * 100.0)
+//                .sports(((double) category.get("스포츠,레저") / total_cost) * 100.0)
+//                .travel(((double) category.get("관광지") / total_cost) * 100.0)
+//                .lodge(((double) category.get("숙박") / total_cost) * 100.0)
+//                .etc(((double) category.get("기타") / total_cost) * 100.0)
+//                .build();
 
         LocalDate startDate = plan.getStartDate();
         LocalDate endDate = LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter);
@@ -148,8 +148,20 @@ public class AnalyzeService {
                 .day(ChronoUnit.DAYS.between(startDate, endDate)+1) // 뺄셈 하나 더 추가
                 .dayAmount(dayAmount)
                 .dayAmountUsed(dayAmountUsed)
-                .dayCategory(dayCategory)
-                .totalCategory(totalCategory)
+                .dayMeal(((double) category.get("음식점") / dayAmount) * 100.0)
+                .dayTraffic(((double) category.get("교통,수송") / dayAmount) * 100.0)
+                .daySports(((double) category.get("스포츠,레저") / dayAmount) * 100.0)
+                .dayTravel(((double) category.get("관광지") / dayAmount) * 100.0)
+                .dayLodge(((double) category.get("숙박") / dayAmount) * 100.0)
+                .dayEtc(((double) category.get("기타") / dayAmount) * 100.0)
+                .meal(((double) category.get("음식점") / total_cost) * 100.0)
+                .traffic(((double) category.get("교통,수송") / total_cost) * 100.0)
+                .sports(((double) category.get("스포츠,레저") / total_cost) * 100.0)
+                .travel(((double) category.get("관광지") / total_cost) * 100.0)
+                .lodge(((double) category.get("숙박") / total_cost) * 100.0)
+                .etc(((double) category.get("기타") / total_cost) * 100.0)
+//                .dayCategory(dayCategory)
+                //.totalCategory(totalCategory)
                 .build();
 
         return AnalyzeResponseDto.builder()
