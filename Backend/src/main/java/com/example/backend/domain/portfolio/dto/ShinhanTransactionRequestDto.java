@@ -54,8 +54,6 @@ public class ShinhanTransactionRequestDto {
             private int locationClassification;
             @JsonProperty("거래점명")
             private String storeName;
-
-
         }
     }
 }

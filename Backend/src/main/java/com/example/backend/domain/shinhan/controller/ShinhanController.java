@@ -41,6 +41,7 @@ public class ShinhanController {
      */
     @PostMapping("/v1/search/transaction")
     public CheckAccountTransactionHistoryResponseDto checkAccountTransactionHistory(@RequestBody CheckAccountTransactionHistoryRequestDto checkAccountTransactionHistoryRequestDto){
+        System.out.println("checkAccountTransactionHistoryRequestDto.getDataBody().getAccount() = " + checkAccountTransactionHistoryRequestDto.getDataBody().getAccount());
         return shinhanService.checkAccountTransactionHistory(checkAccountTransactionHistoryRequestDto);
     }
 }

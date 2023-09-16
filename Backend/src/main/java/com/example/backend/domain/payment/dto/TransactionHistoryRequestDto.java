@@ -25,9 +25,9 @@ public class TransactionHistoryRequestDto {
         private Long amount;
         private String storeName;
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         private LocalDate transactionDate;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
+        @DateTimeFormat(pattern = "HH:mm:ss")
         private LocalTime transactionTime;
         private PaymentType paymentType;
     }

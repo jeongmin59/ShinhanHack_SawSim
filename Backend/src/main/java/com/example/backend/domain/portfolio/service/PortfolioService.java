@@ -23,9 +23,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +40,7 @@ public class PortfolioService {
     private final TransactionRepository transactionRepository;
     private final PaymentRepository paymentRepository;
 
-// 여행 DB 저장
+    // 여행 DB 저장
     public void portfolioSave(String userNumber, Long planId) {
         Account account = accountRepository.findAccountByUserNumber(userNumber)
                 .orElseThrow(UserNotFoundException::new);
@@ -65,7 +65,7 @@ public class PortfolioService {
                         .mapToLong(Payment::getAmount)
                         .sum();
 
-                portfolios.add(Portfolio.createPortfolio(totalBudgetOnTargetDate, totalPaymentOnTargetDate, targetDate,plan));
+                portfolios.add(Portfolio.createPortfolio(totalBudgetOnTargetDate, totalPaymentOnTargetDate, targetDate, plan));
             }
             portfolioRepository.saveAll(portfolios);
         }
@@ -76,22 +76,22 @@ public class PortfolioService {
             //List<TransactionHistory> transactionHistories = transactionRepository.findByTransactionDate(findPortfolio.getTravelDate());
             // 처음 조회라면 저장이 필요하다.
             //if (transactionHistories.isEmpty()) {
-                List<Payment> payments = paymentRepository.findByAccountAndTransactionDate(account, findPortfolio.getTravelDate());
+            List<Payment> payments = paymentRepository.findByAccountAndTransactionDate(account, findPortfolio.getTravelDate());
 
-                List<TransactionHistory> transactionHistoryList = new ArrayList<>();
-                for (Payment payment : payments) {
-                    Mono<KakaoPlaceSearchResponseDto> location = findLocation(payment.getStoreName());
-                    KakaoPlaceSearchResponseDto responseDto = location.block(); // Mono의 결과를 동기적으로 가져옴
+            List<TransactionHistory> transactionHistoryList = new ArrayList<>();
+            for (Payment payment : payments) {
+                Mono<KakaoPlaceSearchResponseDto> location = findLocation(payment.getStoreName());
+                KakaoPlaceSearchResponseDto responseDto = location.block(); // Mono의 결과를 동기적으로 가져옴
 
-                    if (responseDto != null && !responseDto.getDocuments().isEmpty()) {
-                        Double latitude = responseDto.getDocuments().get(0).getY(); // 첫 번째 결과의 위도 정보 가져오기
-                        Double longitude = responseDto.getDocuments().get(0).getX(); // 첫 번째 결과의 경도 정보 가져오기
+                if (responseDto != null && !responseDto.getDocuments().isEmpty()) {
+                    Double latitude = responseDto.getDocuments().get(0).getY(); // 첫 번째 결과의 위도 정보 가져오기
+                    Double longitude = responseDto.getDocuments().get(0).getX(); // 첫 번째 결과의 경도 정보 가져오기
 
-                        transactionHistoryList.add(TransactionHistory.create(payment.getAmount(), payment.getStoreName(), latitude, longitude, payment.getTransactionDate(), payment.getTransactionTime(), findPortfolio));
-                    }
+                    transactionHistoryList.add(TransactionHistory.create(payment.getAmount(), payment.getStoreName(), latitude, longitude, payment.getTransactionDate(), payment.getTransactionTime(), findPortfolio));
                 }
-                transactionRepository.saveAll(transactionHistoryList);
-           // }
+            }
+            transactionRepository.saveAll(transactionHistoryList);
+            // }
         }
     }
 
@@ -125,13 +125,17 @@ public class PortfolioService {
                 })
                 .sum();
 
-        List<LocalDate> deficitDates = findPortfolios.stream()
+        List<String> deficitDates = findPortfolios.stream()
                 .filter(portfolio -> {
                     Long budget = portfolio.getTotalBudget();
                     Long payment = portfolio.getTotalPayment();
                     return budget != null && payment != null && budget - payment < 0;
                 })
-                .map(Portfolio::getTravelDate)
+                .map(portfolio -> {
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                            return portfolio.getTravelDate().format(formatter);
+                        }
+                )
                 .collect(Collectors.toList());
 
         return PortfolioResponseDto.builder()
@@ -148,6 +152,7 @@ public class PortfolioService {
     // 2. 가게명을 검색하여 위도와 경도를 저장한다.
     // 3. 전체 내역을 보여준다.
     // 있다면? 그냥 전체 내역을 보여준다.
+
     /**
      * 1. planId에 해당하느 포트폴리오 값을 전부 받아온다.
      * 2. Id에 해당하는 transaction_history값을 받아온다
@@ -186,7 +191,7 @@ public class PortfolioService {
         Account account = accountRepository.findAccountByUserNumber(userNumber)
                 .orElseThrow(UserNotFoundException::new);
 
-        List<Plan> planList = planRepository.findAllByAccountId(account.getId()).orElse(Collections.emptyList());
+        List<Plan> planList = planRepository.findAllByAccountId(account.getId());
 
         List<PortfolioListGetResponseDto.PlanInfo> planInfoList = planList.stream()
                 .filter(plan -> !plan.getPortfolioList().isEmpty()) // 포트폴리오가 있는지 확인
@@ -201,8 +206,6 @@ public class PortfolioService {
                 .planList(planInfoList)
                 .build();
     }
-
-
 
 
     // userNumber로 계좌내역조회 받아오는 메서드

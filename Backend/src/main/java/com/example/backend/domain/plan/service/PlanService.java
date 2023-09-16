@@ -3,16 +3,20 @@ package com.example.backend.domain.plan.service;
 import com.example.backend.domain.account.Account;
 import com.example.backend.domain.account.exception.UserNotFoundException;
 import com.example.backend.domain.account.repository.AccountRepository;
-import com.example.backend.domain.plan.dto.*;
+import com.example.backend.domain.plan.dto.PlanDetailResponseDto;
+import com.example.backend.domain.plan.dto.PlanGetResponseDto;
+import com.example.backend.domain.plan.dto.PlanSaveRequestDto;
+import com.example.backend.domain.plan.dto.PlanUpdateRequestDto;
 import com.example.backend.domain.plan.entity.Plan;
+import com.example.backend.domain.plan.exception.PlanNotFoundException;
 import com.example.backend.domain.plan.repository.PlanRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import java.util.Collections;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -70,25 +74,19 @@ public class PlanService {
         //Header User-Number를 통해서 계좌 ID를 받아옴
         Account account = accountRepository.findAccountByUserNumber(userNumber)
                 .orElseThrow(UserNotFoundException::new);
+        LocalDate today = LocalDate.now();
 
-        Long accountId = account.getId();
+        PageRequest pageRequest = PageRequest.of(0, 1);
+        Plan plan = planRepository.findNotEndPlan(account, today, pageRequest)
+                .get()
+                .findFirst()
+                .orElseThrow(PlanNotFoundException::new);
 
-        List<Plan> planList = planRepository.findAllByAccountId(accountId)
-                .orElse(Collections.emptyList());
-
-        for (Plan plan : planList) {
-            if(plan.getPortfolioList().isEmpty()){
-                PlanGetResponseDto planGetResponseDto = PlanGetResponseDto.builder()
-                        .planId(plan.getId())
-                        .startDate(plan.getStartDate())
-                        .endDate(plan.getEndDate())
-                        .build();
-
-                return planGetResponseDto;
-            }
-        }
-
-        return null;
+        return PlanGetResponseDto.builder()
+                .planId(plan.getId())
+                .startDate(plan.getStartDate())
+                .endDate(plan.getEndDate())
+                .build();
     }
 
 
@@ -106,8 +104,7 @@ public class PlanService {
 
 
     public List<Plan> planList(Long accountId) {
-        return planRepository.findAllByAccountId(accountId)
-                .orElse(Collections.emptyList());
+        return planRepository.findAllByAccountId(accountId);
     }
 
 

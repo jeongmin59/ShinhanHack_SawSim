@@ -14,6 +14,7 @@ import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,8 +28,9 @@ public class PopularScheduler {
     private final PortfolioService portfolioService;
     private final PopularRepository popularRepository;
 
-    //    @Scheduled(cron = "0 * * * * *")
-    @Scheduled(cron = "1 0 0 * * *")
+//    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 * * * * *")
+//    @Scheduled(cron = "1 0 0 * * *")
     public void savePopularCount() {
         // 1. redis에서 결제내역 아이디 가져오기
         // 2. 해당 결제내역 아이디 이후 값들만 가져오기
@@ -50,23 +52,28 @@ public class PopularScheduler {
                                 popularRepository.save(popular);
                             },
                             () -> {
-                                KakaoPlaceSearchResponseDto.Document document = portfolioService.findLocation(payment.getStoreName()).block().getDocuments().get(0);
-                                System.out.println("document.getX() = " + document.getX());
-                                System.out.println("document.getY() = " + document.getY());
-                                GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
-                                Coordinate coordinate = new Coordinate(document.getX(), document.getY());
-                                Point point = geometryFactory.createPoint(coordinate);
-                                String[] splitCategory = document.getCategory_name().split(">");
-                                String categoryName = splitCategory[0].trim();
-                                if (categoryName.equals("여행")) {
-                                    if (splitCategory[1] != null && splitCategory[1].trim().equals("숙박")) {
-                                        categoryName = "숙박";
-                                    } else {
-                                        categoryName = "관광지";
+                                Mono<KakaoPlaceSearchResponseDto> location = portfolioService.findLocation(payment.getStoreName());
+                                KakaoPlaceSearchResponseDto responseDto = location.block(); // Mono의 결과를 동기적으로 가져옴
+
+                                if (responseDto != null && !responseDto.getDocuments().isEmpty()) {
+                                    KakaoPlaceSearchResponseDto.Document document = responseDto.getDocuments().get(0);
+                                    System.out.println("document.getX() = " + document.getX());
+                                    System.out.println("document.getY() = " + document.getY());
+                                    GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+                                    Coordinate coordinate = new Coordinate(document.getX(), document.getY());
+                                    Point point = geometryFactory.createPoint(coordinate);
+                                    String[] splitCategory = document.getCategory_name().split(">");
+                                    String categoryName = splitCategory[0].trim();
+                                    if (categoryName.equals("여행")) {
+                                        if (splitCategory[1] != null && splitCategory[1].trim().equals("숙박")) {
+                                            categoryName = "숙박";
+                                        } else {
+                                            categoryName = "관광지";
+                                        }
                                     }
+                                    if (!category.contains(categoryName)) categoryName = "기타";
+                                    popularRepository.save(Popular.toEntity(payment.getStoreName(), categoryName, point));
                                 }
-                                if (!category.contains(categoryName)) categoryName = "기타";
-                                popularRepository.save(Popular.toEntity(payment.getStoreName(), categoryName, point));
                             }
                     );
             updatePopularByPaymentId = Math.max(updatePopularByPaymentId, payment.getId());

@@ -24,10 +24,8 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -68,28 +66,56 @@ public class BudgetScheduler {
             ShinhanTransactionRequestDto shinhanTransactionRequestDto = portfolioService.transactionHistoryInquiry(plan.getAccount().getNumber());
             List<ShinhanTransactionRequestDto.DataBody.TransactionHistory> transactions = shinhanTransactionRequestDto.getDataBody().getTransactions();
 
-            List<Payment> payments = new ArrayList<>();
-            LocalDate latestDate = LocalDate.parse(hash.get("latestDate").toString());
-            LocalTime latestTime = LocalTime.parse(hash.get("latestTime").toString());
-            for (ShinhanTransactionRequestDto.DataBody.TransactionHistory transaction : transactions) {
-                if (transaction.getTransactionDate().equals(latestDate) &&
-                        transaction.getTransactionTime().equals(latestTime)) break;
-                if (transaction.getLocationClassification() == 1) continue;
+            // 처음이면 불러온 값 다 저장
+            List<Payment> payments;
+            if (hash.isEmpty()) {
+                payments = shinhanTransactionRequestDto.getDataBody().getTransactions().stream()
+                        .map(transaction -> Payment.createPayment(
+                                transaction.getDetail(),
+                                transaction.getWithdrawalAmount(),
+                                transaction.getStoreName(),
+                                LocalDate.parse(transaction.getTransactionDate(), DateTimeFormatter.ofPattern("yyyyMMdd")),
+                                LocalTime.parse(transaction.getTransactionTime(), DateTimeFormatter.ofPattern("HHmmss")),
+                                PaymentType.CARD,
+                                plan.getAccount()
+                        )).collect(Collectors.toList());
 
-                payments.add(Payment.createPayment(
-                        transaction.getDetail(),
-                        transaction.getWithdrawalAmount(),
-                        transaction.getStoreName(),
-                        LocalDate.parse(transaction.getTransactionDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                        LocalTime.parse(transaction.getTransactionTime(),DateTimeFormatter.ofPattern("HH:mm:ss")),
-                        PaymentType.CARD,
-                        plan.getAccount()));
+                Optional<ShinhanTransactionRequestDto.DataBody.TransactionHistory> latestTransaction = shinhanTransactionRequestDto.getDataBody().getTransactions().stream()
+                        .max(Comparator.comparing(ShinhanTransactionRequestDto.DataBody.TransactionHistory::getTransactionDate)
+                                .thenComparing(ShinhanTransactionRequestDto.DataBody.TransactionHistory::getTransactionTime));
+
+                latestTransaction.ifPresent(transaction -> {
+                    Map<String, String> map = Map.of(
+                            "latestDate", transaction.getTransactionDate(),
+                            "latestTime", transaction.getTransactionTime());
+                    redisService.setHash(plan.getAccount().getUserNumber(), map);
+                });
+
+            } else {
+                payments = new ArrayList<>();
+                String latestDate = hash.get("latestDate").toString();
+                String latestTime = hash.get("latestTime").toString();
+                for (ShinhanTransactionRequestDto.DataBody.TransactionHistory transaction : transactions) {
+                    if (transaction.getTransactionDate().equals(latestDate) &&
+                            transaction.getTransactionTime().equals(latestTime)) break;
+                    if (transaction.getLocationClassification() == 1) continue;
+
+                    payments.add(Payment.createPayment(
+                            transaction.getDetail(),
+                            transaction.getWithdrawalAmount(),
+                            transaction.getStoreName(),
+                            LocalDate.parse(transaction.getTransactionDate(), DateTimeFormatter.ofPattern("yyyyMMdd")),
+                            LocalTime.parse(transaction.getTransactionTime(), DateTimeFormatter.ofPattern("HHmmss")),
+                            PaymentType.CARD,
+                            plan.getAccount()));
+                }
             }
             paymentRepository.saveAll(payments);
 
             // 알림을 보낸 적 있으면 보내지 않기
             if (redisService.getValues("todayBudget_" + plan.getAccount().getNumber()).equals("Y")) continue;
 
+            // 오늘의 예산과 사용내역을 가져와서 비교해서 초과 알림 여부 결정
             String redis = redisService.getValues("todayBudget_" + plan.getAccount().getNumber())
                     .orElseThrow(() -> new ResourceNotFoundException("Redis", "todayBudget_" + plan.getAccount().getNumber()));
             long todayBudget = Long.parseLong(redis);
