@@ -3,8 +3,6 @@ package com.example.backend.domain.portfolio.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -56,8 +54,6 @@ public class ShinhanTransactionRequestDto {
             private int locationClassification;
             @JsonProperty("거래점명")
             private String storeName;
-
-
         }
     }
 }
