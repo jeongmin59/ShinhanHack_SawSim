@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './DateList.module.css';
-import { Button, Card } from 'antd';
+import { Button, Badge, Divider, Space } from 'antd';
 import { Link } from 'react-router-dom';
 import '../../pages/Transaction.css';
-
-// const gridStyle = {
-//   width: '25%',
-//   textAlign: 'center',
-// };
 
 function DateList() {
   const [planId, setPlanId] = useState(null);
   const [endDate, setEndDate] = useState('');
   const [startDate, setStartDate] = useState('');
-
   const data = localStorage.getItem('userNumber');
   const [budgetData, setBudgetData] = useState([]);
+
+
+  const formatDate = (date) => {
+    return `${date.substring(0, 4)}-${date.substring(4, 6)}-${date.substring(6, 8)}`;
+  };
 
   useEffect(() => {
     const getDates = async () => {
@@ -25,10 +24,9 @@ function DateList() {
           headers: { "User-Number": data }
         });
         const dataBody = response.data.dataBody;
-        console.log(dataBody)
-        setPlanId(dataBody.planId)
-        setEndDate(dataBody.endDate)
-        setStartDate(dataBody.startDate)
+        setPlanId(dataBody.planId);
+        setEndDate(formatDate(dataBody.endDate)); // Format end date
+        setStartDate(formatDate(dataBody.startDate)); // Format start date
       } catch (error) {
         console.error(error);
       }
@@ -42,8 +40,7 @@ function DateList() {
       const response = await axios.get(`https://sawsim.site/api/budget/${planId}`);
       const dataBody = response.data.dataBody;
       setBudgetData(dataBody);
-      console.log(dataBody)
-      // window.location.reload();
+      console.log(dataBody);
     } catch (error) {
       console.error(error);
     }
@@ -54,7 +51,7 @@ function DateList() {
       getBudgetData();
     }
   }, [planId]);
-  
+
   const renderDateRange = (startDate, endDate) => {
     const dateArray = [];
     const currentDate = new Date(startDate);
@@ -64,6 +61,15 @@ function DateList() {
       dateArray.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
     }
+
+    const categoryColors = {
+      음식점: 'red',
+      '교통,수송': 'yellow',
+      '스포츠,레저': 'lime',
+      관광지: 'cyan',
+      숙박: 'violet',
+      기타: 'gray',
+    };
 
     return dateArray.map((date, index) => {
       const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
@@ -89,10 +95,23 @@ function DateList() {
               <tbody>
                 {filteredBudgetData.map((item) => (
                   <tr className={styles.lineContent} key={item.budgetId}>
-                    <td className={styles.elementContent}>{item.category}</td>
+                    <td className={styles.elementContent}>
+                      <Badge
+                        color={categoryColors[item.category]}
+                        text={item.category}
+                        dot
+                        style={{
+                          // width: '6rem',
+                          height: '2rem',
+                          fontSize: '1.6rem',
+                          fontFamily: 'preRg',
+                          // size: '7rem'
+                        }}
+                      />
+                    </td>
                     <td className={styles.elementContent}>{item.amount.toLocaleString()}</td>
                     <td className={styles.elementContent}>
-                    <Link
+                      <Link
                         to={`/budget/${planId}/update`}
                         state={{
                           formattedDate: formattedDate,
@@ -102,20 +121,18 @@ function DateList() {
                         }}
                       >
                         <Button
-                          style={{height: '2rem', 
-                          width: '50%', 
-                          backgroundColor:'white', 
-                          // marginTop: '2rem',
-                          fontFamily:"preRg",
-                          color:'#316FDF', 
-                          // border:'1px solid #316FDF', 
-                          // fontFamily:'preBd', 
-                          fontSize: '1rem',
-                          textAlign: 'center',
-                          paddingRight: '1.2rem'
-                          }} 
+                          style={{
+                            height: '2rem',
+                            width: '50%',
+                            backgroundColor: 'white',
+                            fontFamily: "preRg",
+                            color: '#316FDF',
+                            border: 'none',
+                            fontSize: '1rem',
+                            textAlign: 'center',
+                            paddingRight: '1.2rem'
+                          }}
                           size="middle"
-                          // type="primary"
                         >
                           수정
                         </Button>
@@ -144,7 +161,7 @@ function DateList() {
               >
                 예산 추가하기
               </Button>
-            </Link>       
+            </Link>
           </div>
         </div>
       );

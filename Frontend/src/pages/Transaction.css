@@ -64,3 +64,8 @@
   font-family: 'preRg';
   font-size:0.8rem
 } 
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-badge.ant-badge-status .ant-badge-status-text {
+  font-family: 'preRg';
+  font-size: 1.1rem
+}
