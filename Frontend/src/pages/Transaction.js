@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styles from './Transaction.module.css';
 import Header from '../components/common/Header';
 import { Alert, Space, FloatButton, Button, Collapse, Divider, Radio, Table, Tag } from 'antd';
@@ -116,7 +116,8 @@ const Transaction = () => {
   //   };
   //   fetchData();
   // }, []);
-
+  const location = useLocation();
+  const currentLink = location.state?.currentLink;
   const account = sessionStorage.getItem('account');
   const userNumber = localStorage.getItem('userNumber');
   const navigate = useNavigate();
@@ -306,7 +307,7 @@ const Transaction = () => {
     <div>
       <Header />
       <div className={styles.titles}>
-        <Link className={styles.backLink} to='/budget'><p className={styles.toBack}>&lt;</p>
+        <Link className={styles.backLink} to={currentLink}><p className={styles.toBack}>&lt;</p>
         <p className={styles.transactionTitle}>거래 내역</p></Link> 
       </div>
       <div className={styles.transDiv}>
@@ -346,7 +347,7 @@ const Transaction = () => {
           onRow={(record) => ({
             onClick: () => {
               setSelectedTransaction(record);
-              navigate('/transaction/detail', { state: { selectedRow: record } });
+              navigate('/transaction/detail', { state: { selectedRow: record, transactionId: record.key } });
             },
           })}
         />

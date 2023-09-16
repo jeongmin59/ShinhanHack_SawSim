@@ -181,12 +181,24 @@ const BalanceSchedule = () => {
           // 현재날짜와 plan.endDate 비교해서 분기처리
           <>
             {getToday() === plan.endDate ? (
+              <>
+                <Link to={{
+                  pathname: '/budget',
+                  search: `?planId=${planId}`
+                }} >
                 <Button 
                   size="large" 
-                  style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
+                  style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'39vw', marginRight:'0.3rem'}}
+                  className={styles.startTrip}
+                  type="primary">실시간 예산 분석</Button></Link>
+
+                  <Button 
+                  size="large" 
+                  style={{ height: '3rem', backgroundColor:'#bbbbbb', fontFamily:"preRg", width:'39vw', marginLeft:'0.3rem'}}
                   className={styles.startTrip}
                   type="primary"
                   onClick={finishTrip}>여행 종료하기</Button>
+              </>
             ) : getToday() < plan.startDate ? (
                 <Link to={{
                   pathname: '/budget',
@@ -198,7 +210,8 @@ const BalanceSchedule = () => {
                   className={styles.startTrip}
                   type="primary" disabled>아직 여행 시작일이 아닙니다</Button></Link>
             ) : getToday() > plan.endDate ? (
-                finishTrip()
+                // finishTrip()
+                console.log('dd')
             ) : (
                 <Link to={{
                   pathname: '/budget',
@@ -208,7 +221,7 @@ const BalanceSchedule = () => {
                   size="large" 
                   style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
                   className={styles.startTrip}
-                  type="primary">여행 시작하기</Button></Link>
+                  type="primary">실시간 예산 분석</Button></Link>
             )}
           </>
       )}

@@ -6,10 +6,13 @@ import { Button, Modal, Input } from 'antd';
 import { CloseOutlined, ConsoleSqlOutlined } from '@ant-design/icons';
 import pencil from "../assets/pencil2.png";
 
+// put axios 보내고
+// 메모입력 -> get transaction - content 띄우기
 
 const TransactionDetail = () => {
   const location = useLocation();
   const selectedRow = location.state.selectedRow;
+  const transactionId = location.state.transactionId;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [memo, setMemo] = useState('');
 
