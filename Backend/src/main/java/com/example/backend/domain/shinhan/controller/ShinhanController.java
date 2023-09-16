@@ -35,4 +35,12 @@ public class ShinhanController {
     public AccountBalanceDetailResponseDto accountBalanceDetail(@RequestBody AccountBalanceDetailRequestDto accountBalanceDetail){
         return shinhanService.accountBalanceDetail(accountBalanceDetail);
     }
+
+    /**
+     * 계좌 거래 내역 조회
+     */
+    @PostMapping("/v1/search/transaction")
+    public CheckAccountTransactionHistoryResponseDto checkAccountTransactionHistory(@RequestBody CheckAccountTransactionHistoryRequestDto checkAccountTransactionHistoryRequestDto){
+        return shinhanService.checkAccountTransactionHistory(checkAccountTransactionHistoryRequestDto);
+    }
 }

@@ -66,4 +66,20 @@ public class ShinhanService {
                 .bodyToMono(AccountBalanceDetailResponseDto.class)
                 .block();
     }
+
+    public CheckAccountTransactionHistoryResponseDto checkAccountTransactionHistory(CheckAccountTransactionHistoryRequestDto checkAccountTransactionHistoryRequestDto) {
+        //신한 거래내역조회 api 요청
+        WebClient webClient = WebClient.builder()
+                .baseUrl("https://shbhack.shinhan.com")
+                .build();
+
+        return webClient
+                .post()
+                .uri("/v1/search/transaction")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(checkAccountTransactionHistoryRequestDto)
+                .retrieve()
+                .bodyToMono(CheckAccountTransactionHistoryResponseDto.class)
+                .block();
+    }
 }
