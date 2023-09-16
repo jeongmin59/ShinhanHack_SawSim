@@ -17,17 +17,17 @@ public class AnalyzeResponseDto {
         private Integer dayAmount; // 일자별 예산
         private Integer dayAmountUsed; //일자별 사용액
 
-        @JsonProperty("음식점")
+        @JsonProperty("오늘음식점")
         private Double dayMeal;
-        @JsonProperty("교통,수송")
+        @JsonProperty("오늘교통,수송")
         private Double dayTraffic;
-        @JsonProperty("스포츠,레저")
+        @JsonProperty("오늘스포츠,레저")
         private Double daySports;
-        @JsonProperty("관광지")
+        @JsonProperty("오늘관광지")
         private Double dayTravel;
-        @JsonProperty("숙박")
+        @JsonProperty("오늘숙박")
         private Double dayLodge;
-        @JsonProperty("기타")
+        @JsonProperty("오늘기타")
         private Double dayEtc;
 
         @JsonProperty("음식점")
