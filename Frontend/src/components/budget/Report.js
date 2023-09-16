@@ -57,16 +57,29 @@ const Report = () => {
       const dataBody = response.data.dataBody
       console.log(dataBody.dataBody.day) // 여행 몇일차
       setDay(dataBody.dataBody.day)
-      console.log(dataBody.dataBody.totalBudget) // 전체에서 사용 비율
+      console.log(parseFloat(dataBody.dataBody.totalBudget.toFixed(2))) // 전체에서 사용 비율
       setTotalBudget(dataBody.dataBody.totalBudget)
       console.log(dataBody.dataBody.amountUsed) // 사용한 총액
       setAmountUsed(dataBody.dataBody.amountUsed)
-      setFood(parseFloat(dataBody.dataBody[3].toFixed(2)));
-      setTransport(parseFloat(dataBody.dataBody[4].toFixed(2)));
-      setSport(parseFloat(dataBody.data.body[5].toFixed(2)));
-      setTour(parseFloat(data.Body.data.body[6].toFixed(2)));
-      setAccom(parseFloat(data.Body.data.body[7].toFixed(2)));
-      setEtc(parseFloat(data.Body.data.body[8].toFixed(2)));
+      console.log('제대로 오니?',dataBody.dataBody[3] )
+      if (dataBody.dataBody[3] !== undefined) {
+        setFood(parseFloat(dataBody.dataBody[3].toFixed(2)));
+      }
+      if (dataBody.dataBody[4] !== undefined) {
+        setFood(parseFloat(dataBody.dataBody[4].toFixed(2)));
+      }
+      if (dataBody.dataBody[5] !== undefined) {
+        setFood(parseFloat(dataBody.dataBody[5].toFixed(2)));
+      }
+      if (dataBody.dataBody[6] !== undefined) {
+        setFood(parseFloat(dataBody.dataBody[6].toFixed(2)));
+      }
+      if (dataBody.dataBody[7] !== undefined) {
+        setFood(parseFloat(dataBody.dataBody[7].toFixed(2)));
+      }
+      if (dataBody.dataBody[8] !== undefined) {
+        setFood(parseFloat(dataBody.dataBody[8].toFixed(2)));
+      }
       setLoading(false);
     } catch (error) {
       console.error(error);
