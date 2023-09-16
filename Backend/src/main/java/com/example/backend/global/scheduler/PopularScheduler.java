@@ -27,7 +27,7 @@ public class PopularScheduler {
     private final PortfolioService portfolioService;
     private final PopularRepository popularRepository;
 
-//    @Scheduled(cron = "0 * * * * *")
+    //    @Scheduled(cron = "0 * * * * *")
     @Scheduled(cron = "1 0 0 * * *")
     public void savePopularCount() {
         // 1. redis에서 결제내역 아이디 가져오기
@@ -37,7 +37,7 @@ public class PopularScheduler {
         // 4. 가져온 결제내역의 상호명으로 카카오 지도 api 호출하기
         // 5. 좌표와 카테고리 가져오기
         // 6. 상호명이 처음인 가게라면 save
-        List<String> category = Arrays.asList("음식점", "교통,수송", "스포츠,레저", "여행", "의료,건강");
+        List<String> category = Arrays.asList("음식점", "교통,수송", "스포츠,레저", "관광지", "숙박", "의료,건강");
         long updatePopularByPaymentId = Long.parseLong(redisService.getValues("updatePopularByPaymentId")
                 .orElse("0"));
 
@@ -56,7 +56,15 @@ public class PopularScheduler {
                                 GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
                                 Coordinate coordinate = new Coordinate(document.getX(), document.getY());
                                 Point point = geometryFactory.createPoint(coordinate);
-                                String categoryName = document.getCategory_name().split(">")[0].trim();
+                                String[] splitCategory = document.getCategory_name().split(">");
+                                String categoryName = splitCategory[0].trim();
+                                if (categoryName.equals("여행")) {
+                                    if (splitCategory[1] != null && splitCategory[1].trim().equals("숙박")) {
+                                        categoryName = "숙박";
+                                    } else {
+                                        categoryName = "관광지";
+                                    }
+                                }
                                 if (!category.contains(categoryName)) categoryName = "기타";
                                 popularRepository.save(Popular.toEntity(payment.getStoreName(), categoryName, point));
                             }

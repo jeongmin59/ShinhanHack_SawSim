@@ -42,9 +42,6 @@ public class PortfolioService {
 
 // 여행 DB 저장
     public void portfolioSave(String userNumber, Long planId) {
-        /**
-         * 예산(portfolio) 저장
-         */
         Account account = accountRepository.findAccountByUserNumber(userNumber)
                 .orElseThrow(UserNotFoundException::new);
 
@@ -58,7 +55,7 @@ public class PortfolioService {
             long day = ChronoUnit.DAYS.between(plan.getStartDate(), plan.getEndDate());
 
             List<Portfolio> portfolios = new ArrayList<>();
-            for (int i = 0; i < day; i++) {
+            for (int i = 0; i <= day; i++) {
                 LocalDate targetDate = plan.getStartDate().plusDays(i);
 
                 Long totalBudgetOnTargetDate = budgetRepository.findAllByPlanAndTravelDate(plan, targetDate).stream()
@@ -74,9 +71,7 @@ public class PortfolioService {
         }
 
 
-        /**
-         * 맵(transaction_history) 저장
-         */
+        // 맵(transaction_history) 저장
         for (Portfolio findPortfolio : findPortfolios) {
             //List<TransactionHistory> transactionHistories = transactionRepository.findByTransactionDate(findPortfolio.getTravelDate());
             // 처음 조회라면 저장이 필요하다.
@@ -89,8 +84,8 @@ public class PortfolioService {
                     KakaoPlaceSearchResponseDto responseDto = location.block(); // Mono의 결과를 동기적으로 가져옴
 
                     if (responseDto != null && !responseDto.getDocuments().isEmpty()) {
-                        Double latitude = Double.valueOf(responseDto.getDocuments().get(0).getY()); // 첫 번째 결과의 위도 정보 가져오기
-                        Double longitude = Double.valueOf(responseDto.getDocuments().get(0).getX()); // 첫 번째 결과의 경도 정보 가져오기
+                        Double latitude = responseDto.getDocuments().get(0).getY(); // 첫 번째 결과의 위도 정보 가져오기
+                        Double longitude = responseDto.getDocuments().get(0).getX(); // 첫 번째 결과의 경도 정보 가져오기
 
                         transactionHistoryList.add(TransactionHistory.create(payment.getAmount(), payment.getStoreName(), latitude, longitude, payment.getTransactionDate(), payment.getTransactionTime(), findPortfolio));
                     }
@@ -153,13 +148,12 @@ public class PortfolioService {
     // 2. 가게명을 검색하여 위도와 경도를 저장한다.
     // 3. 전체 내역을 보여준다.
     // 있다면? 그냥 전체 내역을 보여준다.
+    /**
+     * 1. planId에 해당하느 포트폴리오 값을 전부 받아온다.
+     * 2. Id에 해당하는 transaction_history값을 받아온다
+     * 3. 그 값들을 리스트에 담아서 출력해준다.
+     */
     public PortfolioMapResponseDto portfolioMapGet(String userNumber, Long planId) {
-        /**
-         * 1. planId에 해당하느 포트폴리오 값을 전부 받아온다.
-         * 2. Id에 해당하는 transaction_history값을 받아온다
-         * 3. 그 값들을 리스트에 담아서 출력해준다.
-         */
-
         List<Portfolio> findPortfolios = portfolioRepository.findAllByPlanId(planId);
         List<PortfolioMapResponseDto.DataBody.travelInfo> travelInfoList = new ArrayList<>();
 
