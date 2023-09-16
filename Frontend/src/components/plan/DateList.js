@@ -5,10 +5,10 @@ import { Button, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import '../../pages/Transaction.css';
 
-const gridStyle = {
-  width: '25%',
-  textAlign: 'center',
-};
+// const gridStyle = {
+//   width: '25%',
+//   textAlign: 'center',
+// };
 
 function DateList() {
   const [planId, setPlanId] = useState(null);
@@ -43,6 +43,7 @@ function DateList() {
       const dataBody = response.data.dataBody;
       setBudgetData(dataBody);
       console.log(dataBody)
+      // window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -79,7 +80,7 @@ function DateList() {
           <div className={styles.dateItem}>
             <table className={styles.centeredTable}>
               <thead>
-                <tr>
+                <tr className={styles.lineTitle}>
                   <th className={styles.elementTitle}>카테고리</th>
                   <th className={styles.elementTitle}>예산</th>
                   <th className={styles.elementTitle}></th>
@@ -87,11 +88,10 @@ function DateList() {
               </thead>
               <tbody>
                 {filteredBudgetData.map((item) => (
-                  <tr key={item.budgetId}>
+                  <tr className={styles.lineContent} key={item.budgetId}>
                     <td className={styles.elementContent}>{item.category}</td>
-                    <td className={styles.elementContent}>{item.amount}</td>
+                    <td className={styles.elementContent}>{item.amount.toLocaleString()}</td>
                     <td className={styles.elementContent}>
-
                     <Link
                         to={`/budget/${planId}/update`}
                         state={{
@@ -102,16 +102,20 @@ function DateList() {
                         }}
                       >
                         <Button
-                          size="small"
-                          style={{
-                            height: '2rem',
-                            marginTop: '0.5rem',
-                            paddingBottom: '0.2rem',
-                            backgroundColor: 'white',
-                            color: 'black',
-                            fontFamily: "preRg",
-                          }}
-                          type="primary"
+                          style={{height: '2rem', 
+                          width: '50%', 
+                          backgroundColor:'white', 
+                          // marginTop: '2rem',
+                          fontFamily:"preRg",
+                          color:'#316FDF', 
+                          // border:'1px solid #316FDF', 
+                          // fontFamily:'preBd', 
+                          fontSize: '1rem',
+                          textAlign: 'center',
+                          paddingRight: '1.2rem'
+                          }} 
+                          size="middle"
+                          // type="primary"
                         >
                           수정
                         </Button>
