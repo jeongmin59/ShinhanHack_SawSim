@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,8 +80,8 @@ public class BudgetScheduler {
                         transaction.getDetail(),
                         transaction.getWithdrawalAmount(),
                         transaction.getStoreName(),
-                        transaction.getTransactionDate(),
-                        transaction.getTransactionTime(),
+                        LocalDate.parse(transaction.getTransactionDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                        LocalTime.parse(transaction.getTransactionTime(),DateTimeFormatter.ofPattern("HH:mm:ss")),
                         PaymentType.CARD,
                         plan.getAccount()));
             }
