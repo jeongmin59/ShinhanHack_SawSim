@@ -57,7 +57,7 @@ public class AnalyzeService {
         category.put("숙박", 0);
         category.put("기타", 0);
 
-        int dayAmount =0; // 오늘 예산 값
+        int dayAmount = 0; // 오늘 예산 값
         int dayAmountUsed = 0; // 오늘 일차 사용 금액
 
         int total_cost = 0; // 전체 예산 값
@@ -145,7 +145,7 @@ public class AnalyzeService {
 
         // 카테고리 퍼센트 비율 구하기
         AnalyzeResponseDto.DataBody dataBody = AnalyzeResponseDto.DataBody.builder()
-                .day(ChronoUnit.DAYS.between(startDate, endDate)+1) // 뺄셈 하나 더 추가
+                .day(ChronoUnit.DAYS.between(startDate, endDate) + 1) // 뺄셈 하나 더 추가
                 .dayAmount(dayAmount)
                 .dayAmountUsed(dayAmountUsed)
                 .dayCategory(dayCategory)

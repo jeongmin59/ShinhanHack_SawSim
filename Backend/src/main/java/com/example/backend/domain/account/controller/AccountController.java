@@ -46,7 +46,7 @@ public class AccountController {
         Optional<Account> findAccount = accountRepository.findAccountByNumber(authVerifyRequestDto.getDataBody().getAccountNumber());
         if (findAccount.isPresent()) {
             authVerifyResponseDto = AuthVerifyResponseDto.builder()
-                    .userNumber(findAccount.get().getNumber())
+                    .userNumber(findAccount.get().getUserNumber())
                     .build();
         } else {
             String username = accountService.verifyAuthNumber(authVerifyRequestDto.getDataBody().getAccountNumber(), authVerifyRequestDto.getDataBody().getAuthNumber());

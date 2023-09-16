@@ -19,7 +19,6 @@ public class AnalyzeController {
     ,@PathVariable Long plan_id){
         AnalyzeResponseDto analyzeResponseDto = analyzeService.analyzeGet(analyzeRequestDto, userNumber, plan_id);
 
-
         return BasicResponse.<AnalyzeResponseDto>builder()
                 .dataHeader(BasicResponse.DataHeader.builder().build()) // 성공일 때 값이 default
                 .dataBody(analyzeResponseDto)
