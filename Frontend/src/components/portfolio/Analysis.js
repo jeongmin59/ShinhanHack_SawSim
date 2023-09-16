@@ -59,7 +59,7 @@ const Analysis = () => {
               )}
            <p className={styles.analysisMent}>일일 예산을 초과한 날은</p>
           {budgetOvers.map((item, index) => (
-            <>8
+            <>
             <span className={styles.emphasis}>{formatDate(item)} / </span></>
           ))}
           <p className={styles.analysisMent}>입니다.</p>
