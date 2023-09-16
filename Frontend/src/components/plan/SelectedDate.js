@@ -47,8 +47,8 @@ function SelectedDate() {
       <p className={styles.planDateTitle}>여행 일정</p>
       {planId !== null ? (
         <div className={styles.dateItem}>
-          <p>여행 시작 일: {startDate}</p>
-          <p>여행 종료 일: {endDate}</p>
+          <p>여행 시작일: {startDate}</p>
+          <p>여행 종료일: {endDate}</p>
           <div>
             {isButtonVisible && (
               <Link to={`/plan/${planId}`}>
