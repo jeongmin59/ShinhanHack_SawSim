@@ -23,6 +23,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -125,13 +126,17 @@ public class PortfolioService {
                 })
                 .sum();
 
-        List<LocalDate> deficitDates = findPortfolios.stream()
+        List<String> deficitDates = findPortfolios.stream()
                 .filter(portfolio -> {
                     Long budget = portfolio.getTotalBudget();
                     Long payment = portfolio.getTotalPayment();
                     return budget != null && payment != null && budget - payment < 0;
                 })
-                .map(Portfolio::getTravelDate)
+                .map(portfolio -> {
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                            return portfolio.getTravelDate().format(formatter);
+                        }
+                )
                 .collect(Collectors.toList());
 
         return PortfolioResponseDto.builder()

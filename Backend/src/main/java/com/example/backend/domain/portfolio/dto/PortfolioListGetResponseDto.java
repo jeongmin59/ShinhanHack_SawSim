@@ -2,6 +2,7 @@ package com.example.backend.domain.portfolio.dto;
 
 
 import com.example.backend.domain.plan.entity.Plan;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,7 +18,9 @@ public class PortfolioListGetResponseDto {
     @Builder(toBuilder = true)
     public static class PlanInfo {
         private Long id;
+        @JsonFormat(pattern = "yyyyMMdd")
         private LocalDate startDate;
+        @JsonFormat(pattern = "yyyyMMdd")
         private LocalDate endDate;
     }
 }

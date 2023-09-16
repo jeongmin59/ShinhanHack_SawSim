@@ -17,6 +17,6 @@ public class PortfolioResponseDto {
 
         private Long totalBudget; // 여행 총 예산
         private Long amount; // 예산 -  사용 금액
-        private List<LocalDate> budgetOvers; // 예산을 초과한 날
+        private List<String> budgetOvers; // 예산을 초과한 날
     }
 }

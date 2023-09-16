@@ -1,5 +1,6 @@
 package com.example.backend.domain.portfolio.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -24,7 +25,9 @@ public class PortfolioMapResponseDto {
             private String storeName;
             private Double latitude;
             private Double longitude;
+            @JsonFormat(pattern = "yyyyMMdd")
             private LocalDate transactionDate;
+            @JsonFormat(pattern = "HHmmss")
             private LocalTime transactionTime;
         }
     }
