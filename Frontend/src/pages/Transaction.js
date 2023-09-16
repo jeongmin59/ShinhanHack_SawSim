@@ -21,34 +21,6 @@ import axios from "axios";
 // 입력 후 확인 누르면 메모 적은 것 content에 넣어서 사용내역저장(백)에 post 요청
 // 상세보기에 띄우는 건 일자, 금액, 내역, 메모, 현금/카드(추가)
 
-const columns = [
-  {
-    title: '일시',
-    dataIndex: '일시',
-    width: '20%',
-    render: (text) => <p style={{fontFamily:'preLt', margin:0}}>{text}</p>,
-  },
-  {
-    title: '상세내역',
-    dataIndex: '상세내역',
-    width: '36%',   
-  },
-  {
-    title: '금액',
-    dataIndex: '금액',
-  },
-  {
-    title: '구분',
-    dataIndex: '구분',
-    render: (tag) => (
-      tag === '카드' ? 
-        <Tag color="blue" style={{marginRight:0}} key={tag}>{tag}</Tag> :
-        <Tag color="purple" style={{marginRight:0}} key={tag}>{tag}</Tag>
-    ),
-    width: '15%',
-  },
-];
-
 // const data = [
 //   {
 //     key: '1',
@@ -108,7 +80,43 @@ const columns = [
 //   },
 // ];
 
+const columns = [
+  {
+    title: '일시',
+    dataIndex: '일시',
+    width: '20%',
+    render: (text) => <p style={{fontFamily:'preLt', margin:0}}>{text}</p>,
+  },
+  {
+    title: '상세내역',
+    dataIndex: '상세내역',
+    width: '36%',   
+  },
+  {
+    title: '금액',
+    dataIndex: '금액',
+  },
+  {
+    title: '구분',
+    dataIndex: '구분',
+    render: (tag) => (
+      tag === '카드' ? 
+        <Tag color="blue" style={{marginRight:0}} key={tag}>{tag}</Tag> :
+        <Tag color="purple" style={{marginRight:0}} key={tag}>{tag}</Tag>
+    ),
+    width: '15%',
+  },
+];
+
+
 const Transaction = () => {
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await getCheckLatest();
+  //   };
+  //   fetchData();
+  // }, []);
+
   const account = sessionStorage.getItem('account');
   const userNumber = localStorage.getItem('userNumber');
   const navigate = useNavigate();
@@ -135,34 +143,122 @@ const Transaction = () => {
       const response = await axios.post("https://sawsim.site/api/v1/search/transaction", requestData);
       console.log(response.data)
       console.log(response.data.dataBody.거래내역)
-      setShTransactions(response.data.dataBody.거래내역)
+      await setShTransactions(response.data.dataBody.거래내역)
+      if (shTransactions) {
+        console.log('신한',shTransactions)
+        await getCheckLatest()
+      }
+      // await console.log('신한',shTransactions)
     } catch (error) {
       console.error(error);
     }
   }
 
+  function changeDateToBackDB(dateString) {
+    const year = dateString.substring(0, 4);
+    const month = dateString.substring(4, 6);
+    const day = dateString.substring(6, 8);
+
+    const formattedDateString = `${year}-${month}-${day}`;
+    return formattedDateString
+  }
+
+  const changeTimeToBackDB = (time) => {
+    const timeString = time.toString();
+    const hours = timeString.substring(0, 2);
+    const minutes = timeString.substring(2, 4);
+    const seconds = timeString.substring(4,6);
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+    return formattedTime;
+  }
+  
   // 2. 최신 거래내역 확인시간 조회(백 api)
   // 이걸 getSHTransactions 함수 then에 넣어야함
   const getCheckLatest = async () => {
     try {
       const response = await axios.get("https://sawsim.site/api/transactions/latest-date", { headers: { "User-Number": userNumber } });
+      console.log(response)
       console.log(response.data.dataBody)
-      console.log('최신확인시간',response.data.dataBody.transactionDate, response.data.dataBody.transactionTime)
-      const latestDatePlusTime = response.data.dataBody.transactionDate + response.data.dataBody.transactionTime
-      setChecklatest(latestDatePlusTime) // 날짜시간 합친상태로 들어감
-      console.log(latestDatePlusTime)
+      console.log('두번째',shTransactions)
+      if (response.data.dataBody === null) {
+        console.log(shTransactions)
+        const newlyAdded = shTransactions.map(item => ({
+          transactionDate: changeDateToBackDB(item.거래일자),
+          transactionTime: changeTimeToBackDB(item.거래시간),
+          amount: item.출금금액,
+          content: "",
+          storeName: item.내용,
+          paymentType: "CARD"
+        }))
+        console.log('보내는 내용',newlyAdded)
+        
+        try {
+          const requestData = {
+            dataBody: { 
+              transactionHistory: newlyAdded
+            }
+          };
+          console.log('데이터바디췤',requestData)
+          const response = await axios.post("https://sawsim.site/api/transactions", requestData, { headers: { "User-Number": userNumber } });
+          console.log(response)
+          // 이후, 전체 거래내역을 다시 가져오는 함수 실행
+          await getTransactions();
+        } catch (error) {
+          console.error("거래내역 저장에 실패했습니다.", error);
+        }
+      } 
+      else {
+        console.log('최신확인시간',response.data.dataBody.transactionDate, response.data.dataBody.transactionTime)
+        const latestDatePlusTime = `${response.data.dataBody.transactionDate}${response.data.dataBody.transactionTime}`
+        setChecklatest(latestDatePlusTime) // 날짜시간 합친상태로 들어감
+        console.log(latestDatePlusTime)
+        filterNewTransactions()
+      }
     } catch (error) {
       console.error(error);
     }
   }
 
   // 3. 이제 신한 거래내역들중에 filter 걸어서 거래일자/시간이 checklatest보다 큰 애들만
-  // newlyAdded 배열로 저장하고
-  // 백 사용내역저장 post 요청 보내기
+  // newlyAdded 배열로 저장하고 백 사용내역저장 post 요청 보내기
   // then, getTransactions 실행
   // --------------------------------------
-  // 이걸 getCheckLatest에 then으로 넣어야함
-  // newlyAdded를 꼭 useState로 관리해야하나? 그냥 const로 그때그때 박아도되지않나?
+  // 이걸 getCheckLatest에 넣어야함
+  const filterNewTransactions = async () => {
+    // 최신 거래내역 확인시간(checklatest)과 비교할 함수
+    const isTransactionNewerThanCheckLatest = (shTransactions) => {
+      // 거래일자와 거래시간을 합쳐서 확인시간과 비교
+      const shDatePlusTime = `${shTransactions.거래일자}${shTransactions.거래시간}`;
+      return shDatePlusTime > checklatest;
+    };
+    // 최신 거래내역 확인시간과 비교하여 새로운 거래내역 필터링
+    const newlyAddedItems = shTransactions.filter(isTransactionNewerThanCheckLatest);
+    const newlyAdded = newlyAddedItems.map(item => ({
+      transactionDate: changeDateToBackDB(item.거래일자),
+      transactionTime: changeTimeToBackDB(item.거래시간),
+      amount: item.출금금액,
+      content: "",
+      storeName: item.내용,
+      paymentType: "CARD"
+    }))
+    // 필터링된 거래내역을 사용내역 저장(백)에 POST 요청
+    try {
+      const requestData = {
+        dataBody: { 
+          transactionHistory: newlyAdded
+        }
+      };
+      const response = await axios.post("https://sawsim.site/api/transactions", requestData, { headers: { "User-Number": userNumber } });
+      console.log(response.data)
+      if (response.data.dataHeader.successCode === '0') {
+        window.alert('새로운 거래내역이 성공적으로 저장되었습니다.')
+      }
+      // 이후, 전체 거래내역을 다시 가져오는 함수 실행
+      await getTransactions();
+    } catch (error) {
+      console.error("거래내역 저장에 실패했습니다.", error);
+    }
+  };
 
   // 최종 테이블에 실리는 백 데이터 get
   const getTransactions = async () => {
@@ -171,14 +267,13 @@ const Transaction = () => {
       console.log(response.data)  
       setAllTransactions(response.data.dataBody)
       console.log(allTransactions)
-      // 데이터를 가공하여 새로운 JSON 배열 생성
     } catch (error) {
       console.error(error);
     }
   } // 배열돌면서 띄움
   const data = allTransactions.map(item => ({
     key: item.id,
-    일시: item.transactionDate,
+    일시: `${item.transactionDate}\n${item.transactionTime}`,
     상세내역: item.storeName,
     금액: item.amount,
     구분: item.paymentType
@@ -191,6 +286,11 @@ const Transaction = () => {
     // getTransactions();
   }, []);
 
+  // useEffect(() => {
+  //   if (shTransactions.length > 0) {
+  //     getCheckLatest();
+  //   }
+  // }, [shTransactions]);
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     setSelectedRowKeys(selectedRowKeys);

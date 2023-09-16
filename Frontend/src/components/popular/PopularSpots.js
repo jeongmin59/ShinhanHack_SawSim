@@ -5,7 +5,7 @@ import axios from "axios";
 import { Space, Tag } from 'antd';
 
 const { CheckableTag } = Tag;
-const tagsData = ['음식점', '여행', '스포츠/레저'];
+const tagsData = ['음식점', '관광', '스포츠/레저'];
 
 const PopularSpots = () => {
   const [populars, setPopulars] = useState([]);
@@ -16,8 +16,8 @@ const PopularSpots = () => {
     try {
       const response = await axios.get("https://sawsim.site/api/popular");
       console.log(response)
-      console.log(response.data.dataBody.popularPlaces)
-      setPopulars(response.data.dataBody.popularPlaces)
+      console.log(response.data.dataBody)
+      setPopulars(response.data.dataBody)
     } catch (error) {
       console.error(error);
     }
@@ -69,7 +69,7 @@ const PopularSpots = () => {
         <div style={{ marginTop: '1rem', display: 'flex', flexWrap: 'wrap' }}>
        {populars.filter(item=>item.category===selectedTag).map((item, index) => (
          <div className={styles.popularDiv} style={{ width: '50%' }}>
-            <a href={`https://www.google.com/search?q=${item.store}&oq=${item.store}&aqs=edge..69i57.1023j0j4&sourceid=chrome&ie=UTF-8`} target="_blank" rel="noopener noreferrer">
+            <a href={`https://www.google.com/search?q=${item.storeName}&oq=${item.storeName}&aqs=edge..69i57.1023j0j4&sourceid=chrome&ie=UTF-8`} target="_blank" rel="noopener noreferrer">
             <img loading="lazy" className={styles.img} src={item.img} alt="img"/></a>
            <p className={styles.store}>{item.store}</p>
          </div>
