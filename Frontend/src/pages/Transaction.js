@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Transaction.module.css';
 import Header from '../components/common/Header';
-import {  Alert, Space, FloatButton, Button, Collapse, Divider, Radio, Table, Tag } from 'antd';
+import { Alert, Space, FloatButton, Button, Collapse, Divider, Radio, Table, Tag } from 'antd';
 import './Transaction.css';
 import axios from "axios";
-
 
 // 페이지 접속 시 거래내역조회(신한 api) + 거래내역 확인시간 조회(백 api)
 // 거래내역조회(신한)의 거래일자시간과 최신 거래내역 확인시간(백) 비교
@@ -13,6 +12,8 @@ import axios from "axios";
 // 거래내역 확인시간(백)보다 거래일자시간(신한)이 나중인것
 // 즉 거래일자시간(신한) > 거래내역 확인시간(백)인 애들만
 // 새롭게 json 파일로 만들어서 사용내역저장(백)에 post 요청을 보냄
+
+// 이건 함
 // 본문에 띄우는 건 사용내역조회(백)
 // 추가작업 : 금액 콤마, 상세내역 길어지면 ... 처리
 
@@ -48,100 +49,153 @@ const columns = [
   },
 ];
 
-
-
-const data = [
-  {
-    key: '1',
-    일시: '08/24 11:00:12',
-    상세내역: '김밥천국 신촌점',
-    금액: '11,000',
-    구분: '카드',
-  },
-  {
-    key: '2',
-    일시: '08/24 11:00:12',
-    상세내역: '스타벅스 독립문점',
-    금액: '8200',
-    구분: '현금'
-  },
-  {
-    key: '3',
-    일시: '08/24 11:00:12',
-    상세내역: '김밥천국',
-    금액: '1,100,000',
-    구분: '현금'
-  },
-  {
-    key: '4',
-    일시: '08/24 11:00:12',
-    상세내역: '스타벅스',
-    금액: '8200',
-    구분: '카드',
-  },
-  {
-    key: '5',
-    일시: '08/24 11:00:12',
-    상세내역: '김밥천국',
-    금액: '11000',
-    구분: '현금'
-  },
-  {
-    key: '6',
-    일시: '08/24 11:00:12',
-    상세내역: '스타벅스스타벅스스타벅스',
-    금액: '110,000',
-    구분: '카드',
-  },
-  {
-    key: '7',
-    일시: '08/24 11:00:12',
-    상세내역: '김밥천국',
-    금액: '11000',
-    구분: '현금'
-  },
-  {
-    key: '8',
-    일시: '08/24 11:00:12',
-    상세내역: '스타벅스',
-    금액: '8200',
-    구분: ['현금']
-  },
-];
+// const data = [
+//   {
+//     key: '1',
+//     일시: '08/24 11:00:12',
+//     상세내역: '김밥천국 신촌점',
+//     금액: '11,000',
+//     구분: '카드',
+//   },
+//   {
+//     key: '2',
+//     일시: '08/24 11:00:12',
+//     상세내역: '스타벅스 독립문점',
+//     금액: '8200',
+//     구분: '현금'
+//   },
+//   {
+//     key: '3',
+//     일시: '08/24 11:00:12',
+//     상세내역: '김밥천국',
+//     금액: '1,100,000',
+//     구분: '현금'
+//   },
+//   {
+//     key: '4',
+//     일시: '08/24 11:00:12',
+//     상세내역: '스타벅스',
+//     금액: '8200',
+//     구분: '카드',
+//   },
+//   {
+//     key: '5',
+//     일시: '08/24 11:00:12',
+//     상세내역: '김밥천국',
+//     금액: '11000',
+//     구분: '현금'
+//   },
+//   {
+//     key: '6',
+//     일시: '08/24 11:00:12',
+//     상세내역: '스타벅스스타벅스스타벅스',
+//     금액: '110,000',
+//     구분: '카드',
+//   },
+//   {
+//     key: '7',
+//     일시: '08/24 11:00:12',
+//     상세내역: '김밥천국',
+//     금액: '11000',
+//     구분: '현금'
+//   },
+//   {
+//     key: '8',
+//     일시: '08/24 11:00:12',
+//     상세내역: '스타벅스',
+//     금액: '8200',
+//     구분: ['현금']
+//   },
+// ];
 
 const Transaction = () => {
+  const account = sessionStorage.getItem('account');
   const userNumber = localStorage.getItem('userNumber');
   const navigate = useNavigate();
-  const [allTransactions, setAllTransactions] = useState([]);
+  const [shTransactions, setShTransactions] = useState([]); // 신한 거래내역조회
+  const [checklatest, setChecklatest] = useState(''); // 최신 거래내역 확인시간
+  // const [newlyAdded, setNewlyAdded] = useState([]) // 새로 추가할 배열
+  // 이걸 백에 post 보내고나면
+  const [allTransactions, setAllTransactions] = useState([]); // 표에 띄울 전체 거래내역
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
-// 1. axios get 요청을 보냄 + setAllTransactions
-// 2. map으로 돌면서 데이터 배열을 완성한다
-// 3. 그걸 그대로 테이블의 data로 넣는다
-const getTransactions = async () => {
-  try {
-    const response = await axios.get("https://sawsim.site/api/transactions", { headers: { "User-Number": userNumber } });
-    console.log(response.data)      
-    setAllTransactions(response.data.dataBody)
-    console.log(allTransactions)
-
-  } catch (error) {
-    console.error(error);
+  // 1. 페이지 접속 시 거래내역조회(신한 api) - useEffect는 이거 하나만 넣고 안에서 모든걸 해결
+  const getSHTransactions = async () => {
+    try {
+      const requestData = {
+        dataHeader: {
+          apikey: "2023_Shinhan_SSAFY_Hackathon",
+        },
+        dataBody: {
+          계좌번호: account,
+        },
+      };
+      const response = await axios.post("https://sawsim.site/api/v1/search/transaction", requestData);
+      console.log(response.data)
+      console.log(response.data.dataBody.거래내역)
+      setShTransactions(response.data.dataBody.거래내역)
+    } catch (error) {
+      console.error(error);
+    }
   }
-}
 
-// const data = [
+  // 2. 최신 거래내역 확인시간 조회(백 api)
+  // 이걸 getSHTransactions 함수 then에 넣어야함
+  const getCheckLatest = async () => {
+    try {
+      const response = await axios.get("https://sawsim.site/api/transactions/latest-date", { headers: { "User-Number": userNumber } });
+      console.log(response.data.dataBody)
+      console.log('최신확인시간',response.data.dataBody.transactionDate, response.data.dataBody.transactionTime)
+      const latestDatePlusTime = response.data.dataBody.transactionDate + response.data.dataBody.transactionTime
+      setChecklatest(latestDatePlusTime) // 날짜시간 합친상태로 들어감
+      console.log(latestDatePlusTime)
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-// ]
+  // 3. 이제 신한 거래내역들중에 filter 걸어서 거래일자/시간이 checklatest보다 큰 애들만
+  // newlyAdded 배열로 저장하고
+  // 백 사용내역저장 post 요청 보내기
+  // then, getTransactions 실행
+  // --------------------------------------
+  // 이걸 getCheckLatest에 then으로 넣어야함
+  // newlyAdded를 꼭 useState로 관리해야하나? 그냥 const로 그때그때 박아도되지않나?
+
+  // 최종 테이블에 실리는 백 데이터 get
+  const getTransactions = async () => {
+    try {
+      const response = await axios.get("https://sawsim.site/api/transactions", { headers: { "User-Number": userNumber } });
+      console.log(response.data)  
+      setAllTransactions(response.data.dataBody)
+      console.log(allTransactions)
+      // 데이터를 가공하여 새로운 JSON 배열 생성
+    } catch (error) {
+      console.error(error);
+    }
+  } // 배열돌면서 띄움
+  const data = allTransactions.map(item => ({
+    key: item.id,
+    일시: item.transactionDate,
+    상세내역: item.storeName,
+    금액: item.amount,
+    구분: item.paymentType
+  }));
+
+
+  useEffect(() => {
+    // getCheckLatest();
+    getSHTransactions();
+    // getTransactions();
+  }, []);
 
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
     setSelectedRowKeys(selectedRowKeys);
     setSelectedRows(selectedRows);
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-
   };
 
   const toDutch = () => {
@@ -202,101 +256,3 @@ const getTransactions = async () => {
 };
 
 export default Transaction;
-
-
-// import React from 'react';
-// import { Link, useNavigate } from "react-router-dom";
-// import styles from "./TransactionDetail.module.css";
-// import Header from "../components/common/Header";
-// import { FloatButton, Button, Collapse, Divider, Radio, Table } from 'antd';
-// import './Transaction.css'
-
-// // const text = '여행메이트와의 정산이 필요한 내역을 체크하고, \n 정산하기 버튼을 눌러 공유해보세요'
-
-// const columns = [
-//   {
-//     title: '일시',
-//     dataIndex: '일시',
-//   },
-//   {
-//     title: '상세내역',
-//     dataIndex: '상세내역',
-//   },
-//   {
-//     title: '금액',
-//     dataIndex: '금액',
-//   },
-// ];
-// const data = [
-//   {
-//     key: '1',
-//     일시: '08/24 11:00:12',
-//     상세내역: '김밥천국',
-//     금액: '11000',
-//   },
-//   {
-//     key: '2',
-//     일시: '08/24 11:00:12',
-//     상세내역: '스타벅스',
-//     금액: '8200',
-//   },
-  
-// ];
-
-// const rowSelection = {
-//   onChange: (selectedRowKeys, selectedRows) => {
-//     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-//   },
-//   onSelect : () => {
-//     console.log('선택됨선택됨');
-//     <FloatButton description="정산하기" shape="square" style={{ border: '1px solid blue', fontFamily:'preBd', width: '8rem', height: '3rem', right: '35vw'}} />
-//   },
-// };
-
-// const TransactionDetail = () => {
-//   const navigate = useNavigate();
-//   const check = () => {
-//     console.log('선택됨')
-//   }
-
-//   const toDutch = () => {
-//     navigate('/dutch')
-//   }
-
-//   return (
-//     <div>
-//       <Header/>
-//       <p className={styles.transactionTitle}>거래 상세내역</p>
-//       <div className={styles.transDiv}>
-//         <p className={styles.nMent1}>여행메이트와의 정산이 필요한 내역을 체크하고,</p>
-//         <p className={styles.nMent}>정산하기 버튼을 눌러 공유해보세요</p>
-//         {/* <Link to="/dutch"><Button style={{fontFamily:"preRg"}}>정산하기</Button></Link> */}
-//       </div>
-
-//       {/* <Collapse
-//       bordered={false}
-//       items={[{ key: '1', label: '정산하기', children: <p>{text}</p> }]}
-//       style={{whiteSpace: 'pre-line', fontFamily: 'preRg', marginTop: 0, padding: 0, textAlign:'start'}}
-//     /> */}
-//     {/* <FloatButton description="정산하기" shape="square" style={{ border: '1px solid blue', fontFamily:'preBd', width: '8rem', height: '3rem', right: '35vw'}} onClick={toDutch} /> */}
-
-//       <div className={styles.detailDiv}>
-//         <Table
-//           rowSelection={{
-//             hideSelectAll: true,
-//             backgroundColor: 'white',
-//             // style : {{ backgroundColor: 'white' }},
-//             ...rowSelection,
-//           }}
-//           columns={columns}
-//           dataSource={data}
-//           scroll={{ y: '63vh' }}
-//           pagination={false}
-//           hideSelectAll={true}
-//         />
-//       </div>
-//     </div>
-//   )
-// }
- 
-// export default TransactionDetail

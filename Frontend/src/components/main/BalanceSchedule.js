@@ -57,6 +57,7 @@ const BalanceSchedule = () => {
       setAccount(response.data.dataBody.accountNumber)
       console.log(response.data.dataBody.name)
       setName(response.data.dataBody.name)
+      sessionStorage.setItem('account', account)
       localStorage.setItem('userName', name);
     } catch (error) {
       console.error(error);
@@ -123,6 +124,45 @@ const BalanceSchedule = () => {
     }
   }
 
+  // 폭죽
+  // function ConfettiComponent() {
+  //   const count = 200;
+  //   const defaults = {
+  //     origin: { y: 0.7 }
+  //   };
+  
+  //   function fire(particleRatio, opts) {
+  //     confetti(Object.assign({}, defaults, opts, {
+  //       particleCount: Math.floor(count * particleRatio)
+  //     }));
+  //   }
+  
+  //   // componentDidMount나 useEffect 등에서 호출할 수 있도록 원하는 시점에 fire 함수를 호출합니다.
+  //   React.useEffect(() => {
+  //     fire(0.25, {
+  //       spread: 26,
+  //       startVelocity: 55,
+  //     });
+  //     fire(0.2, {
+  //       spread: 60,
+  //     });
+  //     fire(0.35, {
+  //       spread: 100,
+  //       decay: 0.91,
+  //       scalar: 0.8
+  //     });
+  //     fire(0.1, {
+  //       spread: 120,
+  //       startVelocity: 25,
+  //       decay: 0.92,
+  //       scalar:1.2
+  //     });
+  //     fire(0.1, {
+  //       spread:120 ,
+  //      startVelocity :45 
+  //    });
+  //  }, []); }
+
   useEffect(() => {
     checkAccount();
     console.log(localStorage.getItem('userNumber'))
@@ -185,9 +225,9 @@ const BalanceSchedule = () => {
                 }} >
                 <Button 
                   size="large" 
-                  style={{ height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
+                  style={{ color: 'white', opacity:'0.6', height: '3rem', backgroundColor:'#316FDF', fontFamily:"preRg", width:'80vw'}}
                   className={styles.startTrip}
-                  type="primary" disabled>여행 시작하기</Button></Link>
+                  type="primary" disabled>아직 여행 시작일이 아닙니다</Button></Link>
             ) : getToday() > plan.endDate ? (
                 finishTrip()
             ) : (
