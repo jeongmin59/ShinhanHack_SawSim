@@ -93,6 +93,9 @@ public class PaymentService {
 
     public LatestDateTimeResponseDto getLatestDateTime(String userNumber) {
         Map<Object, Object> hash = redisService.getHash(userNumber);
+        if (hash.isEmpty()) {
+            throw new ResourceNotFoundException("Payment.getLatestDateTime", userNumber);
+        }
         String latestDate = (String) hash.get("latestDate");
         String latestTime = (String) hash.get("latestTime");
 
