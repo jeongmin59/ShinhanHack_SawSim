@@ -26,18 +26,11 @@ const CalendarModal = ({ onDateSelected }) => {
   const handleOk = async () => {
     setConfirmLoading(true);
   
-    // Increment the start date by one day
-    const nextDayStartDate = new Date(startDate);
-    nextDayStartDate.setDate(nextDayStartDate.getDate() + 1);
-    const formattedStartDate = nextDayStartDate.toISOString().split('T')[0];
-  
+    const formattedStartDate = startDate.toISOString().split('T')[0];
     let formattedEndDate = null;
   
     if (endDate !== null) {
-      // Increment the end date by one day
-      const nextDayEndDate = new Date(endDate);
-      nextDayEndDate.setDate(nextDayEndDate.getDate() + 1);
-      formattedEndDate = nextDayEndDate.toISOString().split('T')[0];
+      formattedEndDate = endDate.toISOString().split('T')[0];
     } else {
       formattedEndDate = formattedStartDate;
     }

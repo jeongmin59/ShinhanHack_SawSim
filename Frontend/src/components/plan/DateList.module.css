@@ -1,20 +1,12 @@
 .dateText {
-  /* margin-top: 2rem; */
-  /* width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 1.5rem; */
-  /* padding-bottom: 1.5rem; */
-    /* margin-bottom: 0; */
-    margin-top: 2rem;
-    font-size: 1.4rem;
-    text-align: start;
-    padding-left: 1.5rem;
-    font-weight: bolder;
+  margin-top: 2rem;
+  font-size: 1.4rem;
+  text-align: start;
+  padding-left: 1.5rem;
+  font-weight: bolder;
 }
 
 .dateItem {
-  /* margin-top: 2rem; */
   border-radius: 0.5rem;
   box-shadow: 4px 4px 20px rgb(236, 236, 236), -4px -4px 20px rgb(236, 236, 236);
   width: 90%;
@@ -32,24 +24,29 @@
 .centeredTable {
   text-align: center;
   width: 100%;
-  /* border-top: 1px solid #444444; */
   border-collapse: collapse;
-  /* border-collapse: collapse; */
 }
 
 .elementTitle {
-  /* color: grey; */
   text-align: center;
   border-bottom: 0.001rem solid rgb(154, 154, 154);
   padding-bottom: 0.8rem;
-  /* margin: 0.8rem 0; */
+  padding-left: 0.5rem;
+  /* padding-right: 1.5rem; */
 }
+
 .elementContent {
   color: black;
-  /* margin: 0.8rem 0; */
-  /* padding-right: 1rem; */
   text-align: center;
-  /* padding: 1rem; */
-  /* border-bottom: 1px solid grey; */
   padding: 0.2rem;
+  /* padding-right: 2rem; */
+  /* padding-left: 0.5rem; */
 }
+
+/* .lineTitle {
+  text-align: center;
+}
+
+.lineContent {
+  text-align: center;
+} */

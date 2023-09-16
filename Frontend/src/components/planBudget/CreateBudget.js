@@ -16,6 +16,7 @@ const CreateBudget = () => {
 
   const handleCategoryChange = (value) => {
     setCategory(value);
+    console.log(category)
   };
 
   const handleAmountChange = (value) => {
@@ -33,6 +34,7 @@ const CreateBudget = () => {
       };
       const response = await axios.post(`https://sawsim.site/api/budget/${planId}`, requestData)
       console.log('성공', response.data);
+      window.location.reload();
     } catch (error) {
       console.error('에러', error);
     }
@@ -46,7 +48,7 @@ return (
   <div>
     <Link className={styles.backLink} to={`/plan/${planId}`}><p className={styles.toBack}>&lt;</p>
     <p className={styles.popularTitle}>뒤로가기</p></Link> 
-    <h3>{formattedDate}</h3>
+    <h3 className={styles.todayDate}>{formattedDate}</h3>
     <form className={styles.dateItem}>
       <label className={styles.category}>
         <p className={styles.categoryTitle}>카테고리</p>
@@ -57,8 +59,9 @@ return (
         >
           <Option value="음식점">음식점</Option>
           <Option value="교통,수송">교통,수송</Option>
-          <Option value="여행">여행</Option>
-          <Option value="의료,건강">의료,건강</Option>
+          <Option value="스포츠,레저">스포츠,레저</Option>
+          <Option value="관광지">관광지</Option>
+          <Option value="숙박">숙박</Option>
           <Option value="기타">기타</Option>
         </Select>
       </label>
@@ -67,14 +70,16 @@ return (
       <label className={styles.amount}>
         <p className={styles.amountTitle}>예산</p>
         <Space.Compact className={styles.amountInput}>
-          <InputNumber addonAfter="₩"
-            min={1}
-            value={amount}
-            onChange={handleAmountChange}
-            style={{ width: '80%' }}
-            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            parser={(value) => value.replace(/\\s?|(,*)/g, '')}
-          />
+        <InputNumber
+          addonAfter="₩"
+          min={1}
+          value={amount}
+          onChange={handleAmountChange}
+          style={{ width: '80%' }}
+          formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          parser={(value) => value.replace(/₩\s?|(,*)/g, '')}
+          step={1}
+        />
         </Space.Compact>
       </label>
       <br />
@@ -88,7 +93,7 @@ return (
           style={{
             height: '2.5rem',
             // width: '60%',
-            marginRight: '1rem',
+            // marginRight: '1rem',
             backgroundColor: '#316FDF',
             fontFamily: "preRg"
           }}
