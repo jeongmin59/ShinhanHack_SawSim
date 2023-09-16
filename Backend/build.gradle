@@ -29,6 +29,23 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // redis 설정
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // springdoc swagger 설정
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
+
+    // mysql
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    // postgresql
+    implementation 'org.postgresql:postgresql'
+    // 공간 쿼리를 위한 point 타입
+    implementation 'org.locationtech.jts:jts-core:1.18.1'
+    implementation 'org.hibernate:hibernate-spatial'
+
+    //webflux
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 }
 
 tasks.named('test') {
