@@ -109,8 +109,16 @@ const BalanceSchedule = () => {
     const year = today.getFullYear();
     const month = ("0" + (today.getMonth() + 1)).slice(-2);
     const day = ("0" + today.getDate()).slice(-2);
-    
-    return `${year}-${month}-${day}`;
+    return `${year}${month}${day}`;
+  }
+  
+  function changeDateToBackDB(dateString) {
+    const year = dateString.substring(0, 4);
+    const month = dateString.substring(4, 6);
+    const day = dateString.substring(6, 8);
+
+    const formattedDateString = `${year}/${month}/${day}`;
+    return formattedDateString
   }
 
   // 18. 자동으로 여행 종료 (api 호출 함수 실행)
@@ -123,45 +131,6 @@ const BalanceSchedule = () => {
       console.error(error);
     }
   }
-
-  // 폭죽
-  // function ConfettiComponent() {
-  //   const count = 200;
-  //   const defaults = {
-  //     origin: { y: 0.7 }
-  //   };
-  
-  //   function fire(particleRatio, opts) {
-  //     confetti(Object.assign({}, defaults, opts, {
-  //       particleCount: Math.floor(count * particleRatio)
-  //     }));
-  //   }
-  
-  //   // componentDidMount나 useEffect 등에서 호출할 수 있도록 원하는 시점에 fire 함수를 호출합니다.
-  //   React.useEffect(() => {
-  //     fire(0.25, {
-  //       spread: 26,
-  //       startVelocity: 55,
-  //     });
-  //     fire(0.2, {
-  //       spread: 60,
-  //     });
-  //     fire(0.35, {
-  //       spread: 100,
-  //       decay: 0.91,
-  //       scalar: 0.8
-  //     });
-  //     fire(0.1, {
-  //       spread: 120,
-  //       startVelocity: 25,
-  //       decay: 0.92,
-  //       scalar:1.2
-  //     });
-  //     fire(0.1, {
-  //       spread:120 ,
-  //      startVelocity :45 
-  //    });
-  //  }, []); }
 
   useEffect(() => {
     checkAccount();
@@ -259,7 +228,7 @@ const BalanceSchedule = () => {
           </>
         ) : (
           <>
-          <p className={styles.schedule}>{plan.startDate} ~ {plan.endDate}</p>
+          <p className={styles.schedule}>{changeDateToBackDB(plan.startDate)} ~ {changeDateToBackDB(plan.endDate)}</p>
           <Link to={`/plan/${planId}`}>
           <Button 
             size="medium" 
