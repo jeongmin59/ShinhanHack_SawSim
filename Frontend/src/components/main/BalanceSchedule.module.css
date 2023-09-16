@@ -111,14 +111,16 @@
 .noSchedule1 {
   font-size: 1rem;
   font-weight: 700;
-  margin-top: 0;
-  margin-bottom: 0;
+  /* margin-top: 0;
+  margin-bottom: 0; */
   position: relative;
-  color:rgb(85, 85, 85);
+  color:rgb(83, 83, 83);
   /* background: linear-gradient(to top, #96b2e5 50%, transparent 50%); */
   /* background: linear-gradient(to top, #ffffff 50%, transparent 50%); */
-  width: 55vw;
-  margin: 0 auto 0.2rem auto;
+  width: 47vw;
+  margin: 0.3rem auto 0.4rem auto;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.5) 100%, transparent 50%);
+
 }
 .noSchedule2 {
   font-size: 1rem;
@@ -126,8 +128,10 @@
   margin-top: 0;
   margin-bottom: 0.5rem;
   position: relative;
-  /* background: linear-gradient(to top, #ffffff 50%, transparent 50%); */
+  /* background: linear-gradient(to top, #ffffff 100%, transparent 50%); */
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.5) 100%, transparent 50%);
+
   width: 70vw;
-  margin: 0 auto;
+  margin: 0 auto 0.3rem auto;
   color:rgb(85, 85, 85);
 }

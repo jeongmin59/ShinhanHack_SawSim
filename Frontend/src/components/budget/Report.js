@@ -28,8 +28,8 @@ const Report = () => {
   const [food, setFood] = useState(0)
   const [transport, setTransport] = useState(0)
   const [sport, setSport] = useState(0)
-  const [trip, setTrip] = useState(0)
-  const [medical, setMedical] = useState(0)
+  const [tour, setTour] = useState(0)
+  const [accom, setAccom] = useState(0)
   const [etc, setEtc] = useState(0)
   const [loading, setLoading] = useState(true);
 
@@ -61,12 +61,12 @@ const Report = () => {
       setTotalBudget(dataBody.dataBody.totalBudget)
       console.log(dataBody.dataBody.amountUsed) // 사용한 총액
       setAmountUsed(dataBody.dataBody.amountUsed)
-      setFood(dataBody.dataBody[3])
-      setTransport(dataBody.dataBody[4])
-      setSport(dataBody.dataBody[5])
-      setTrip(dataBody.dataBody[6])
-      setMedical(dataBody.dataBody[7])
-      setEtc(dataBody.dataBody[8])
+      setFood(parseFloat(dataBody.dataBody[3].toFixed(2)));
+      setTransport(parseFloat(dataBody.dataBody[4].toFixed(2)));
+      setSport(parseFloat(dataBody.data.body[5].toFixed(2)));
+      setTour(parseFloat(data.Body.data.body[6].toFixed(2)));
+      setAccom(parseFloat(data.Body.data.body[7].toFixed(2)));
+      setEtc(parseFloat(data.Body.data.body[8].toFixed(2)));
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -75,9 +75,9 @@ const Report = () => {
 
   const graphData = [
     { name: '전체', value: 100 },
-    { name: '여행', value: trip },
+    { name: '관광지', value: tour },
     { name: '스포츠,레저', value: sport },
-    { name: '의료,건강', value: medical },
+    { name: '숙박', value: accom },
     { name: '기타', value: etc },
     { name: '교통,수송', value: transport },
     { name: '음식점', value: food },
