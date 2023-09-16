@@ -39,11 +39,9 @@ public class CheckAccountTransactionHistoryResponseDto {
         @Getter
         public static class TransactionHistory {
             @JsonProperty("거래일자")
-            @JsonFormat(pattern = "yyyyMMdd")
-            private LocalDate transactionDate;
+            private String transactionDate;
             @JsonProperty("거래시간")
-            @JsonFormat(pattern = "HHmmss")
-            private LocalTime transactionTime;
+            private String transactionTime;
             @JsonProperty("적요")
             private String briefs;
             @JsonProperty("출금금액")
