@@ -203,6 +203,7 @@ const TransferOne = () => {
             <Space.Compact style={{width: '90%'}}>
             <Input 
               addonBefore="계좌번호"
+              maxLength={12}
               onPressEnter={checkName}
               value={account}
               onChange={onChangeAccount}

@@ -24,9 +24,11 @@ const PortList = () => {
     }
   }
   
-  const formatDate = (dateStr) => {
-    const [year, month, day] = dateStr.split('-');
-    return `${year.slice(-2)}.${month}.${day}`;
+  const formatDate = (dateString) => {
+      const year = dateString.substring(2, 4);
+      const month = dateString.substring(4, 6);
+      const day = dateString.substring(6, 8);
+      return `${year}.${month}.${day}`;
   };
 
   useEffect(() => {
