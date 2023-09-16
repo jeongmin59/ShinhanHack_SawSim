@@ -64,13 +64,16 @@ public class BudgetScheduler {
         for (Plan plan : plans) {
             // 오늘 여행을 가야하는 계좌의 최근 조회 날짜 불러오기(redis)
             Map<Object, Object> hash = redisService.getHash(plan.getAccount().getUserNumber());
+            if (hash.isEmpty()) {
+                continue;
+            }
 
             ShinhanTransactionRequestDto shinhanTransactionRequestDto = portfolioService.transactionHistoryInquiry(plan.getAccount().getNumber());
             List<ShinhanTransactionRequestDto.DataBody.TransactionHistory> transactions = shinhanTransactionRequestDto.getDataBody().getTransactions();
 
             List<Payment> payments = new ArrayList<>();
-            LocalDate latestDate = LocalDate.parse(hash.get("latestDate").toString());
-            LocalTime latestTime = LocalTime.parse(hash.get("latestTime").toString());
+            String latestDate = hash.get("latestDate").toString();
+            String latestTime = hash.get("latestTime").toString();
             for (ShinhanTransactionRequestDto.DataBody.TransactionHistory transaction : transactions) {
                 if (transaction.getTransactionDate().equals(latestDate) &&
                         transaction.getTransactionTime().equals(latestTime)) break;
@@ -80,8 +83,8 @@ public class BudgetScheduler {
                         transaction.getDetail(),
                         transaction.getWithdrawalAmount(),
                         transaction.getStoreName(),
-                        LocalDate.parse(transaction.getTransactionDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                        LocalTime.parse(transaction.getTransactionTime(),DateTimeFormatter.ofPattern("HH:mm:ss")),
+                        LocalDate.parse(transaction.getTransactionDate(), DateTimeFormatter.ofPattern("yyyyMMdd")),
+                        LocalTime.parse(transaction.getTransactionTime(),DateTimeFormatter.ofPattern("HHmmss")),
                         PaymentType.CARD,
                         plan.getAccount()));
             }
