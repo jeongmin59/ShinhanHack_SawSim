@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 @Getter
 @Builder(toBuilder = true)
 public class AnalyzeResponseDto {
@@ -20,17 +18,17 @@ public class AnalyzeResponseDto {
         private Integer amountUsed;
 
         @JsonProperty("음식점")
-        private Long meal;
+        private Double meal;
         @JsonProperty("교통,수송")
-        private Long traffic;
+        private Double traffic;
         @JsonProperty("스포츠,레저")
-        private Long sports;
-        @JsonProperty("여행")
-        private Long travel;
-        @JsonProperty("의료,건강")
-        private Long medical;
+        private Double sports;
+        @JsonProperty("관광지")
+        private Double travel;
+        @JsonProperty("숙박")
+        private Double lodge;
         @JsonProperty("기타")
-        private Long etc;
+        private Double etc;
 
     }
 }

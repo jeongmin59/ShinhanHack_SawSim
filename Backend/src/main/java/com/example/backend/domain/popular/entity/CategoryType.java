@@ -2,7 +2,7 @@ package com.example.backend.domain.popular.entity;
 
 public enum CategoryType {
     RESTAURANT("음식점"),
-    SIGHTS("여행"),
+    SIGHTS("관광지"),
     LEISURE("스포츠,레저");
 
     private final String koreanName;

@@ -101,7 +101,7 @@ public class BudgetScheduler {
             String userNumber = plan.getAccount().getUserNumber();
             String username = plan.getAccount().getUsername();
             if (todayBudget <= totalAmount) {
-                SOLPushNotificationResponse solPushNotificationResponse = callPushNotificationApi(userNumber, username);// TODO: 수행결과 "N" 이면 예외처리해주기(지금은 무조건 성공 나옴)
+                SOLPushNotificationResponse solPushNotificationResponse = callPushNotificationApi(userNumber, username);
                 if (solPushNotificationResponse.getDataBody().get수행결과().equals("Y")) {
                     redisService.setValues(86500, "todayBudgetOver_" + plan.getAccount().getNumber(), "Y");
                 }

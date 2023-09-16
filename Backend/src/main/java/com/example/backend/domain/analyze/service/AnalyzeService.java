@@ -53,8 +53,8 @@ public class AnalyzeService {
         category.put("음식점", 0);
         category.put("교통,수송", 0);
         category.put("스포츠,레저", 0);
-        category.put("여행", 0);
-        category.put("의료,건강", 0);
+        category.put("관광지", 0);
+        category.put("숙박", 0);
         category.put("기타", 0);
 
         int amountUsed = 0; // 오늘 일차 사용 금액
@@ -87,7 +87,15 @@ public class AnalyzeService {
                     String extractedCategory = "";
                     if (responseDto != null && !responseDto.getDocuments().isEmpty()) {
                         String categoryName = responseDto.getDocuments().get(0).getCategory_name();
-                        extractedCategory = categoryName.split(">")[0].trim();
+                        String[] splitCategory = categoryName.split(">");
+                        extractedCategory = splitCategory[0].trim();
+                        if (splitCategory[0].trim().equals("여행")) {
+                            if (splitCategory[1] != null && splitCategory[1].trim().equals("숙박")) {
+                                extractedCategory = "숙박";
+                            } else {
+                                extractedCategory = "관광지";
+                            }
+                        }
                     }
 
                     if (category.containsKey(extractedCategory)) {
@@ -99,7 +107,6 @@ public class AnalyzeService {
                     //오늘 일차일 경우 총 사용 금액 계산.
                     amountUsed += payment.getAmount();
                 }
-
             }
 
             List<Budget> budgets = budgetRepository.findAllByPlanAndTravelDate(plan, plan.getStartDate().plusDays(i));
@@ -126,16 +133,17 @@ public class AnalyzeService {
         LocalDate endDate = LocalDate.parse(analyzeRequestDto.getDataBody().getTodayDate(), formatter);
 
         // 카테고리 퍼센트 비율 구하기
+        // TODO: 만약 double 이 안되면 long 으로 다시 바꿔주기
         AnalyzeResponseDto.DataBody dataBody = AnalyzeResponseDto.DataBody.builder()
                 .day(ChronoUnit.DAYS.between(startDate, endDate))
                 .totalBudget(totalBudget)
                 .amountUsed(amountUsed)
-                .meal((long) ((double) category.get("음식점") / total_cost * 100.0))
-                .traffic((long) ((double) category.get("교통,수송") / total_cost * 100.0))
-                .sports((long) ((double) category.get("스포츠,레저") / total_cost * 100.0))
-                .travel((long) ((double) category.get("여행") / total_cost * 100.0))
-                .medical((long) ((double) category.get("의료,건강") / total_cost * 100.0))
-                .etc((long) ((double) category.get("기타") / total_cost * 100.0))
+                .meal(((double) category.get("음식점") / total_cost) * 100.0)
+                .traffic(((double) category.get("교통,수송") / total_cost) * 100.0)
+                .sports(((double) category.get("스포츠,레저") / total_cost) * 100.0)
+                .travel(((double) category.get("관광지") / total_cost) * 100.0)
+                .lodge(((double) category.get("숙박") / total_cost) * 100.0)
+                .etc(((double) category.get("기타") / total_cost) * 100.0)
                 .build();
 
         return AnalyzeResponseDto.builder()
