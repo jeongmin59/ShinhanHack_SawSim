@@ -86,8 +86,8 @@ public class BudgetScheduler {
 
                 latestTransaction.ifPresent(transaction -> {
                     Map<String, String> map = Map.of(
-                            "latestDate", String.format(String.valueOf(DateTimeFormatter.ofPattern("yyyyMMdd"))),
-                            "latestTime", String.format(String.valueOf(DateTimeFormatter.ofPattern("HHmmss"))));
+                            "latestDate", transaction.getTransactionDate().format(String.valueOf(DateTimeFormatter.ofPattern("yyyyMMdd"))),
+                            "latestTime", transaction.getTransactionTime().format(String.valueOf(DateTimeFormatter.ofPattern("HHmmss"))));
                     redisService.setHash(plan.getAccount().getUserNumber(), map);
                 });
 
