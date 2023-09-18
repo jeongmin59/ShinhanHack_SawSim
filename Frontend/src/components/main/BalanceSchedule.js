@@ -210,8 +210,7 @@ const BalanceSchedule = () => {
                   className={styles.startTrip}
                   type="primary" disabled>아직 여행 시작일이 아닙니다</Button></Link>
             ) : getToday() > plan.endDate ? (
-                // finishTrip()
-                console.log('dd')
+                finishTrip()
             ) : (
                 <Link to={{
                   pathname: '/budget',
