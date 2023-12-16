@@ -1,13 +1,10 @@
 # ShinhanHack_SawSim
-맞춤형 여행 예산 관리 서비스_SolTrip
-(2023.09.01 - 2023.09.17)
+![쏠트립](https://github.com/jeongmin59/ssarout/assets/102538362/81810aac-b06c-4712-9fd6-cfb6280af474)
 
 
-# ✈ SolTrip
+## ✈ SolTrip
 
-<div>
-  <h3>여행 예산 관리 플랫폼</h3>
-</div>
+### 금융 + 여행을 결합 시킨 맞춤형 여행 예산 관리 서비스
 
 <br/>
 
@@ -35,7 +32,7 @@
 
 <div>
 
-<strong>목표</strong>
+> 목표
 
 - 사용자들이 보다 쉽게 여행 예산을 관리할 수 있도록 돕는 서비스
 - 신한 은행 Open API를 활용하여 실시간 예산 관리
